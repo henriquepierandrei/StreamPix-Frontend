@@ -1,17 +1,28 @@
 import React, { useState } from 'react';
-import { Mic, Play } from 'lucide-react';
+import { QRCodeCanvas } from "qrcode.react";
+
+import { Mic } from 'lucide-react';
+import logoQrCode from '../assets/logo-qrcode.png';
 import logo from '../assets/logo.png';
+
+import { useNavigate } from 'react-router-dom';
+
+import { createDonationRequest, sendDonation } from '../api/DonationRequest';
+
 import './style.css';
 
 interface DonationFormProps { }
 
 const StreamPixDonation: React.FC<DonationFormProps> = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [message, setMessage] = useState('');
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState('BRL');
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const [selectedQuickAmount, setSelectedQuickAmount] = useState<number | null>(null);
+  const [voiceType, setVoiceType] = useState<string>('');
+
 
   const quickAmounts = [5, 10, 25, 50, 100];
 
@@ -20,32 +31,35 @@ const StreamPixDonation: React.FC<DonationFormProps> = () => {
     setSelectedQuickAmount(value);
   };
 
-  const handleSubmit = () => {
-    console.log('Donation submitted:', {
-      username,
-      message,
-      amount,
-      currency,
-      isAudioEnabled
-    });
+  const handleSubmit = async () => {
+    if (!voiceType) return alert("Selecione uma voz!");
+    const donation = createDonationRequest(username, message, Number(amount), voiceType);
+
+    try {
+      const response = await sendDonation(donation); // retorna ShortResponseApiDTO
+      const transactionId = response.transaction_StreamPix_id;
+      navigate(`/streampix/donation/${transactionId}`); // redireciona para localhost/:transaction_StreamPix_id
+    } catch (error) {
+      console.error("Erro ao enviar doação:", error);
+    }
   };
+
+
 
   return (
     <>
 
       <div className="donation-container">
         <div className="donation-wrapper">
-          {/* Header Card */}
-          <div className='header-card'>
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", gap: "10px" }}>
-              <img src={logo} alt="" width={"30px"} />
-              <p>StreamerName</p>
-
-            </div>
-          </div>
-
           {/* Donation Form */}
           <div className="form-card">
+            
+
+
+            <div className='header-card'>
+              <img src={logoQrCode} alt="" width={"30px"} />
+              <p>StreamerName</p>
+            </div>
             {/* Username */}
             <div className="form-group">
               <input
@@ -77,7 +91,7 @@ const StreamPixDonation: React.FC<DonationFormProps> = () => {
             {/* Audio Options */}
             <div className="form-group">
               <div className="button-row">
-                <button type="button" className="audio-button" disabled={!isAudioEnabled} style={{ backgroundColor: isAudioEnabled ? '#f7f6f6ff' : '#dfddddff', cursor: isAudioEnabled ? 'pointer' : 'not-allowed' }}>
+                <button type="button" className="audio-button" disabled={!isAudioEnabled} style={{ backgroundColor: isAudioEnabled ? '#f7f6f6ff' : '#eeededff', cursor: isAudioEnabled ? 'pointer' : 'not-allowed' }}>
 
                   <Mic size={14} />
                   Gravar áudio
@@ -105,14 +119,33 @@ const StreamPixDonation: React.FC<DonationFormProps> = () => {
 
             {/* AI Voice Option */}
             <div className="form-group">
-              <div className="toggle-row">
-                <span className="toggle-text">Escolher voz gerada com IA</span>
-                <div
-                  onClick={() => setIsAudioEnabled(!isAudioEnabled)}
-                  className={`toggle ${isAudioEnabled ? 'active' : ''}`}
-                >
-                  <div className="toggle-knob" />
-                </div>
+              <div className="voice-selection">
+                <label className="radio-label">
+                  <input
+                    type="radio"
+                    name="voiceType"
+                    value="male"
+                    checked={voiceType === 'male'}
+                    onChange={() => {
+                      setVoiceType('male');
+                      setIsAudioEnabled(true);
+                    }}
+                  />
+                  Voz Masculina
+                </label>
+                <label className="radio-label">
+                  <input
+                    type="radio"
+                    name="voiceType"
+                    value="female"
+                    checked={voiceType === 'female'}
+                    onChange={() => {
+                      setVoiceType('female');
+                      setIsAudioEnabled(true);
+                    }}
+                  />
+                  Voz Feminina
+                </label>
               </div>
             </div>
 

@@ -5,12 +5,7 @@ body {
     min-height: 100vh;
     background: linear-gradient(
         -45deg,
-        #1e3c72,
-        #2a5298,
-        #3b82f6,
-        #1d4ed8,
-        #252f46,
-        #1e40af
+         rgb(109, 160, 255), #0066ffff
     );
     background-size: 400% 400%;
     animation: gradientMove 8s ease infinite;

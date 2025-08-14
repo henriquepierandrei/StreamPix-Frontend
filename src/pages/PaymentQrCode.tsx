@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Copy, CheckCircle, XCircle, Clock, QrCode, RefreshCw, ArrowBigLeft, ArrowLeft } from 'lucide-react';
+import { Copy, CheckCircle, XCircle, Clock, QrCode, ArrowLeft } from 'lucide-react';
 import './style.css';
+import { useParams } from 'react-router-dom';
+import { getDonation} from '../api/GetDonation';
+import { QRCodeCanvas } from 'qrcode.react';
+import logoQrCode from '../assets/logo-qrcode.png';
+
 
 interface PaymentQrCodeProps { }
 
@@ -8,40 +13,23 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
     const [paymentStatus, setPaymentStatus] = useState<'pending' | 'success' | 'failed'>('pending');
     const [timeLeft, setTimeLeft] = useState(300); // 5 minutos
     const [copied, setCopied] = useState(false);
+    const [paymentInfo, setPaymentInfo] = useState<any>(null);
+    const { transactionId } = useParams<{ transactionId: string }>();
 
-    const pixCode = "00020126580014BR.GOV.BCB.PIX013636401748-2532-4272-8d83-6ec93d9e26d15204000053039865802BR5925DOUGLAS STREAMER GAMER6009Sao Paulo62070503***6304A7B2";
-    const amount = "25.00";
-
-    // Simular verificação de pagamento
     useEffect(() => {
-        const timer = setInterval(() => {
-            setTimeLeft(prev => {
-                if (prev <= 1) {
-                    setPaymentStatus('failed');
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-
-        // Simular pagamento aprovado após 10 segundos (para demo)
-        const paymentTimer = setTimeout(() => {
-            if (paymentStatus === 'pending') {
-                setPaymentStatus(Math.random() > 0.3 ? 'success' : 'failed');
+        const fetchPayment = async () => {
+            try {
+                const response = await getDonation(transactionId!);
+                console.log("Payment Info:", transactionId, response);
+                setPaymentInfo(response); 
+            } catch (error) {
+                console.error(error);
             }
-        }, 10000);
-
-        return () => {
-            clearInterval(timer);
-            clearTimeout(paymentTimer);
         };
-    }, [paymentStatus]);
+        fetchPayment();
+    }, [transactionId]);
 
-    const copyToClipboard = () => {
-        navigator.clipboard.writeText(pixCode);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
+    
 
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60);
@@ -259,25 +247,36 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
                 <div className="qr-card">
                     <div className="header">
                         <h1 className="title">
-                            <QrCode size={24} color="#2563eb" />
-                            Pagamento PIX
+                          <QRCodeCanvas value={paymentInfo?.qrcode || ''} size={24} color="#2563eb" />
+                          Pagamento PIX
                         </h1>
                         <p className="subtitle">Escaneie o QR Code ou copie o código</p>
                     </div>
 
-                    <div className="qr-section">
-                        <div className="qr-placeholder">
-                            <div className="qr-grid">
-                                {Array.from({ length: 64 }, (_, i) => (
-                                    <div
-                                        key={i}
-                                        className={`qr-cell ${Math.random() > 0.5 ? 'filled' : ''}`}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                        <div className="amount">R$ {amount}</div>
-                    </div>
+                    <div style={{ position: "relative", display: "inline-block" }}>
+              {/* QRCode */}
+              <QRCodeCanvas
+                value={paymentInfo?.qrcode || ''}
+                size={256}
+                level="H" // High error correction (necessário p/ suportar a logo no meio)
+                includeMargin={true}
+              />
+
+              {/* Logo central */}
+              <img
+                src={logoQrCode}
+                alt="Logo"
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "30px",
+                }}
+              />
+            </div>
 
                     <div className="timer">
                         <Clock size={16} />
@@ -286,10 +285,14 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
 
                     <div className="pix-section">
                         <div className="pix-label">Código PIX Copia e Cola:</div>
-                        <div className="pix-code">{pixCode}</div>
+                        <div className="pix-code">{paymentInfo?.qrcode}</div>
                         <button
                             className={`copy-button ${copied ? 'copied' : ''}`}
-                            onClick={copyToClipboard}
+                            onClick={() => {
+                                navigator.clipboard.writeText(paymentInfo?.qrcode || '');
+                                setCopied(true);
+                                setTimeout(() => setCopied(false), 2000);
+                            }}
                         >
                             {copied ? (
                                 <>
