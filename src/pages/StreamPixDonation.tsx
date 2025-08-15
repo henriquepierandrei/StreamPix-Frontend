@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { QRCodeCanvas } from "qrcode.react";
-
 import { Mic } from 'lucide-react';
 import logoQrCode from '../assets/logo-qrcode.png';
 import logo from '../assets/logo.png';
