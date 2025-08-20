@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Key, Settings, User } from 'lucide-react';
-import './dashboard.css';
+import { Save, Key, Settings, User, DoorOpen, MessageCircle } from 'lucide-react';
+import { ApiConfig } from "./../api/ApiConfig";
+import { getStreamerData } from "./../api/GetStreamerData"; // ajuste o path se necessário
+import logo from '../assets/logo.png';
+import './style/dashboard.css';
 
 interface StreamerData {
   streamer_name: string;
@@ -15,38 +18,90 @@ interface StreamerData {
   };
 }
 
+
+
 const StreamerDashboard: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
+  const [donates, setDonates] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [streamerData, setStreamerData] = useState<StreamerData>({
-    streamer_name: "Joaoo",
-    streamer_balance: 150.5,
-    is_auto_play: true,
-    min_amount: 1.0,
-    max_characters_name: 11,
-    max_characters_message: 250,
+    streamer_name: "Carregando...",
+    streamer_balance: 0,
+    is_auto_play: false,
+    min_amount: 0,
+    max_characters_name: 0,
+    max_characters_message: 0,
     http_response: {
-      status: "OK",
-      message: "Streamer atualizado com sucesso!"
+      status: "WAIT",
+      message: "Carregando dados..."
     }
   });
   const [tempKey, setTempKey] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // Carregar automaticamente se já existir chave salva
   useEffect(() => {
     const savedKey = localStorage.getItem('streamer_api_key');
     if (savedKey) {
       setApiKey(savedKey);
       setIsAuthenticated(true);
+
+      (async () => {
+        try {
+          setIsLoading(true);
+          const data = await getStreamerData(savedKey);
+          setStreamerData(data);
+        } catch (err) {
+          console.error("Erro ao buscar streamer:", err);
+          setIsAuthenticated(false);
+        } finally {
+          setIsLoading(false);
+        }
+      })();
     }
   }, []);
 
-  const handleLogin = () => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      const fetchDonates = async () => {
+        try {
+          setIsLoading(true);
+          const api = ApiConfig.getInstance();
+          const response = await api.get(`/log/donations?key=${apiKey}&&page=0&size=10&sort=donatedAt,desc`);
+          setDonates(response.data.content); // conforme JSON que você enviou
+        } catch (err) {
+          console.error("Erro ao buscar donates:", err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchDonates();
+    }
+  }, [isAuthenticated, apiKey]);
+
+
+  const handleLogin = async () => {
     if (tempKey.trim()) {
       localStorage.setItem('streamer_api_key', tempKey);
       setApiKey(tempKey);
       setIsAuthenticated(true);
       setTempKey('');
+
+      try {
+        setIsLoading(true);
+        const data = await getStreamerData(tempKey); // chama API
+        setStreamerData(data);
+      } catch (err) {
+        console.error("Erro ao buscar streamer:", err);
+        setIsAuthenticated(false);
+        localStorage.removeItem('streamer_api_key');
+        alert("Chave inválida ou erro na API!");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -58,16 +113,25 @@ const StreamerDashboard: React.FC = () => {
 
   const handleSave = async () => {
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      const api = ApiConfig.getInstance();
+      const response = await api.put(`/streamer?key=${apiKey}`, streamerData);
+      setStreamerData(prev => ({
+        ...prev,
+        http_response: response.data.http_response
+      }));
+    } catch (err) {
+      console.error("Erro ao salvar streamer:", err);
       setStreamerData(prev => ({
         ...prev,
         http_response: {
-          status: "OK",
-          message: "Dados atualizados com sucesso!"
+          status: "ERROR",
+          message: "Falha ao salvar alterações."
         }
       }));
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const updateField = (field: keyof StreamerData, value: any) => {
@@ -79,7 +143,7 @@ const StreamerDashboard: React.FC = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="container">
+      <div className="container" style={{ overflowY: 'auto' }}>
         <div className="loginContainer">
           <div className="loginCard">
             <div className="iconContainer">
@@ -87,7 +151,7 @@ const StreamerDashboard: React.FC = () => {
             </div>
             <h1 className="title">Acesso ao Dashboard</h1>
             <p className="subtitle">Insira sua chave de API para continuar</p>
-            
+
             <div className="inputGroup">
               <label>Chave da API</label>
               <input
@@ -98,9 +162,7 @@ const StreamerDashboard: React.FC = () => {
                 onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
               />
             </div>
-            <button
-              onClick={handleLogin}
-            >
+            <button onClick={handleLogin}>
               Acessar Dashboard
             </button>
           </div>
@@ -115,25 +177,25 @@ const StreamerDashboard: React.FC = () => {
         <div className="header">
           <div className="headerLeft">
             <div className="headerIcon">
-              <Settings size={24} />
+              <img src={logo} alt="" width={"30px"} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
               <h1 className="title">Dashboard do Streamer</h1>
-
             </div>
           </div>
           <button className="logoutButton" onClick={handleLogout}>
-            Sair
+            <DoorOpen /> Sair
           </button>
         </div>
 
         {streamerData.http_response && (
           <div className="statusCard">
             <div className="statusIndicator">
-              <div 
+              <div
                 className="statusDot"
                 style={{ backgroundColor: streamerData.http_response.status === 'OK' ? '#2ed573' : '#ff4757' }}
               />
+
               <span style={{ fontWeight: 'bold' }}>
                 Status: {streamerData.http_response.status}
               </span>
@@ -146,40 +208,40 @@ const StreamerDashboard: React.FC = () => {
 
         <div className="gridContainer">
           <div className="card">
+            <div className="formGroup">
+              <label>Saldo</label>
+              <div className='balance-display'>
+                <p className='balance'>R${streamerData.streamer_balance.toFixed(2)}</p>
+              </div>
+
+            </div>
             <div className="cardTitle">
               <User size={20} color="#667eea" />
               Informações do Streamer
             </div>
-            
+
             <div className="formGroup">
               <label>Nome do Streamer</label>
               <input
                 type="text"
                 value={streamerData.streamer_name}
+                className='input'
                 onChange={(e) => updateField('streamer_name', e.target.value)}
               />
             </div>
 
-            <div className="formGroup">
-              <label>Saldo</label>
-              <input
-                type="number"
-                value={streamerData.streamer_balance}
-                onChange={(e) => updateField('streamer_balance', parseFloat(e.target.value))}
-                step="0.01"
-              />
-            </div>
+
 
             <div className="formGroup">
-              <label style={{ display: 'flex', alignItems: 'center' }}>
+              <div className='custom-checkbox-label'>
                 <input
                   type="checkbox"
                   checked={streamerData.is_auto_play}
                   onChange={(e) => updateField('is_auto_play', e.target.checked)}
-                  className="checkbox"
+
                 />
-                Auto Play Ativado
-              </label>
+                <p>Auto Play Ativado</p>
+              </div>
             </div>
           </div>
 
@@ -188,11 +250,12 @@ const StreamerDashboard: React.FC = () => {
               <Settings size={20} color="#667eea" />
               Configurações
             </div>
-            
+
             <div className="formGroup">
               <label>Valor Mínimo</label>
               <input
                 type="number"
+                className='input'
                 value={streamerData.min_amount}
                 onChange={(e) => updateField('min_amount', parseFloat(e.target.value))}
                 step="0.01"
@@ -204,6 +267,7 @@ const StreamerDashboard: React.FC = () => {
               <label>Máximo de Caracteres no Nome</label>
               <input
                 type="number"
+                className='input'
                 value={streamerData.max_characters_name}
                 onChange={(e) => updateField('max_characters_name', parseInt(e.target.value))}
                 min="1"
@@ -213,6 +277,7 @@ const StreamerDashboard: React.FC = () => {
             <div className="formGroup">
               <label>Máximo de Caracteres na Mensagem</label>
               <input
+                className='input'
                 type="number"
                 value={streamerData.max_characters_message}
                 onChange={(e) => updateField('max_characters_message', parseInt(e.target.value))}
@@ -220,20 +285,47 @@ const StreamerDashboard: React.FC = () => {
               />
             </div>
             <button
-          className="saveButton"
-          onClick={handleSave}
-          disabled={isLoading}
-          style={{
-            opacity: isLoading ? 0.7 : 1,
-            cursor: isLoading ? 'not-allowed' : 'pointer'
-          }}
-        >
-          <Save size={20} />
-          {isLoading ? 'Salvando...' : 'Salvar Alterações'}
-        </button>
+              className="saveButton"
+              onClick={handleSave}
+              disabled={isLoading}
+              style={{
+                opacity: isLoading ? 0.7 : 1,
+                cursor: isLoading ? 'not-allowed' : 'pointer'
+              }}
+            >
+              <Save size={20} />
+              {isLoading ? 'Salvando...' : 'Salvar Alterações'}
+            </button>
           </div>
+
         </div>
+      </div><br />
+      <div className="card-donations">
+        <div className="cardTitle">
+          <Settings size={20} color="#667eea" />
+          Donates Recebidos
+        </div>
+        {donates.length === 0 ? (
+          <p>Nenhum donate encontrado.</p>
+        ) : (
+          donates.map((donate) => (
+            <div key={donate.uuid} className="donateItem">
+              <p><strong><User size={15}/> Nome:</strong> {donate.name}</p>
+              <p><strong><MessageCircle size={15}/> Mensagem:</strong> {donate.message}</p>
+              <p className='balance-donation'><strong>Valor:</strong> R${donate.amount.toFixed(2)}</p>
+
+              <p style={{ fontSize: '12px', color: '#666' }}>
+                Data: {new Date(donate.donated_at).toLocaleString()} </p>
+              {donate.audio_url && (
+                <audio controls className="audioPlayer">
+                  <source src={donate.audio_url} type="audio/mpeg" />
+                </audio>
+              )}
+            </div>
+          ))
+        )}
       </div>
+
     </div>
   );
 };

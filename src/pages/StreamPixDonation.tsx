@@ -1,26 +1,53 @@
-import React, { useState } from 'react';
-import { Mic } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft, Mic, UserX, XCircle } from 'lucide-react';
 import logoQrCode from '../assets/logo-qrcode.png';
 import logo from '../assets/logo.png';
+import { useNavigate, useParams } from 'react-router-dom';
+import { createDonationRequest, sendDonation, getStreamerData } from '../api/DonationRequest';
+import './style/style.css';
+import Loading from '../components/Loading';
 
-import { useNavigate } from 'react-router-dom';
-
-import { createDonationRequest, sendDonation } from '../api/DonationRequest';
-
-import './style.css';
-
-interface DonationFormProps { }
-
-const StreamPixDonation: React.FC<DonationFormProps> = () => {
+const StreamPixDonation: React.FC = () => {
   const navigate = useNavigate();
+  const { streamerName } = useParams<{ streamerName: string }>();
+
   const [username, setUsername] = useState('');
   const [message, setMessage] = useState('');
   const [amount, setAmount] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState<'pending' | 'success' | 'failed' | 'notfound'>('pending');
   const [currency, setCurrency] = useState('BRL');
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const [selectedQuickAmount, setSelectedQuickAmount] = useState<number | null>(null);
   const [voiceType, setVoiceType] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
+
+  // dados vindos da API do streamer
+  const [minAmount, setMinAmount] = useState(10);
+  const [maxNameLength, setMaxNameLength] = useState(20);
+  const [maxMessageLength, setMaxMessageLength] = useState(162);
+
+  useEffect(() => {
+    if (!streamerName) return;
+
+    const fetchStreamer = async () => {
+      try {
+        setLoading(true);
+        const data = await getStreamerData(streamerName);
+        setMinAmount(data.min_amount || 10);
+        setMaxNameLength(data.max_name_lenght || 20);
+        setMaxMessageLength(data.max_message_lenght || 162);
+      } catch (err) {
+        console.error("Erro ao carregar streamer:", err);
+        setPaymentStatus('notfound');
+
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStreamer();
+  }, [streamerName, navigate]);
 
   const quickAmounts = [5, 10, 25, 50, 100];
 
@@ -31,45 +58,62 @@ const StreamPixDonation: React.FC<DonationFormProps> = () => {
 
   const handleSubmit = async () => {
     if (!voiceType) return alert("Selecione uma voz!");
+    if (!amount || Number(amount) < minAmount)
+      return alert(`O valor mínimo é R$ ${minAmount},00`);
+
+    setLoading(true);
     const donation = createDonationRequest(username, message, Number(amount), voiceType);
 
     try {
-      const response = await sendDonation(donation); // retorna ShortResponseApiDTO
+      const response = await sendDonation(donation);
       const transactionId = response.transaction_StreamPix_id;
-      navigate(`/streampix/donation/${transactionId}`); // redireciona para localhost/:transaction_StreamPix_id
+      navigate(`/donation/${transactionId}`);
     } catch (error) {
       console.error("Erro ao enviar doação:", error);
+      alert("Erro ao enviar doação. Tente novamente!");
+    } finally {
+      setLoading(false);
     }
   };
 
-
-
   return (
     <>
+      {loading && <Loading />}
 
-      <div className="donation-container">
-        <div className="donation-wrapper">
-          {/* Donation Form */}
-          <div className="form-card">
-            
+      {paymentStatus === 'notfound' ? (
+        <div className="payment-container" style={{ background: 'linear-gradient(-45deg, #441313ff, #131212ff)' }}>
+          <img src={logo} alt="" width={"40px"} style={{ position: 'absolute', left: "50%", top: "20px", transform: 'translateX(-50%' }} />
 
-
-            <div className='header-card'>
-              <img src={logoQrCode} alt="" width={"30px"} />
-              <p>StreamerName</p>
+          <div className="error-card">
+            <ArrowLeft className="button-go-back" onClick={() => window.history.back()} />
+            <div className="error-icon">
+              <UserX size={40} color="white" />
             </div>
-            {/* Username */}
+            <h2 className="error-title">Streamer Não Encontrado</h2>
+            <p className="error-message">
+              Não foi possível localizar o streamer. Verifique o nome e tente novamente.
+            </p>
+          </div>
+        </div>
+      ) : <div className="donation-container">
+        <div className="donation-wrapper">
+          <div className="form-card">
+            <div className='header-card'>
+              <img src={logoQrCode} alt="QR Code Logo" width={50} style={{ borderRadius: "10px 0px 0px 10px" }} />
+              <p>{streamerName}</p>
+            </div>
+
             <div className="form-group">
               <input
                 type="text"
                 placeholder="Seu nome de usuário"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                maxLength={maxNameLength}
                 className="input"
               />
             </div>
 
-            {/* Quick Amount Buttons */}
             <div className="form-group">
               <label className="label">Valores rápidos:</label>
               <div className="quick-amounts">
@@ -86,129 +130,64 @@ const StreamPixDonation: React.FC<DonationFormProps> = () => {
               </div>
             </div>
 
-            {/* Audio Options */}
-            <div className="form-group">
-              <div className="button-row">
-                <button type="button" className="audio-button" disabled={!isAudioEnabled} style={{ backgroundColor: isAudioEnabled ? '#f7f6f6ff' : '#eeededff', cursor: isAudioEnabled ? 'pointer' : 'not-allowed' }}>
-
-                  <Mic size={14} />
-                  Gravar áudio
-
-                </button>
-
-              </div>
-            </div>
-
-            {/* Message */}
             <div className="form-group">
               <div className="textarea-wrapper">
                 <textarea
                   placeholder="Sua mensagem de apoio..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  maxLength={162}
+                  maxLength={maxMessageLength}
                   className="textarea"
                 />
-                <div className="char-count">
-                  {message.length}/162
-                </div>
+                <div className="char-count">{message.length}/{maxMessageLength}</div>
               </div>
             </div>
 
-            {/* AI Voice Option */}
-            <div className="form-group">
-              <div className="voice-selection">
-                <label className="radio-label">
-                  <input
-                    type="radio"
-                    name="voiceType"
-                    value="male"
-                    checked={voiceType === 'male'}
-                    onChange={() => {
-                      setVoiceType('male');
-                      setIsAudioEnabled(true);
-                    }}
-                  />
-                  Voz Masculina
-                </label>
-                <label className="radio-label">
-                  <input
-                    type="radio"
-                    name="voiceType"
-                    value="female"
-                    checked={voiceType === 'female'}
-                    onChange={() => {
-                      setVoiceType('female');
-                      setIsAudioEnabled(true);
-                    }}
-                  />
-                  Voz Feminina
-                </label>
-              </div>
-            </div>
+            <div className="form-group"> <div className="voice-selection"> <label className="radio-label"> <input type="radio" name="voiceType" value="male" checked={voiceType === 'male'} onChange={() => { setVoiceType('male'); setIsAudioEnabled(true); }} /> Voz Masculina </label> <label className="radio-label"> <input type="radio" name="voiceType" value="female" checked={voiceType === 'female'} onChange={() => { setVoiceType('female'); setIsAudioEnabled(true); }} /> Voz Feminina </label> </div> </div>
 
-            {/* Amount and Currency */}
             <div className="form-group">
               <div className="amount-row">
-                <select
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value)}
-                  className="select"
-                >
+                <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="select">
                   <option value="BRL">BRL</option>
-
                 </select>
                 <input
                   type="number"
                   placeholder="0,00"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  min="10"
-                  step="0.01"
+                  min={minAmount}
+                  step={0.01}
                   className="input amount-input"
                 />
               </div>
-              <p className="min-amount">
-                Valor mínimo é de R$ 10,00
-              </p>
+              <p className="min-amount">Valor mínimo é de R$ {minAmount},00</p>
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="button"
-              onClick={handleSubmit}
-              className="submit-button"
-            >
+            <button type="button" onClick={handleSubmit} className="submit-button">
               ENVIAR DOAÇÃO
             </button>
-
-            {/* Terms */}
-            <div className="terms">
-              Ao continuar, você declara que leu e concorda com os{' '}
-              <a href="#" className="link">
-                Termos de Uso
-              </a>{' '}
-              e{' '}
-              <a href="#" className="link">
-                Política de Privacidade
-              </a>
-            </div>
           </div>
 
-          {/* Footer */}
           <div className="footer">
             <div className="footer-brand">
               <div style={{
-                backgroundColor: "#2563eb", padding: "5px", borderRadius: "10px",
-                justifyContent: "center", alignItems: "center", height: "32px"
+                backgroundColor: "#2563eb",
+                padding: "5px",
+                borderRadius: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "32px"
               }}>
-                <img src={logo} alt="" width={"20px"} />
+                <img src={logo} alt="Logo" width={20} />
               </div>
               <span>StreamPix</span>
             </div>
           </div>
         </div>
-      </div>
+      </div>}
+
+
     </>
   );
 };

@@ -29,3 +29,13 @@ export const sendDonation = async (donation: DonationRequest) => {
         throw error;
     }
 };
+
+export const getStreamerData = async (streamerName: string) => {
+    try {
+        const api = ApiConfig.getInstance();
+        const response = await api.get(`/streamer/${streamerName}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

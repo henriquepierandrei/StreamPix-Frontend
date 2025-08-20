@@ -1,0 +1,98 @@
+/* Container do toast (flutuante, canto superior) */
+.spx-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  color: #e5e7eb;
+  border: 2px solid rgba(59, 130, 246, 0.35);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.03);
+  border-radius: 14px;
+  padding: 14px 16px 14px 12px;
+  width: min(calc(100vw - 32px), 420px);
+  z-index: 9999;
+
+  animation: spx-slide-in 260ms cubic-bezier(.2,.8,.2,1) forwards,
+             spx-pop 160ms ease-out forwards;
+}
+
+/* Botão fechar */
+.spx-toast__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: 0;
+  background: transparent;
+  color: #9ca3af;
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.spx-toast__close:hover { color: #fff; background: rgba(255,255,255,0.05); }
+
+/* Avatar/ícone */
+.spx-toast__left { display: flex; align-items: center; }
+.spx-avatar {
+  width: 40px; height: 40px;
+  border-radius: 999px;
+  display: grid; place-items: center;
+  background: radial-gradient(120px 60px at 30% 20%, #0051ff, #2881ff);
+  color: rgb(59, 57, 57);
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+}
+
+/* Texto */
+.spx-toast__content { display: grid; gap: 4px; }
+.spx-toast__headline {
+  font-size: 15px;
+  line-height: 1.35;
+}
+.spx-name { font-weight: 700; color: #282d31; }
+.spx-verb { color: #525c64; }
+.spx-amount {
+  color: #2276d6;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.spx-toast__subline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #93a3b2;
+  opacity: 0.95;
+}
+
+.spx-toast__message {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #52555a;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(148, 163, 184, 0.397);
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+/* Animations */
+@keyframes spx-slide-in {
+  from { transform: translateY(-8px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes spx-pop {
+  0% { transform: scale(0.985); }
+  100% { transform: scale(1); }
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .spx-toast { top: 16px; right: 16px; padding-right: 40px; }
+  .spx-toast__message { font-size: 13px; }
+}

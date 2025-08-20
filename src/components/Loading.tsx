@@ -12,7 +12,6 @@ const Loading: React.FC = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            background: 'linear-gradient(-40deg, rgb(109, 160, 255), #0066ffff',
             backgroundSize: '400% 400%',
             animation: 'gradient 15s ease infinite',
             zIndex: 9999
