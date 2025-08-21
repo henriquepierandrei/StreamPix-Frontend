@@ -1,9 +1,10 @@
 /* Container geral */
 .container {
-  background-color: rgb(211, 207, 207);
+  background-color: rgb(230, 223, 223);
   padding: 20px;
   font-family: Arial, sans-serif;
   height: auto;
+  width: 100%;
 }
 
 /* Container de login */
@@ -73,8 +74,9 @@
 /* Para o hover do container */
 .audioPlayer:hover {
 
-  border-color: #667eea;
+  border-color: #0c0c0cff;
 }
+
 /* Pequeno ícone de áudio opcional (se quiser colocar ao lado) */
 .audioIcon {
   color: #667eea;
@@ -91,7 +93,7 @@
 }
 
 .iconContainer {
-  background: #667eea;
+  background: #0c0c0cff;
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -157,7 +159,7 @@ button {
 
 /* Dashboard */
 .dashboardContainer {
-  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -179,7 +181,7 @@ button {
 }
 
 .headerIcon {
-  background: #2563eb;
+  background: #0c0c0cff;
   padding: 10px;
   border-radius: 10px;
   text-align: center;
@@ -239,11 +241,13 @@ button {
 /* Grid e Cards */
 .gridContainer {
   display: grid;
+  width: 100%;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 }
 
-.card, .card-donations {
+.card,
+.card-donations {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 15px;
   padding: 25px;
@@ -251,81 +255,252 @@ button {
   border: 1px solid #e1e5e9;
 }
 
-.cardTitle{
+.card-donations {
+
+  max-height: 500px;
+  overflow-y: auto;
+  margin: auto;
+
+}
+
+
+
+/* ===== TÍTULO DO CARD ===== */
+.cardTitle {
   font-weight: 700;
-  background-color: rgb(247, 244, 244);
-  padding: 5px;
-  border-radius: 8px;
-  border: 1px solid #e1e5e9;
-  justify-content: center;
-  gap: 10px;
-  color:  rgb(59, 57, 57);
+  font-size: clamp(18px, 4vw, 22px);
+  /* Responsivo */
+  letter-spacing: -0.02em;
+  /* Melhor legibilidade */
+  line-height: 1.3;
+
+  /* Layout moderno */
   display: flex;
   align-items: center;
-  font-size: 18px;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 20px;
+
+  /* Visual aprimorado */
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.03),
+    0 1px 2px rgba(0, 0, 0, 0.06);
+
+  /* Cor otimizada para contraste */
+  color: #1e293b;
+
+
 }
 
+/* ===== ITEM DE DOAÇÃO ===== */
 .donateItem {
- cursor: pointer;
- font-size: 14px;
- transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
- padding: 18px 20px;
- background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
- margin: 12px 0;
- border-radius: 12px;
- border: 1px solid rgba(225, 229, 233, 0.6);
- box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
- position: relative;
- color: rgb(54, 54, 54);
- overflow: hidden;
+  /* Estrutura e espaçamento */
+  position: relative;
+  padding: 24px;
+  margin: 16px 0;
+  border-radius: 20px;
+  overflow: hidden;
+
+  /* Typography */
+  font-size: 15px;
+  line-height: 1.5;
+  color: #334155;
+
+  /* Visual base */
+  background: linear-gradient(135deg, #ffffff 0%, #eceaea 50%, #fdfdfd 100%);
+  border: 1px solid rgba(203, 213, 225, 0.4);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.02),
+    0 4px 6px rgba(0, 0, 0, 0.03);
+
+  /* Interatividade */
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Acessibilidade */
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* Efeito shimmer melhorado */
 .donateItem::before {
- content: '';
- position: absolute;
- top: 0;
- left: -100%;
- width: 100%;
- height: 100%;
- background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
- transition: left 0.6s;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.4) 45%,
+      rgba(255, 255, 255, 0.6) 50%,
+      rgba(255, 255, 255, 0.4) 55%,
+      transparent 100%);
+  transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+/* Estados de interação */
+.donateItem:hover {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #e5ebf1 100%);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.04),
+    0 10px 15px rgba(0, 0, 0, 0.06),
+    0 20px 25px rgba(0, 0, 0, 0.08);
+  border-color: rgba(148, 163, 184, 0.3);
 }
 
 .donateItem:hover::before {
- left: 100%;
+  left: 100%;
 }
 
-.donateItem:hover {
- transform: translateY(-2px);
- box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
- background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
- border-color: rgba(6, 59, 138, 0.2);
+.donateItem:active {
+  transform: translateY(-2px) scale(0.99);
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Foco para acessibilidade */
+.donateItem:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 4px rgba(59, 130, 246, 0.1),
+    0 4px 6px rgba(0, 0, 0, 0.04),
+    0 10px 15px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== BALANCE DONATION ===== */
 .donateItem .balance-donation {
- transition: all 0.3s ease;
- font-weight: 600;
- font-size: 16px;
- color: #323333;
- cursor: pointer;
- width: max-content;
- display: inline-block;
- border: 1px solid transparent;
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+  width: max-content;
+
+  /* Typography */
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.4;
+
+  /* Visual */
+  color: #475569;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+
+  /* Transição suave */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .donateItem:hover .balance-donation {
- color: #063b8a;
- transform: scale(1.05) translateX(3px);
- font-size: 17px;
- padding: 6px 14px;
- background: linear-gradient(135deg, rgba(6, 59, 138, 0.08) 0%, rgba(6, 59, 138, 0.05) 100%);
- border-radius: 8px;
- border-color: #d4d8db;
+  color: #1d4ed8;
+  background: linear-gradient(135deg,
+      rgba(29, 78, 216, 0.08) 0%,
+      rgba(29, 78, 216, 0.04) 50%,
+      rgba(29, 78, 216, 0.02) 100%);
+  border-color: rgba(29, 78, 216, 0.15);
+  transform: scale(1.05) translateX(4px);
+  box-shadow: 0 2px 4px rgba(29, 78, 216, 0.1);
 }
 
+/* ===== TEXTO STRONG ===== */
 .donateItem strong {
- font-weight: 600;
+  font-weight: 700;
+  color: #0f172a;
+  transition: color 0.3s ease;
 }
+
+.donateItem:hover strong {
+  color: #1e293b;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .cardTitle {
+    font-size: 18px;
+    padding: 14px 16px;
+    gap: 8px;
+  }
+
+  .donateItem {
+    padding: 20px;
+    margin: 12px 0;
+    border-radius: 16px;
+  }
+
+  .donateItem .balance-donation {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardTitle {
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+
+  .donateItem {
+    padding: 16px;
+    font-size: 14px;
+  }
+}
+
+/* ===== MODO ESCURO ===== */
+
+
+/* ===== ANIMAÇÕES DE ENTRADA ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.donateItem {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.donateItem:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.donateItem:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.donateItem:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+/* ===== REDUÇÃO DE MOVIMENTO ===== */
+@media (prefers-reduced-motion: reduce) {
+
+  .donateItem,
+  .donateItem::before,
+  .donateItem .balance-donation,
+  .cardTitle {
+    transition: none;
+    animation: none;
+  }
+
+  .donateItem:hover {
+    transform: none;
+  }
+
+  .donateItem:hover .balance-donation {
+    transform: none;
+  }
+}
+
 .formGroup {
   margin-bottom: 15px;
 }
@@ -364,4 +539,3 @@ button {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(19, 165, 80, 0.2);
 }
-

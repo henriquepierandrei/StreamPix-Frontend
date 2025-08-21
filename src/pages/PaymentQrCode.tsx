@@ -76,8 +76,6 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
   return (
     <>
 
-
-
       {paymentStatus === 'success' && (
         <div className="payment-container" style={{ background: 'linear-gradient(-45deg, #0b3315ff, #131212ff)' }}>
           <img src={logo} alt="" width={"40px"} style={{ position: 'absolute', left: "50%", top: "20px", transform: 'translateX(-50%' }} />

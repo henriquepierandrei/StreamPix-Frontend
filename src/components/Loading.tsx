@@ -14,7 +14,8 @@ const Loading: React.FC = () => {
             alignItems: 'center',
             backgroundSize: '400% 400%',
             animation: 'gradient 15s ease infinite',
-            zIndex: 9999
+            zIndex: 999,
+            background: 'linear-gradient(-45deg, #1d1b1bff, #131212ff)'
         }}>
             <style>{`
             @keyframes gradient {

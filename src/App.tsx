@@ -3,8 +3,7 @@ import PaymentQrCode from './pages/PaymentQrCode'
 import StreamPixDonation from './pages/StreamPixDonation'
 import StreamerDashboard from './pages/StreamerDashboard';
 import DonationToast from './components/DonationToast';
-import StreamerNotFound from './components/StreamerNotFound';
-import StreamerQrPage from './components/StreamerQrPage';
+import StreamerQrPage from './pages/StreamerQrPage';
 
 
 function App() {
@@ -13,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/streamer/:streamerName" element={<StreamPixDonation />} />
         <Route path="/donation/:transactionId" element={<PaymentQrCode />} />
-        <Route path="/streamer" element={<StreamerDashboard />} />
+        <Route path="/streamer/dashboard" element={<StreamerDashboard />} />
         <Route path="/streamer/qrcode/:streamerName" element={<StreamerQrPage />} />
         
         {/* Rota de teste para o DonationToast */}

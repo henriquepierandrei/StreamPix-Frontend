@@ -23,8 +23,6 @@ interface StreamerData {
 const StreamerDashboard: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
   const [donates, setDonates] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [streamerData, setStreamerData] = useState<StreamerData>({
     streamer_name: "Carregando...",

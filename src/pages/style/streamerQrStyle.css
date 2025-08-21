@@ -1,0 +1,90 @@
+
+
+@keyframes shooting {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-1000px) translateY(600px) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+/* container do QR */
+.qr-container {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.65);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* efeito nas mensagens */
+.qr-message {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  animation: fadeInOut 20s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+
+.qr-container {
+    padding: 0px 0px 10px 0px;
+    background: linear-gradient(45deg, #223446ea 0%, #222222f3 50%, #1c1d1ff5 100%);
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    height: 360px;
+    width: 350px;
+}
+
+.title-qrcode {
+    text-align: center;
+    margin-bottom: 20px;
+    background: linear-gradient(45deg, #31455acc 0%, #353535d2 50%, #3a3c41cb 100%);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.custom-qr{
+    border-radius: 10px;
+}
+
+.qr-container h2 {
+    color: transparent;
+    background: linear-gradient(45deg, #ffffff 0%, #e9b2b2 50%, #abb4c7 100%);
+    -webkit-background-clip: text;
+
+}
+
+.qr-code-container-streamer {
+    background: linear-gradient(45deg, #31455a 0%, #353535 50%, #3a3c41 100%);
+    width: max-content;
+    padding: 15px;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
