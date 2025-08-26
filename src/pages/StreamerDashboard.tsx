@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Key, Settings, User, DoorOpen, MessageCircle, Clock } from 'lucide-react';
+import { Save, Key, Settings, User, DoorOpen, MessageCircle, Clock, Pointer, UserStarIcon } from 'lucide-react';
 import { ApiConfig } from "./../api/ApiConfig";
 import { getStreamerData } from "./../api/GetStreamerData"; // ajuste o path se necessário
 import logo from '../assets/logo.png';
 import './style/dashboard.css';
+import PlayButtonAudio from '../components/PlayButtonAudio';
 
 interface StreamerData {
   streamer_name: string;
@@ -187,23 +188,23 @@ const StreamerDashboard: React.FC = () => {
       <div className="card-donations">
         <div className="cardTitle">
           <Settings size={20} color="#667eea" />
-          Donates Recebidos
+          <p>Donates Recebidos</p>
         </div>
         {donates.length === 0 ? (
           <p>Nenhum donate encontrado.</p>
         ) : (
           donates.map((donate) => (
             <div key={donate.uuid} className="donateItem">
-              <p><strong><User size={15} /> Nome:</strong> {donate.name}</p>
-              <p className='balance-donation'>R${donate.amount}</p>
+              <p className='balance-donation'>
+                R${donate.amount}
+              </p>
+              <div className='audio-container'>{donate.audio_url && (<PlayButtonAudio src={donate.audio_url} />)}
+              </div>
+
+              <p><strong><UserStarIcon size={12} /> Nome:</strong> {donate.name}</p>
 
               <p style={{ fontSize: '12px', color: '#666', display: 'flex', alignItems: 'center', gap: "5px" }}>
-                <Clock size={12}/> Data: {new Date(donate.donated_at).toLocaleString()} </p>
-              {donate.audio_url && (
-                <audio controls className="audioPlayer">
-                  <source src={donate.audio_url} type="audio/mpeg" />
-                </audio>
-              )}
+                <Clock size={12} /> Data: {new Date(donate.donated_at).toLocaleString()} </p>
             </div>
           ))
         )}
@@ -220,7 +221,7 @@ const StreamerDashboard: React.FC = () => {
             </div>
             <div className="cardTitle">
               <User size={20} color="#667eea" />
-              Informações do Streamer
+              <p>Informações do Streamer</p>
             </div>
 
             <div className="formGroup">
@@ -251,7 +252,7 @@ const StreamerDashboard: React.FC = () => {
           <div className="card">
             <div className="cardTitle">
               <Settings size={20} color="#667eea" />
-              Configurações
+              <p>Configurações</p>
             </div>
 
             <div className="formGroup">

@@ -1,3 +1,5 @@
+
+
 /* Container geral */
 .container {
   background-color: rgb(230, 223, 223);
@@ -20,7 +22,7 @@
   font-weight: 800;
   font-size: 1.95rem;
   color: transparent;
-  background: linear-gradient(45deg, #9292ff 0%, #2356ff 100%);
+  background: linear-gradient(45deg, #373749, rgb(72, 103, 161));
   -webkit-background-clip: text;
   cursor: pointer;
 }
@@ -46,9 +48,11 @@
   width: 100%;
 }
 
-.loginButton{
+.loginButton {
   background: linear-gradient(135deg, #1a1a1b 0%, #1f1e20 100%);
-}.loginButton:hover{
+}
+
+.loginButton:hover {
   background: linear-gradient(135deg, rgb(43, 42, 42) 0%, #3c3a3d 100%);
   color: white;
   transform: translateY(-1px);
@@ -193,7 +197,7 @@ button {
 }
 
 .headerIcon {
-  background: #0c0c0cff;
+  background: linear-gradient(45deg, #373749, rgb(72, 103, 161));
   padding: 10px;
   border-radius: 10px;
   text-align: center;
@@ -263,7 +267,7 @@ button {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 15px;
   padding: 20px;
-  box-shadow: 
+  box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.05),
     0 4px 6px rgba(0, 0, 0, 0.05),
     0 10px 15px rgba(0, 0, 0, 0.03);
@@ -278,6 +282,7 @@ button {
   overflow-y: auto;
   margin: auto;
 }
+
 /* ===== TÍTULO DO CARD ===== */
 .cardTitle {
   font-weight: 700;
@@ -295,21 +300,25 @@ button {
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.03),
     0 1px 2px rgba(0, 0, 0, 0.06);
-  color: #1e293b;
+}.cardTitle p {
+  color: transparent;
+  background: linear-gradient(45deg, #373749, rgb(72, 103, 161));
+  -webkit-background-clip: text;
 }
-
 .donateItem {
+  font-family: "Saira", sans-serif;
+
   position: relative;
   padding: 5px 20px;
   margin: 16px 0;
-  border-radius: 20px;
+  border-radius: 5px;
   overflow: hidden;
   font-size: 15px;
   line-height: 1.5;
   color: #334155;
   /* Visual base */
   background: linear-gradient(135deg, #ffffff 0%, #eceaea 50%, #fdfdfd 100%);
-  border-left: 8px solid rgba(0, 0, 255, 0.767);
+  border: 1px solid rgba(223, 223, 224, 0.767);
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.02),
     0 4px 6px rgba(0, 0, 0, 0.03);
@@ -323,10 +332,11 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
-.donateItem p{
-  color: #475569;
-
+.donateItem p {
+  color: #5b7599;
 }
+
+
 
 /* Efeito shimmer melhorado */
 .donateItem::before {
@@ -344,17 +354,6 @@ button {
       transparent 100%);
   transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
-}
-
-/* Estados de interação */
-.donateItem:hover {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #e5ebf1 100%);
-  transform: translateY(-4px) scale(1.01);
-  box-shadow:
-    0 4px 6px rgba(0, 0, 0, 0.04),
-    0 10px 15px rgba(0, 0, 0, 0.06),
-    0 20px 25px rgba(0, 0, 0, 0.08);
-  border-color: rgba(148, 163, 184, 0.3);
 }
 
 .donateItem:hover::before {
@@ -378,45 +377,49 @@ button {
 
 /* ===== BALANCE DONATION ===== */
 .donateItem .balance-donation {
-  position: relative;
   z-index: 2;
   display: inline-block;
-  width: max-content;
+  width: 5%;
+  text-align: start;
 
   /* Typography */
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 800;
+  font-size: 12px;
   line-height: 0.8;
-
   /* Visual */
   color: #475569;
   padding: 8px 12px;
   border-radius: 5px;
   border: 1px solid transparent;
   background: transparent;
-
   /* Transição suave */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  color: #1d4ed8;
-  background: linear-gradient(135deg,
-      rgba(29, 78, 216, 0.08) 0%,
-      rgba(29, 78, 216, 0.04) 50%,
-      rgba(29, 78, 216, 0.02) 100%);
-  border-color: rgba(204, 206, 211, 0.527);
-  box-shadow: 0 2px 4px rgba(29, 78, 216, 0.1);
+  color: #595a5c;
+  border: 1px solid rgba(89, 90, 92, 0.267);
   transform: scale(1.05);
+  
 }
 
+.balance-donation {
+  position: fixed;
+  
+  right: 20px;
+  top: 10px;
+}
+
+.audio-container {
+  position: absolute;
+  right: 115px;
+  bottom: 4%;
+  padding: 10px;
+}
 
 /* ===== TEXTO STRONG ===== */
 .donateItem strong {
-  font-weight: 700;
   transition: color 0.3s ease;
+  border-radius: 5px;
 }
 
-.donateItem:hover strong {
-  color: #1e293b;
-}
 
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
