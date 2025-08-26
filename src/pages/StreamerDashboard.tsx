@@ -195,7 +195,7 @@ const StreamerDashboard: React.FC = () => {
           donates.map((donate) => (
             <div key={donate.uuid} className="donateItem">
               <p><strong><User size={15} /> Nome:</strong> {donate.name}</p>
-              <p className='balance-donation'>R${donate.amount.toFixed(2)}</p>
+              <p className='balance-donation'>R${donate.amount}</p>
 
               <p style={{ fontSize: '12px', color: '#666', display: 'flex', alignItems: 'center', gap: "5px" }}>
                 <Clock size={12}/> Data: {new Date(donate.donated_at).toLocaleString()} </p>
@@ -214,7 +214,7 @@ const StreamerDashboard: React.FC = () => {
             <div className="formGroup">
               <label>Saldo</label>
               <div className='balance-display'>
-                <p className='balance'>R${streamerData.streamer_balance.toFixed(2)}</p>
+                <p className='balance'>R${streamerData.streamer_balance}</p>
               </div>
 
             </div>

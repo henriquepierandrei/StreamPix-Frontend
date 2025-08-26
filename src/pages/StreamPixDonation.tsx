@@ -6,22 +6,23 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { createDonationRequest, sendDonation, getStreamerData } from '../api/DonationRequest';
 import './style/style.css';
 import Loading from '../components/Loading';
+import Alert from '../components/Alert';
 
 type PaymentStatus = 'pending' | 'success' | 'failed' | 'notfound' | 'error';
 
 const StreamPixDonation: React.FC = () => {
   const navigate = useNavigate();
   const { streamerName } = useParams() as { streamerName?: string };
-
   const [username, setUsername] = useState('');
   const [message, setMessage] = useState('');
-  const [amount, setAmount] = useState<number | ''>('');
+  const [amount, setAmount] = useState<string>(''); // sempre string no input
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>('pending');
   const [currency, setCurrency] = useState('BRL');
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const [selectedQuickAmount, setSelectedQuickAmount] = useState<number | null>(null);
   const [voiceType, setVoiceType] = useState<string>('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(false);
 
   // dados vindos da API do streamer
   const [minAmount, setMinAmount] = useState(10);
@@ -52,13 +53,15 @@ const StreamPixDonation: React.FC = () => {
   const quickAmounts = [5, 10, 25, 50, 100];
 
   const handleQuickAmount = (value: number) => {
-    setAmount(value);
+    setAmount(value.toString()); // salva como string
     setSelectedQuickAmount(value);
   };
 
   const handleSubmit = async () => {
+    const numericAmount = parseFloat(amount);
+
     if (!voiceType) return alert("Selecione uma voz!");
-    if (!amount || amount < minAmount)
+    if (!numericAmount || numericAmount < minAmount)
       return alert(`O valor mínimo é R$ ${minAmount},00`);
 
     setLoading(true);
@@ -68,16 +71,19 @@ const StreamPixDonation: React.FC = () => {
       const response = await sendDonation(donation);
       const transactionId = response.transaction_StreamPix_id;
       navigate(`/donation/${transactionId}`);
-    } catch (error) {
-      setPaymentStatus('error');
+    } catch (error: any) {
+      // setPaymentStatus('error');
+        const apiError = error.response?.data; // 👈 esse é o JSON que você mostrou
+      setError(apiError);
       console.error('Erro ao enviar doação:', error);
     } finally {
       setLoading(false);
     }
   };
 
-
   if (loading) return <Loading />;
+
+  
 
   if (paymentStatus === 'notfound') {
     return (
@@ -117,10 +123,15 @@ const StreamPixDonation: React.FC = () => {
 
   return (
     <div className='donation-container'>
-      <div className="donation-wrapper">
       
+      {error && <div style={{position: "fixed", top: "10px"}}><Alert error={error} /></div>}
+      
+      <div className="donation-wrapper">
+
         <div className="form-card">
-          <h2 className='donate-title-page'><BadgeDollarSign style={{color: "#0051ff"}} size={"1.3em"}/> Doe para<strong>{streamerName}</strong></h2><br />
+          <h2 className='donate-title-page'>
+            <BadgeDollarSign style={{ color: "#0051ff" }} size={"1.3em"} /> Doe para <strong>{streamerName}</strong>
+          </h2><br />
           <div className='header-card'>
             <img src={streamerLogo} alt="QR Code Logo" width={50} style={{ borderRadius: "10px 0px 0px 10px" }} />
             <p>{streamerName}</p>
@@ -198,13 +209,15 @@ const StreamPixDonation: React.FC = () => {
                 type="number"
                 placeholder="0,00"
                 value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
+                onChange={(e) => setAmount(e.target.value)}
                 min={minAmount}
                 step={0.01}
                 className="input amount-input"
               />
             </div>
-            <p className="min-amount">Valor mínimo é de R$ {minAmount},00</p>
+            <p className='min-amount'>
+              R${minAmount.toString().replace('.', ',')} é o valor mínimo.
+            </p>
           </div>
 
           <button type="button" onClick={handleSubmit} className="submit-button">

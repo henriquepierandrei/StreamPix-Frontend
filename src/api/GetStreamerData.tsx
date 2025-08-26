@@ -2,9 +2,9 @@ import { ApiConfig } from "./ApiConfig";
 
 interface StreamerData {
   streamer_name: string;
-  streamer_balance: number;
+  streamer_balance: string;
   is_auto_play: boolean;
-  min_amount: number;
+  min_amount: string;
   max_characters_name: number;
   max_characters_message: number;
   http_response: {

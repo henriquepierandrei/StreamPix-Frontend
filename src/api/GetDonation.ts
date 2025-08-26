@@ -1,9 +1,9 @@
 import { ApiConfig } from "./ApiConfig";
 interface DonationResponse {
     qrcode: string;
-    amount: number;
+    amount: string;
     name: string;
-    remaining_time: number;
+    time_remaining_seconds: number;
 }
 
 export const getDonation = async (uuid: string): Promise<DonationResponse> => {

@@ -26,7 +26,7 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
       try {
         const response = await getDonation(transactionId);
         setPaymentInfo(response);
-        setTimeLeft(300);
+        setTimeLeft(response.time_remaining_seconds);
 
         if ((response as any).already_paid) {
           setPaymentStatus('success');

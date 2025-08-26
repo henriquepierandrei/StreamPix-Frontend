@@ -4,14 +4,14 @@ import { ApiConfig } from "./ApiConfig";
 export interface DonationRequest {
     name: string;
     message: string;
-    amount: number;
+    amount: string;
     voice_type: string;
 }
 
 export const createDonationRequest = (
     name: string,
     message: string,
-    amount: number,
+    amount: string,
     voiceType: string
 ): DonationRequest => ({
     name,
