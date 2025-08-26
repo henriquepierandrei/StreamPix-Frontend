@@ -2,8 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PaymentQrCode from './pages/PaymentQrCode'
 import StreamPixDonation from './pages/StreamPixDonation'
 import StreamerDashboard from './pages/StreamerDashboard';
-import DonationToast from './components/DonationToast';
 import StreamerQrPage from './pages/StreamerQrPage';
+import NotFoundPage from './pages/Notfound/NotFoundPage';
+
 
 
 function App() {
@@ -14,19 +15,8 @@ function App() {
         <Route path="/donation/:transactionId" element={<PaymentQrCode />} />
         <Route path="/streamer/dashboard" element={<StreamerDashboard />} />
         <Route path="/streamer/qrcode/:streamerName" element={<StreamerQrPage />} />
-        
-        {/* Rota de teste para o DonationToast */}
-
-        <Route path="/teste" element={<DonationToast
-          name="Meno de Guarulhos"
-          amount={0.05}
-          message="TomaTomaToma aquele café! aquele caféaToma aquele café! aquele caféaToma aquele café! aquele caféaToma aquele café! aquele caféaToma aquele café! aquele caféaToma aquele café! aquele caféaToma aquele café! aquele caféa aquele café! aquele café!"
-          playSoundUrl="/sounds/donate.mp3"
-          onClose={() => console.log("toast fechado")}
-        />} />
-
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
-
     </Router>
   );
 }

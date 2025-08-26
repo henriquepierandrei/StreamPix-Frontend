@@ -10,54 +10,64 @@ import logoQrCode from '../assets/logo-qrcode.png';
 interface PaymentQrCodeProps { }
 
 const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
-  const [paymentStatus, setPaymentStatus] = useState<'pending' | 'success' | 'failed' | 'notfound'>('pending');
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutos
+  const [paymentStatus, setPaymentStatus] = useState<'pending' | 'success' | 'notfound' | 'expired' | 'loading'>('loading');
+  const [timeLeft, setTimeLeft] = useState(0); // 5 minutos
   const [copied, setCopied] = useState(false);
   const [paymentInfo, setPaymentInfo] = useState<any>(null);
   const { transactionId } = useParams<{ transactionId: string }>();
 
   useEffect(() => {
+    if (!transactionId) return;
+
     let interval: ReturnType<typeof setInterval>;
     let paymentCheckInterval: ReturnType<typeof setInterval>;
 
     const fetchPayment = async () => {
       try {
-        const response = await getDonation(transactionId!);
+        const response = await getDonation(transactionId);
         setPaymentInfo(response);
+        setTimeLeft(300);
 
         if ((response as any).already_paid) {
           setPaymentStatus('success');
+          clearInterval(paymentCheckInterval); // para o polling
+        } else {
+          setPaymentStatus('pending');
         }
       } catch (error: any) {
-        if (error.response?.status === 404 || error.response?.status === 409) {
-          setPaymentStatus('notfound');
-        } else {
-          console.error(error);
-        }
+        if (error.response?.status === 404) setPaymentStatus('notfound');
+        else if (error.response?.status === 409) {
+          setPaymentStatus('expired');
+          clearInterval(paymentCheckInterval); // para o polling
+        } else console.error(error);
       }
     };
 
-
+    // primeira chamada imediata
     fetchPayment();
 
+    // timer do countdown
     interval = setInterval(() => {
       setTimeLeft(prev => {
-        if (prev <= 1) {
+        if (prev <= 1 && paymentStatus !== 'success') {
           clearInterval(interval);
-          if (paymentStatus === 'pending') setPaymentStatus('failed');
+          setPaymentStatus('expired'); // marca expirado quando chegar a 0
+          clearInterval(paymentCheckInterval); // garante que o polling pare
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
 
+    // polling a cada 5s
     paymentCheckInterval = setInterval(fetchPayment, 5000);
 
     return () => {
       clearInterval(interval);
       clearInterval(paymentCheckInterval);
     };
-  }, [transactionId, paymentStatus]);
+  }, [transactionId]);
+
 
 
   const formatTime = (seconds: number) => {
@@ -71,13 +81,12 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
     setTimeLeft(300);
   };
 
-  // Aqui o retorno de success/failed continua igual ao seu código original...
-
   return (
     <>
 
       {paymentStatus === 'success' && (
-        <div className="payment-container" style={{ background: 'linear-gradient(-45deg, #0b3315ff, #131212ff)' }}>
+        <div className="payment-container"
+        >
           <img src={logo} alt="" width={"40px"} style={{ position: 'absolute', left: "50%", top: "20px", transform: 'translateX(-50%' }} />
           <div className="success-card">
             <ArrowLeft className="button-go-back" onClick={() => window.history.back()} />
@@ -90,7 +99,8 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
         </div>
       )}
 
-      {paymentStatus === 'failed' && (
+
+      {paymentStatus === 'expired' && (
         <div className="payment-container">
           <img src={logo} alt="" width={"40px"} style={{ position: 'absolute', left: "50%", top: "20px", transform: 'translateX(-50%' }} />
           <div className="error-card">
@@ -98,11 +108,10 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
             <div className="error-icon">
               <XCircle size={40} color="white" />
             </div>
-            <h2 className="error-title">Pagamento Não Realizado</h2>
+            <h2 className="error-title">Pagamento Expirado</h2>
             <p className="error-message">
               O tempo limite expirou ou ocorreu um erro no processamento. Tente novamente.
             </p>
-            <button className="retry-button" onClick={handleTryAgain}>Tentar Novamente</button>
           </div>
         </div>
       )}
@@ -112,15 +121,12 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
           <img src={logo} alt="" width={"40px"} style={{ position: 'absolute', left: "50%", top: "20px", transform: 'translateX(-50%' }} />
 
           <div className="qr-card">
-            <div className="header">
-              <h1 className="title">
-                <QRCodeCanvas value={paymentInfo?.qrcode || ''} size={24} color="#2563eb" />
-                Pagamento PIX
-              </h1>
+            <div className="header-card-qr">
+              <h1 className="title">Pagamento PIX</h1>
               <p className="subtitle">Escaneie o QR Code ou copie o código</p>
             </div>
 
-            <div style={{ position: "relative", display: "inline-block" }}>
+            <div style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
               <QRCodeCanvas
                 value={paymentInfo?.qrcode || ''}
                 size={256}

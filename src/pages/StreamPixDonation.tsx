@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Mic, UserX, XCircle, XIcon } from 'lucide-react';
-import logoQrCode from '../assets/logo-qrcode.png';
+import { ArrowLeft, BadgeDollarSign, UserX, XIcon } from 'lucide-react';
+import streamerLogo from '../assets/image.png';
 import logo from '../assets/logo.png';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createDonationRequest, sendDonation, getStreamerData } from '../api/DonationRequest';
@@ -118,9 +118,11 @@ const StreamPixDonation: React.FC = () => {
   return (
     <div className='donation-container'>
       <div className="donation-wrapper">
+      
         <div className="form-card">
+          <h2 className='donate-title-page'><BadgeDollarSign style={{color: "#0051ff"}} size={"1.3em"}/> Doe para<strong>{streamerName}</strong></h2><br />
           <div className='header-card'>
-            <img src={logoQrCode} alt="QR Code Logo" width={50} style={{ borderRadius: "10px 0px 0px 10px" }} />
+            <img src={streamerLogo} alt="QR Code Logo" width={50} style={{ borderRadius: "10px 0px 0px 10px" }} />
             <p>{streamerName}</p>
           </div>
 
@@ -212,17 +214,7 @@ const StreamPixDonation: React.FC = () => {
 
         <div className="footer">
           <div className="footer-brand">
-            <div style={{
-              backgroundColor: "#2563eb",
-              padding: "5px",
-              borderRadius: "10px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "32px"
-            }}>
-              <img src={logo} alt="Logo" width={20} />
-            </div>
+            <img src={logo} alt="Logo" width={15} />
             <span>StreamPix</span>
           </div>
         </div>

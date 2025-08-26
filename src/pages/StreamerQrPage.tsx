@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import QRCode from "react-qr-code";
 import { ApiConfig } from "./../api/ApiConfig";
-import logo from "./../assets/logo.png";
+import logo from "./../assets/logo-qrcode-to-request.png";
 import "./style/streamerQrStyle.css";
 
 interface StreamerData {
@@ -79,9 +79,7 @@ function StreamerQrPage() {
                                 transform: "translate(-50%, -50%)",
                                 width: "50px",
                                 height: "50px",
-                                borderRadius: "10px",
-                                background: "linear-gradient(45deg, #223446ea 0%, #222222f3 50%, #1c1d1ff5 100%)",
-                                padding: "5px",
+                                borderRadius: "10px"
                             }}
                         />
 

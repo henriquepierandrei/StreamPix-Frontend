@@ -3,6 +3,7 @@ interface DonationResponse {
     qrcode: string;
     amount: number;
     name: string;
+    remaining_time: number;
 }
 
 export const getDonation = async (uuid: string): Promise<DonationResponse> => {
@@ -12,5 +13,6 @@ export const getDonation = async (uuid: string): Promise<DonationResponse> => {
         return response.data;
     } catch (error) {
         throw error;
+        console.error("Error fetching donation:", error);
     }
 };

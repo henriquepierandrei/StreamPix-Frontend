@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Key, Settings, User, DoorOpen, MessageCircle } from 'lucide-react';
+import { Save, Key, Settings, User, DoorOpen, MessageCircle, Clock } from 'lucide-react';
 import { ApiConfig } from "./../api/ApiConfig";
 import { getStreamerData } from "./../api/GetStreamerData"; // ajuste o path se necessário
 import logo from '../assets/logo.png';
@@ -160,7 +160,7 @@ const StreamerDashboard: React.FC = () => {
                 onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
               />
             </div>
-            <button onClick={handleLogin}>
+            <button onClick={handleLogin} style={{ marginTop: '10px' }} className="loginButton">
               Acessar Dashboard
             </button>
           </div>
@@ -171,39 +171,44 @@ const StreamerDashboard: React.FC = () => {
 
   return (
     <div className="container">
-      <div className="dashboardContainer">
-        <div className="header">
-          <div className="headerLeft">
-            <div className="headerIcon">
-              <img src={logo} alt="" width={"30px"} />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-              <h1 className="title">Dashboard do Streamer</h1>
-            </div>
+      <div className="header">
+        <div className="headerLeft">
+          <div className="headerIcon">
+            <img src={logo} alt="" width={"30px"} />
           </div>
-          <button className="logoutButton" onClick={handleLogout}>
-            <DoorOpen /> Sair
-          </button>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <h1 className="title">Dashboard do Streamer</h1>
+          </div>
         </div>
+        <button className="logoutButton" onClick={handleLogout}>
+          <DoorOpen /> Sair
+        </button>
+      </div>
+      <div className="card-donations">
+        <div className="cardTitle">
+          <Settings size={20} color="#667eea" />
+          Donates Recebidos
+        </div>
+        {donates.length === 0 ? (
+          <p>Nenhum donate encontrado.</p>
+        ) : (
+          donates.map((donate) => (
+            <div key={donate.uuid} className="donateItem">
+              <p><strong><User size={15} /> Nome:</strong> {donate.name}</p>
+              <p className='balance-donation'>R${donate.amount.toFixed(2)}</p>
 
-        {streamerData.http_response && (
-          <div className="statusCard">
-            <div className="statusIndicator">
-              <div
-                className="statusDot"
-                style={{ backgroundColor: streamerData.http_response.status === 'OK' ? '#2ed573' : '#ff4757' }}
-              />
-
-              <span style={{ fontWeight: 'bold' }}>
-                Status: {streamerData.http_response.status}
-              </span>
+              <p style={{ fontSize: '12px', color: '#666', display: 'flex', alignItems: 'center', gap: "5px" }}>
+                <Clock size={12}/> Data: {new Date(donate.donated_at).toLocaleString()} </p>
+              {donate.audio_url && (
+                <audio controls className="audioPlayer">
+                  <source src={donate.audio_url} type="audio/mpeg" />
+                </audio>
+              )}
             </div>
-            <p style={{ margin: '5px 0 0', color: '#666' }}>
-              {streamerData.http_response.message}
-            </p>
-          </div>
+          ))
         )}
-
+      </div>
+      <div className="dashboardContainer">
         <div className="gridContainer">
           <div className="card">
             <div className="formGroup">
@@ -298,32 +303,6 @@ const StreamerDashboard: React.FC = () => {
 
         </div>
       </div><br />
-      <div className="card-donations">
-        <div className="cardTitle">
-          <Settings size={20} color="#667eea" />
-          Donates Recebidos
-        </div>
-        {donates.length === 0 ? (
-          <p>Nenhum donate encontrado.</p>
-        ) : (
-          donates.map((donate) => (
-            <div key={donate.uuid} className="donateItem">
-              <p><strong><User size={15}/> Nome:</strong> {donate.name}</p>
-              <p><strong><MessageCircle size={15}/> Mensagem:</strong> {donate.message}</p>
-              <p className='balance-donation'><strong>Valor:</strong> R${donate.amount.toFixed(2)}</p>
-
-              <p style={{ fontSize: '12px', color: '#666' }}>
-                Data: {new Date(donate.donated_at).toLocaleString()} </p>
-              {donate.audio_url && (
-                <audio controls className="audioPlayer">
-                  <source src={donate.audio_url} type="audio/mpeg" />
-                </audio>
-              )}
-            </div>
-          ))
-        )}
-      </div>
-
     </div>
   );
 };
