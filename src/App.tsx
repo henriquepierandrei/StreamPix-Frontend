@@ -11,7 +11,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/streamer/:streamerName" element={<StreamPixDonation />} />
+        <Route path="/:streamerName" element={<StreamPixDonation />} />
         <Route path="/donation/:transactionId" element={<PaymentQrCode />} />
         <Route path="/streamer/dashboard" element={<StreamerDashboard />} />
         <Route path="/streamer/qrcode/:streamerName" element={<StreamerQrPage />} />

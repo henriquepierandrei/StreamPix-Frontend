@@ -29,7 +29,7 @@ function NotFoundPage() {
             <div className="footer">
                 <div className="footer-brand">
                     <img src={logo} alt="Logo" width={15} />
-                    <span style={{fontFamily: 'Montserrat'}}>StreamPix</span>
+                    <span style={{fontFamily: 'Saira'}}>StreamPix</span>
                 </div>
             </div>
 

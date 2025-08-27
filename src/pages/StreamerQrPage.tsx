@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import QRCode from "react-qr-code";
+// import QRCode from "react-qr-code";
+import { QRCode } from "react-qrcode-logo";
+
 import { ApiConfig } from "./../api/ApiConfig";
 import logo from "./../assets/logo-qrcode-to-request.png";
 import "./style/streamerQrStyle.css";
@@ -18,9 +20,8 @@ function StreamerQrPage() {
     // mensagens motivacionais para aparecer em loop
     const messages = [
         "💖 Apoie seu streamer favorito!",
-        "🚀 Faça parte da live com sua doação!",
-        "🔥 Mostre seu suporte, doe agora!",
-        "🎉 Ajude a manter a energia da stream!",
+        "🚀 Faça parte da live!",
+        "🔥 Mostre seu suporte!"
     ];
     const [currentMessage, setCurrentMessage] = useState(0);
 
@@ -28,7 +29,7 @@ function StreamerQrPage() {
         async function fetchStreamer() {
             try {
                 const api = ApiConfig.getInstance();
-                const response = await api.get(`/streamer/${streamerName}`);
+                const response = await api.get(`/${streamerName}`);
                 const data: StreamerData = response.data;
                 setStreamerData(data);
             } catch (err: any) {
@@ -55,19 +56,28 @@ function StreamerQrPage() {
     return (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}><div style={{ textAlign: "center", marginTop: "50px" }} className="qr-container">
             <div className="title-qrcode">
-                <h2>QR Code {streamerName}</h2>
+                <h2>streampix.gg/{streamerName}</h2>
             </div>
 
             {streamerData && (
                 <>
                     <div style={{ position: "relative", display: "inline-block" }}>
-                        <QRCode
+                        {/* <QRCode
                             value={streamerData.qr_code_url}
                             size={200}
                             bgColor="transparent"
                             fgColor="#ffffff"
                             level="H"
                             className="custom-qr"
+                        /> */}
+                        <QRCode
+                            value={streamerData.qr_code_url}
+                            size={200}
+                            bgColor="transparent"
+                            fgColor="#ffffff"
+                            qrStyle="fluid"      // deixa os quadradinhos arredondados
+                            eyeRadius={15}      // arredonda os cantos dos "olhos"
+                            
                         />
                         <img
                             src={logo}
@@ -89,10 +99,10 @@ function StreamerQrPage() {
 
                 </>
             )}
-             <p key={currentMessage} className="qr-message">
-          {messages[currentMessage]}
-        </p>
-            
+            <p key={currentMessage} className="qr-message">
+                {messages[currentMessage]}
+            </p>
+
         </div></div>
     );
 }

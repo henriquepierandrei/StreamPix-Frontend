@@ -173,11 +173,7 @@ button {
   transition: transform 0.2s;
 }
 
-/* Dashboard */
-.dashboardContainer {
-  width: 100%;
-  margin: 0 auto;
-}
+
 
 .header {
   background: rgba(255, 255, 255, 0.95);
@@ -256,10 +252,13 @@ button {
 
 /* Grid e Cards */
 .gridContainer {
+  padding: 0px;
   display: grid;
   width: 100%;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
+  
+
 }
 
 .card,
@@ -379,7 +378,7 @@ button {
 .donateItem .balance-donation {
   z-index: 2;
   display: inline-block;
-  width: 5%;
+  width: max-content;
   text-align: start;
 
   /* Typography */
@@ -388,9 +387,8 @@ button {
   line-height: 0.8;
   /* Visual */
   color: #475569;
-  padding: 8px 12px;
+  padding: 5px;
   border-radius: 5px;
-  border: 1px solid transparent;
   background: transparent;
   /* Transição suave */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -410,6 +408,8 @@ button {
 .audio-container {
   position: absolute;
   right: 115px;
+  display: flex;
+  gap: 2px;
   bottom: 4%;
   padding: 10px;
 }

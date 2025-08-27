@@ -33,7 +33,7 @@ export const sendDonation = async (donation: DonationRequest) => {
 export const getStreamerData = async (streamerName: string) => {
     try {
         const api = ApiConfig.getInstance();
-        const response = await api.get(`/streamer/${streamerName}`);
+        const response = await api.get(`/${streamerName}`);
         return response.data;
     } catch (error) {
         throw error;

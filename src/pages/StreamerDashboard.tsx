@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Key, Settings, User, DoorOpen, MessageCircle, Clock, Pointer, UserStarIcon } from 'lucide-react';
+import { Save, Key, Settings, User, DoorOpen, Clock, UserStarIcon, Copy, Link, QrCode } from 'lucide-react';
 import { ApiConfig } from "./../api/ApiConfig";
 import { getStreamerData } from "./../api/GetStreamerData"; // ajuste o path se necessário
 import logo from '../assets/logo.png';
 import './style/dashboard.css';
 import PlayButtonAudio from '../components/PlayButtonAudio';
+import ReplayButtonDonation from '../components/ReplayButtonDonation';
 
 interface StreamerData {
   streamer_name: string;
@@ -198,7 +199,9 @@ const StreamerDashboard: React.FC = () => {
               <p className='balance-donation'>
                 R${donate.amount}
               </p>
-              <div className='audio-container'>{donate.audio_url && (<PlayButtonAudio src={donate.audio_url} />)}
+              <div className='audio-container'>
+                <ReplayButtonDonation uuid={donate.uuid} />
+                {donate.audio_url && (<PlayButtonAudio src={donate.audio_url} />)}
               </div>
 
               <p><strong><UserStarIcon size={12} /> Nome:</strong> {donate.name}</p>
@@ -303,7 +306,114 @@ const StreamerDashboard: React.FC = () => {
           </div>
 
         </div>
-      </div><br />
+      </div>
+      <div className="dashboardContainer">
+        <div className='gridContainer'>
+            <div className='card'>
+            <div className="cardTitle">
+              <QrCode size={20} color="#667eea" />
+              <p>URL QrCode {streamerData.streamer_name}</p>
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px', flexDirection: 'column', marginTop: '10px' }}>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <input 
+                type="text"
+                value={"http://localhost:5173/streamer/qrcode/" + streamerData.streamer_name}
+                readOnly
+                className="input"
+                style={{ flex: 1 }}
+              />
+              <button 
+                className="iconButton"
+                style={{width: '40px', height: '40px', background: 'transparent', color: "#636363ff" }}
+                onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText("http://localhost:5173/streamer/qrcode/" + streamerData.streamer_name);
+                  const feedback = document.getElementById('copyFeedback');
+                  if (feedback) {
+                  feedback.style.opacity = '1';
+                  setTimeout(() => {
+                    feedback.style.opacity = '0';
+                  }, 2000);
+                  }
+                } catch (err) {
+                  console.error('Failed to copy:', err);
+                }
+                }}
+              >
+                <Copy size={20} />
+              </button>
+              </div>
+              <span 
+              id="copyFeedback" 
+              style={{ 
+                color: '#9398a1ff',
+                fontSize: '0.8rem',
+                opacity: 0,
+                transition: 'opacity 0.3s',
+                marginTop: '-5px'
+              }}
+              >
+              URL copiada com sucesso!
+              </span>
+            </div>
+
+            </div>
+          <div className='card'>
+            <div className="cardTitle">
+              <Link size={20} color="#667eea" />
+              <p>URL Mensagens {streamerData.streamer_name}</p>
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px', flexDirection: 'column', marginTop: '10px' }}>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <input 
+                type="text"
+                value={"http://127.0.0.1:3000/backup/index.html"}
+                readOnly
+                className="input"
+                style={{ flex: 1 }}
+              />
+              <button 
+                className="iconButton"
+                style={{width: '40px', height: '40px', background: 'transparent', color: "#636363ff" }}
+                onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText("http://127.0.0.1:3000/backup/index.html");
+                  const feedback = document.getElementById('copyFeedback2');
+                  if (feedback) {
+                  feedback.style.opacity = '1';
+                  setTimeout(() => {
+                    feedback.style.opacity = '0';
+                  }, 2000);
+                  }
+                } catch (err) {
+                  console.error('Failed to copy:', err);
+                }
+                }}
+              >
+                <Copy size={20} />
+              </button>
+              </div>
+              <span 
+              id="copyFeedback2" 
+              style={{ 
+                color: '#9398a1ff',
+                fontSize: '0.8rem',
+                opacity: 0,
+                transition: 'opacity 0.3s',
+                marginTop: '-5px'
+              }}
+              >
+              URL copiada com sucesso!
+              </span>
+            </div>
+
+            </div>
+        </div>
+      </div>
+      
     </div>
   );
 };

@@ -3,6 +3,8 @@ html,
     padding: 0px;
     margin: 0px;
     box-sizing: border-box;
+    font-family: 'Saira', sans-serif;
+
 }
 
 body {
@@ -15,13 +17,13 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Saira', sans-serif;
 
 
     background: linear-gradient(350deg,
-        rgb(22, 38, 90) 0%,
-        rgb(63, 67, 75) 57%,
-        rgb(17, 61, 128) 100%);
+            rgb(22, 38, 90) 0%,
+            rgb(63, 67, 75) 57%,
+            rgb(17, 61, 128) 100%);
     background-size: 400% 400%;
     animation: gradientMove 12s ease infinite;
     height: auto;
@@ -31,9 +33,11 @@ body {
     0% {
         background-position: 0% 50%;
     }
+
     50% {
         background-position: 100% 50%;
     }
+
     100% {
         background-position: 0% 50%;
     }
@@ -42,27 +46,28 @@ body {
 
 
 .content {
-  background-color:rgba(255,255,255,.8);
-  border-radius:.25em;
-  box-shadow:0 0 .25em rgba(0,0,0,.25);
-  box-sizing:border-box;
-  left:50%;
-  padding:10vmin;
-  position:fixed;
-  text-align:center;
-  top:50%;
-  transform:translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, .8);
+    border-radius: .25em;
+    box-shadow: 0 0 .25em rgba(0, 0, 0, .25);
+    box-sizing: border-box;
+    left: 50%;
+    padding: 10vmin;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 
 
 @keyframes slide {
-  0% {
-    transform:translateX(-25%);
-  }
-  100% {
-    transform:translateX(25%);
-  }
+    0% {
+        transform: translateX(-25%);
+    }
+
+    100% {
+        transform: translateX(25%);
+    }
 }
 
 .donation-wrapper {
@@ -215,7 +220,8 @@ body {
         transform: translateY(0);
     }
 }
-.donate-title-page{
+
+.donate-title-page {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -308,9 +314,9 @@ body {
 .form-card {
     border-bottom: 3px solid #2563eb;
     background: linear-gradient(350deg,
-        rgb(255, 255, 255) 0%,
-        rgb(202, 209, 224) 57%,
-        rgb(232, 233, 233) 100%);
+            rgb(255, 255, 255) 0%,
+            rgb(202, 209, 224) 57%,
+            rgb(232, 233, 233) 100%);
     border-radius: 12px;
     padding: 25px;
     width: 100%;
@@ -561,11 +567,13 @@ body {
     font-weight: 500;
     font-size: 14px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}.footer-brand span{
+}
+
+.footer-brand span {
     background: linear-gradient(350deg,
-        rgb(255, 255, 255) 0%,
-        rgb(79, 134, 255) 57%,
-        rgb(84, 145, 173) 100%);
+            rgb(255, 255, 255) 0%,
+            rgb(79, 134, 255) 57%,
+            rgb(84, 145, 173) 100%);
     color: transparent;
     -webkit-background-clip: text;
 
