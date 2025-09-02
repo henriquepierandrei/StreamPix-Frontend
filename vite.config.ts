@@ -13,7 +13,7 @@ export default defineConfig({
     ]
   },
   optimizeDeps: {
-    exclude: ["@stomp/stompjs", "sockjs-client"]
+    include: ['@stomp/stompjs/esm6/client', 'sockjs-client'],
   }
 });
 

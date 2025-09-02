@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Key, Settings, User, DoorOpen, Clock, UserStarIcon, Copy, Link, QrCode } from 'lucide-react';
-import { ApiConfig } from "./../api/ApiConfig";
+import { Key, DoorOpen } from 'lucide-react';
 import { getStreamerData } from "./../api/GetStreamerData"; // ajuste o path se necessário
 import logo from '../assets/logo.png';
 import './style/dashboard.css';
-import PlayButtonAudio from '../components/PlayButtonAudio';
-import ReplayButtonDonation from '../components/ReplayButtonDonation';
+import GoalComponent from '../components/goal/GoalComponent';
+import DonationsPage from './dashboard/DonationsPage';
+import StreamerSettings from './dashboard/StreamerSettings';
+import AnalyticsPage from './dashboard/AnalyticsPage';
 
 interface StreamerData {
   streamer_name: string;
@@ -14,17 +15,18 @@ interface StreamerData {
   min_amount: number;
   max_characters_name: number;
   max_characters_message: number;
+  qr_code_is_dark_theme: boolean;
+  add_messages_bellow: boolean;
+  donate_is_dark_theme: boolean;
   http_response: {
     status: string;
     message: string;
   };
 }
 
-
-
 const StreamerDashboard: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
-  const [donates, setDonates] = useState<any[]>([]);
+
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [streamerData, setStreamerData] = useState<StreamerData>({
     streamer_name: "Carregando...",
@@ -33,11 +35,15 @@ const StreamerDashboard: React.FC = () => {
     min_amount: 0,
     max_characters_name: 0,
     max_characters_message: 0,
+    qr_code_is_dark_theme: false,
+    add_messages_bellow: false,
+    donate_is_dark_theme: false,
     http_response: {
       status: "WAIT",
       message: "Carregando dados..."
     }
   });
+
   const [tempKey, setTempKey] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -63,24 +69,6 @@ const StreamerDashboard: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      const fetchDonates = async () => {
-        try {
-          setIsLoading(true);
-          const api = ApiConfig.getInstance();
-          const response = await api.get(`/log/donations?key=${apiKey}&&page=0&size=10&sort=donatedAt,desc`);
-          setDonates(response.data.content); // conforme JSON que você enviou
-        } catch (err) {
-          console.error("Erro ao buscar donates:", err);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchDonates();
-    }
-  }, [isAuthenticated, apiKey]);
 
 
   const handleLogin = async () => {
@@ -105,41 +93,7 @@ const StreamerDashboard: React.FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('streamer_api_key');
-    setApiKey('');
-    setIsAuthenticated(false);
-  };
 
-  const handleSave = async () => {
-    setIsLoading(true);
-    try {
-      const api = ApiConfig.getInstance();
-      const response = await api.put(`/streamer?key=${apiKey}`, streamerData);
-      setStreamerData(prev => ({
-        ...prev,
-        http_response: response.data.http_response
-      }));
-    } catch (err) {
-      console.error("Erro ao salvar streamer:", err);
-      setStreamerData(prev => ({
-        ...prev,
-        http_response: {
-          status: "ERROR",
-          message: "Falha ao salvar alterações."
-        }
-      }));
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const updateField = (field: keyof StreamerData, value: any) => {
-    setStreamerData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
 
   if (!isAuthenticated) {
     return (
@@ -173,247 +127,13 @@ const StreamerDashboard: React.FC = () => {
 
   return (
     <div className="container">
-      <div className="header">
-        <div className="headerLeft">
-          <div className="headerIcon">
-            <img src={logo} alt="" width={"30px"} />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <h1 className="title">Dashboard do Streamer</h1>
-          </div>
-        </div>
-        <button className="logoutButton" onClick={handleLogout}>
-          <DoorOpen /> Sair
-        </button>
-      </div>
-      <div className="card-donations">
-        <div className="cardTitle">
-          <Settings size={20} color="#667eea" />
-          <p>Donates Recebidos</p>
-        </div>
-        {donates.length === 0 ? (
-          <p>Nenhum donate encontrado.</p>
-        ) : (
-          donates.map((donate) => (
-            <div key={donate.uuid} className="donateItem">
-              <p className='balance-donation'>
-                R${donate.amount}
-              </p>
-              <div className='audio-container'>
-                <ReplayButtonDonation uuid={donate.uuid} />
-                {donate.audio_url && (<PlayButtonAudio src={donate.audio_url} />)}
-              </div>
-
-              <p><strong><UserStarIcon size={12} /> Nome:</strong> {donate.name}</p>
-
-              <p style={{ fontSize: '12px', color: '#666', display: 'flex', alignItems: 'center', gap: "5px" }}>
-                <Clock size={12} /> Data: {new Date(donate.donated_at).toLocaleString()} </p>
-            </div>
-          ))
-        )}
-      </div>
-      <div className="dashboardContainer">
-        <div className="gridContainer">
-          <div className="card">
-            <div className="formGroup">
-              <label>Saldo</label>
-              <div className='balance-display'>
-                <p className='balance'>R${streamerData.streamer_balance}</p>
-              </div>
-
-            </div>
-            <div className="cardTitle">
-              <User size={20} color="#667eea" />
-              <p>Informações do Streamer</p>
-            </div>
-
-            <div className="formGroup">
-              <label>Nome do Streamer</label>
-              <input
-                type="text"
-                value={streamerData.streamer_name}
-                className='input'
-                onChange={(e) => updateField('streamer_name', e.target.value)}
-              />
-            </div>
+      <DonationsPage />
+      <StreamerSettings />
+      {/* Componente de Meta */}
+      {apiKey && <GoalComponent apiKey={apiKey} />}
+      <AnalyticsPage />
 
 
-
-            <div className="formGroup">
-              <div className='custom-checkbox-label'>
-                <input
-                  type="checkbox"
-                  checked={streamerData.is_auto_play}
-                  onChange={(e) => updateField('is_auto_play', e.target.checked)}
-
-                />
-                <p>Auto Play Ativado</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="cardTitle">
-              <Settings size={20} color="#667eea" />
-              <p>Configurações</p>
-            </div>
-
-            <div className="formGroup">
-              <label>Valor Mínimo</label>
-              <input
-                type="number"
-                className='input'
-                value={streamerData.min_amount}
-                onChange={(e) => updateField('min_amount', parseFloat(e.target.value))}
-                step="0.01"
-                min="0"
-              />
-            </div>
-
-            <div className="formGroup">
-              <label>Máximo de Caracteres no Nome</label>
-              <input
-                type="number"
-                className='input'
-                value={streamerData.max_characters_name}
-                onChange={(e) => updateField('max_characters_name', parseInt(e.target.value))}
-                min="1"
-              />
-            </div>
-
-            <div className="formGroup">
-              <label>Máximo de Caracteres na Mensagem</label>
-              <input
-                className='input'
-                type="number"
-                value={streamerData.max_characters_message}
-                onChange={(e) => updateField('max_characters_message', parseInt(e.target.value))}
-                min="1"
-              />
-            </div>
-            <button
-              className="saveButton"
-              onClick={handleSave}
-              disabled={isLoading}
-              style={{
-                opacity: isLoading ? 0.7 : 1,
-                cursor: isLoading ? 'not-allowed' : 'pointer'
-              }}
-            >
-              <Save size={20} />
-              {isLoading ? 'Salvando...' : 'Salvar Alterações'}
-            </button>
-          </div>
-
-        </div>
-      </div>
-      <div className="dashboardContainer">
-        <div className='gridContainer'>
-            <div className='card'>
-            <div className="cardTitle">
-              <QrCode size={20} color="#667eea" />
-              <p>URL QrCode {streamerData.streamer_name}</p>
-            </div>
-
-            <div style={{ display: 'flex', gap: '10px', flexDirection: 'column', marginTop: '10px' }}>
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <input 
-                type="text"
-                value={"http://localhost:5173/streamer/qrcode/" + streamerData.streamer_name}
-                readOnly
-                className="input"
-                style={{ flex: 1 }}
-              />
-              <button 
-                className="iconButton"
-                style={{width: '40px', height: '40px', background: 'transparent', color: "#636363ff" }}
-                onClick={async () => {
-                try {
-                  await navigator.clipboard.writeText("http://localhost:5173/streamer/qrcode/" + streamerData.streamer_name);
-                  const feedback = document.getElementById('copyFeedback');
-                  if (feedback) {
-                  feedback.style.opacity = '1';
-                  setTimeout(() => {
-                    feedback.style.opacity = '0';
-                  }, 2000);
-                  }
-                } catch (err) {
-                  console.error('Failed to copy:', err);
-                }
-                }}
-              >
-                <Copy size={20} />
-              </button>
-              </div>
-              <span 
-              id="copyFeedback" 
-              style={{ 
-                color: '#9398a1ff',
-                fontSize: '0.8rem',
-                opacity: 0,
-                transition: 'opacity 0.3s',
-                marginTop: '-5px'
-              }}
-              >
-              URL copiada com sucesso!
-              </span>
-            </div>
-
-            </div>
-          <div className='card'>
-            <div className="cardTitle">
-              <Link size={20} color="#667eea" />
-              <p>URL Mensagens {streamerData.streamer_name}</p>
-            </div>
-
-            <div style={{ display: 'flex', gap: '10px', flexDirection: 'column', marginTop: '10px' }}>
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <input 
-                type="text"
-                value={"http://127.0.0.1:3000/backup/index.html"}
-                readOnly
-                className="input"
-                style={{ flex: 1 }}
-              />
-              <button 
-                className="iconButton"
-                style={{width: '40px', height: '40px', background: 'transparent', color: "#636363ff" }}
-                onClick={async () => {
-                try {
-                  await navigator.clipboard.writeText("http://127.0.0.1:3000/backup/index.html");
-                  const feedback = document.getElementById('copyFeedback2');
-                  if (feedback) {
-                  feedback.style.opacity = '1';
-                  setTimeout(() => {
-                    feedback.style.opacity = '0';
-                  }, 2000);
-                  }
-                } catch (err) {
-                  console.error('Failed to copy:', err);
-                }
-                }}
-              >
-                <Copy size={20} />
-              </button>
-              </div>
-              <span 
-              id="copyFeedback2" 
-              style={{ 
-                color: '#9398a1ff',
-                fontSize: '0.8rem',
-                opacity: 0,
-                transition: 'opacity 0.3s',
-                marginTop: '-5px'
-              }}
-              >
-              URL copiada com sucesso!
-              </span>
-            </div>
-
-            </div>
-        </div>
-      </div>
-      
     </div>
   );
 };

@@ -4,8 +4,8 @@ import StreamPixDonation from './pages/StreamPixDonation'
 import StreamerDashboard from './pages/StreamerDashboard';
 import StreamerQrPage from './pages/StreamerQrPage';
 import NotFoundPage from './pages/Notfound/NotFoundPage';
-
-
+import DonationsPage from './pages/dashboard/DonationsPage';
+import GoalComponent from './components/goal/GoalComponent';
 
 function App() {
   return (
@@ -13,8 +13,16 @@ function App() {
       <Routes>
         <Route path="/:streamerName" element={<StreamPixDonation />} />
         <Route path="/donation/:transactionId" element={<PaymentQrCode />} />
-        <Route path="/streamer/dashboard" element={<StreamerDashboard />} />
+
         <Route path="/streamer/qrcode/:streamerName" element={<StreamerQrPage />} />
+
+
+        <Route
+          path="/streamer/dashboard/goals"
+          element={<GoalComponent apiKey={localStorage.getItem("streamer_api_key") || ""} />}
+        />
+        <Route path="/streamer/dashboard/donations" element={<DonationsPage />} />
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>

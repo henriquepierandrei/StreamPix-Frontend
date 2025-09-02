@@ -1,14 +1,14 @@
+import { X, XCircle } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 const AlertContainer = styled.div`
   padding: 16px;
-  background: linear-gradient(90deg, #ffa4a4ff, #fcc6c6ff);
-  min-width: 350px;
+  background: linear-gradient(90deg, #ffffffff, #ffdfdfff);
+  min-width: 320px;
   border-radius: 10px;
   
-  color: #690000ff;
-  border: 1px solid #690000ff;
+  color: #af0000ff;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,7 +17,7 @@ const AlertContainer = styled.div`
 
 const AlertMessage = styled.p`
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   width: max-content;
 `;
@@ -25,7 +25,7 @@ const AlertMessage = styled.p`
 const CloseButton = styled.button`
   background: none;
   border: none;
-  color: #690000ff;
+  color: #af0000ff;
   font-weight: bold;
   width: max-content;
   height: max-content;
@@ -47,7 +47,7 @@ const ProgressBar = styled.div<{ duration: number }>`
   bottom: 0;
   left: 0;
   height: 4px;
-  background: #690000ff;
+  background: #eb0000ff;
   width: 100%;
   animation: ${({ duration }) => duration}s linear 0s 1 shrink;
 
@@ -91,14 +91,14 @@ const Alert: React.FC<AlertProps> = ({ error, duration = 5, onClose }) => {
 
     return (
         <AlertContainer>
-            <AlertMessage>{error.message}</AlertMessage>
+            <AlertMessage style={{display: "flex", alignItems: "center", gap: "10px"}}><XCircle />{error.message}</AlertMessage>
             <CloseButton
                 onClick={() => {
                     setVisible(false);
                     if (onClose) onClose();
                 }}
             >
-                ×
+                <X size={16} />
             </CloseButton>
             <ProgressBar duration={duration} />
         </AlertContainer>

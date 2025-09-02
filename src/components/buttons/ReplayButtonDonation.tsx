@@ -1,5 +1,5 @@
 import { BellRing } from "lucide-react";
-import { ApiConfig } from "../api/ApiConfig";
+import { ApiConfig } from "../../api/ApiConfig";
 
 const ReplayButtonDonation = ({ uuid }: { uuid: string }) => {
   const handleReplay = async () => {
@@ -15,22 +15,7 @@ const ReplayButtonDonation = ({ uuid }: { uuid: string }) => {
 
   return (
     <button
-      onClick={handleReplay}
-      style={{
-        width: "28px",
-        height: "28px",
-        color: "#fff",
-        background: "linear-gradient(45deg, #373749, rgb(72, 103, 161))",
-        borderRadius: "50%",
-        border: "none",
-        cursor: "pointer",
-        margin: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 0,
-      }}
-    >
+      onClick={handleReplay} className="replay-button">
       <BellRing size={12} />
     </button>
   );

@@ -11,12 +11,38 @@ body {
     animation: gradientMove 8s ease infinite;
     position: relative;
     overflow: hidden;
+    background-color: rgb(238, 238, 238);
 }
 
-audio {
-    width: 100%;
-    height: 40px;
-    border-radius: 8px;
-    background-color: #1a0404;
-    outline: none;
+body.dark{
+  background-color: rgb(51, 51, 51);
 }
+/* ===================== */
+/* 🎨 Tema Light (padrão) */
+/* ===================== */
+:root {
+  --bg-color: #f9f9f9;
+  --text-color: #1e1e1e;
+  --navbar-bg: #ffffff;
+  --nav-item-color: #444;
+  --nav-item-hover-bg: #e6e6e6;
+  --nav-item-active-bg: #dbeafe; /* azul clarinho */
+  --nav-item-active-color: #1d4ed8; /* azul principal */
+  --border-color: #ddd;
+}
+
+/* ===================== */
+/* 🌙 Tema Dark */
+/* ===================== */
+body.dark {
+  --bg-color: #121212;
+  --text-color: #cfcfcf;
+  --navbar-bg: #1f1f1f;
+  --nav-item-color: #9ca3af; /* cinza claro */
+  --nav-item-hover-bg: #2c2c2c;
+  --nav-item-active-bg: rgba(59, 130, 246, 0.15); /* azul transparente */
+  --nav-item-active-color: #3b82f6; /* azul vivo */
+  --border-color: #464545;
+}
+
+

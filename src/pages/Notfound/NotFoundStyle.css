@@ -24,6 +24,7 @@
   font-size: 10rem;
   background: linear-gradient(90deg, #ffffff, #3730ff);
   -webkit-background-clip: text;
+  background-clip: text;
   font-weight: 900;
   font-family: "Saira", sans-serif;
 

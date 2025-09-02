@@ -1,12 +1,12 @@
-
-
 /* Container geral */
 .container {
-  background-color: rgb(230, 223, 223);
-  padding: 20px;
+  background-color: rgb(233, 233, 233);
   font-family: Arial, sans-serif;
-  height: auto;
-  width: 100%;
+  height: 100vh;
+}
+
+body.dark .container {
+  background-color: rgb(47, 50, 51);
 }
 
 /* Container de login */
@@ -17,6 +17,47 @@
   min-height: 100vh;
 }
 
+.play-button, .replay-button{
+  width: 28px;
+  height: 28px;
+  color: rgb(73, 73, 73);
+  background: linear-gradient(45deg, #dddde6, rgb(227, 232, 243));
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;    
+}body.dark .play-button, body.dark .replay-button{
+  color: white;
+  background: linear-gradient(45deg, #5a5a79, rgb(75, 82, 94));
+}
+
+@media (max-width: 768px) {
+  .play-button{
+    position: absolute;
+    bottom: 1px;
+    left: 100px;
+  }
+  .replay-button{
+    position: absolute;
+    bottom: 1px;
+    left: 65px;
+  }
+}
+
+.hr-dashboard{
+  background-color: rgb(209, 209, 209);
+  border: none;
+  width: 100%;
+  margin: auto;
+  height: 1px;
+}body.dark .hr-dashboard{
+  background-color: rgb(85, 85, 85);
+}
+
 .balance {
   transition: 1s;
   font-weight: 800;
@@ -24,13 +65,23 @@
   color: transparent;
   background: linear-gradient(45deg, #373749, rgb(72, 103, 161));
   -webkit-background-clip: text;
+  background-clip: text;
   cursor: pointer;
+}body.dark .balance {
+  background: linear-gradient(45deg, #9494ac, rgb(124, 166, 243));
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .balance:hover {
   color: #0f5ccf;
   scale: 1.05;
   transform: rotate(2deg);
+}
+
+body.dark .balance:hover {
+  color: #468ffd;
 }
 
 .custom-checkbox-label,
@@ -47,6 +98,17 @@
   text-wrap: nowrap;
   width: 100%;
 }
+body.dark .balance-display{
+  background-color: rgb(54, 57, 58);
+  border: 1px solid #6e6e6e;
+}
+
+body.dark .custom-checkbox-label{
+  background-color: rgb(53, 64, 70);
+  border-color: #6e6e6e;
+  color: #8d8c8c;
+}
+
 
 .loginButton {
   background: linear-gradient(135deg, #1a1a1b 0%, #1f1e20 100%);
@@ -66,32 +128,7 @@
   cursor: pointer;
 }
 
-.audioPlayer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background-color: #f4f5f7;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #dcdde1;
-  width: 100%;
-  max-width: 400px;
-  margin-top: 5px;
-}
 
-/* Esconde o player nativo do navegador e estiliza apenas o controle básico */
-.audioPlayer audio {
-  width: 100%;
-  height: 40px;
-  outline: none;
-  border-radius: 16px;
-}
-
-
-/* Para o hover do container */
-.audioPlayer:hover {
-  border-color: rgb(23, 23, 24);
-}
 
 /* Pequeno ícone de áudio opcional (se quiser colocar ao lado) */
 .audioIcon {
@@ -108,32 +145,36 @@
   text-align: center;
 }
 
-.iconContainer {
-  background: #0c0c0cff;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-  color: white;
-}
-
 .title {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
   background: linear-gradient(45deg, #303031 0%, #485169 100%);
   -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+body.dark title {
+  background: linear-gradient(45deg, #ccccd1 0%, #93b0ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
 }
 
 .subtitle {
   background: linear-gradient(45deg, #303031 0%, #485169 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
   margin-bottom: 30px;
+}
+
+body.dark .subtitle {
+  background: linear-gradient(45deg, #cbcbda 0%, #a0b9ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .inputGroup {
@@ -147,6 +188,14 @@ label {
   font-weight: 500;
   background: linear-gradient(45deg, #303031 0%, #485169 100%);
   -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+body.dark label {
+  background: linear-gradient(45deg, #d4d4ff 0%, #96b2ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
 }
 
@@ -158,50 +207,69 @@ input {
   font-size: 16px;
   box-sizing: border-box;
   outline: none;
+}body.dark input{
+  background: #292c31;
+    border: 1px solid #4d4d4d;
+    color: #808080;
+}
+
+body.dark input {
+  border-color: rgb(88, 88, 92)
+}
+
+
+.progress-bar-goal {
+  height: 50px;
+  /* <-- aqui controla a espessura da barra */
+  width: 100%;
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  /* centraliza textos na vertical */
+  justify-content: center;
+  flex-direction: column;
+  background: linear-gradient(45deg, #ffffff, rgb(242, 243, 247));
+  padding: 0;
+}
+
+body.dark .progress-bar-goal {
+  background: linear-gradient(45deg, #3f3e3e, rgb(85, 91, 110));
+}
+
+.progress-bar-goal p {
+  z-index: 1;
+  color: rgb(37, 37, 37);
+  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.185);
+}
+
+body.dark .progress-bar-goal p {
+  color: rgb(235, 235, 235);
+  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.185);
+}
+
+.bar-goal {
+  height: 100%;
+  background: linear-gradient(45deg, #09f8a8, rgb(79, 141, 255));
+  border-radius: 8px;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 button {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  color: rgb(139, 139, 139);
   border: none;
   border-radius: 8px;
+  background: transparent;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   transition: transform 0.2s;
-}
-
-
-
-.header {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-.headerLeft {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.headerIcon {
-  background: linear-gradient(45deg, #373749, rgb(72, 103, 161));
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
-  display: flex;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+}body.dark {
+color: rgb(77, 77, 77);
 }
 
 .logoutButton {
@@ -209,6 +277,7 @@ button {
   color: #af1c1c;
   border: 1px solid #af1c1c;
   padding: 12px 24px;
+  height: 50px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
@@ -218,14 +287,16 @@ button {
   width: 20%;
   align-items: center;
   gap: 8px;
+}body.dark .logoutButton{
+  background: #dc2626;
+  color: white;
 }
 
 .logoutButton:hover {
   background: #dc2626;
   color: white;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
-
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.397);
 }
 
 /* Status Card */
@@ -236,6 +307,18 @@ button {
   margin-bottom: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   border: 2px solid #e1e5e9;
+}body.dark .statusCard {
+  background: linear-gradient(135deg, #515253, #566069);
+  border: 2px solid #5a5959;
+  color: white;
+}
+
+.alert-message{
+  background-color: rgb(243, 243, 243);
+  border: 1px solid #ccc;
+}body.dark .alert-message{
+  background-color: rgb(49, 49, 49);
+  border: 1px solid #3a3a3a;
 }
 
 .statusIndicator {
@@ -252,13 +335,12 @@ button {
 
 /* Grid e Cards */
 .gridContainer {
-  padding: 0px;
   display: grid;
   width: 100%;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  
-
+  background-color: rgb(223, 223, 223);
+}body.dark .gridContainer{
+  background-color: rgb(36, 39, 41);
 }
 
 .card,
@@ -274,12 +356,31 @@ button {
   margin: 8px;
   min-height: 100px;
   border: 1px solid #e1e5e9;
+}body.dark .card-donations{
+  background: rgba(33, 37, 39, 0.95);
+  border: 1px solid #646464;
 }
-
 .card-donations {
-  max-height: 500px;
   overflow-y: auto;
   margin: auto;
+}
+
+
+body.dark .card{
+  background-color: rgb(38, 40, 44);
+  border-color: #474747;
+}
+
+.card-donations{
+  height: 100vh;
+}
+
+.donation-date{
+  color: rgb(27, 72, 117);
+  margin: 10px;
+
+}body.dark .donation-date{
+  color: rgb(67, 136, 206);
 }
 
 /* ===== TÍTULO DO CARD ===== */
@@ -299,14 +400,25 @@ button {
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.03),
     0 1px 2px rgba(0, 0, 0, 0.06);
-}.cardTitle p {
+}body.dark .cardTitle{
+  background: linear-gradient(135deg, #414347 0%, #303131 50%, #3d4452 100%);
+  border: 1px solid rgba(126, 126, 126, 0.329);
+}
+
+.cardTitle p {
   color: transparent;
   background: linear-gradient(45deg, #373749, rgb(72, 103, 161));
   -webkit-background-clip: text;
+  background-clip: text;
+}body.dark .cardTitle p{
+   color: transparent;
+  background: linear-gradient(45deg, #ababcf, rgb(86, 134, 223));
+  -webkit-background-clip: text;
+  background-clip: text;
 }
+
 .donateItem {
   font-family: "Saira", sans-serif;
-
   position: relative;
   padding: 5px 20px;
   margin: 16px 0;
@@ -325,14 +437,18 @@ button {
   /* Interatividade */
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
   /* Acessibilidade */
   outline: none;
   -webkit-tap-highlight-color: transparent;
+}body.dark .donateItem{
+  background: linear-gradient(135deg, #494c50 0%, #2c2727 50%, #374453 100%);
+  border: 1px solid rgba(98, 98, 99, 0.767);
 }
 
 .donateItem p {
   color: #5b7599;
+}body.dark .donateItem p{
+  color: #9ea7b4;
 }
 
 
@@ -372,6 +488,8 @@ button {
     0 0 0 4px rgba(59, 130, 246, 0.1),
     0 4px 6px rgba(0, 0, 0, 0.04),
     0 10px 15px rgba(0, 0, 0, 0.06);
+}body.dark .donateItem:focus-visible{
+  outline: 3px solid #355fa1;
 }
 
 /* ===== BALANCE DONATION ===== */
@@ -385,8 +503,6 @@ button {
   font-weight: 800;
   font-size: 12px;
   line-height: 0.8;
-  /* Visual */
-  color: #475569;
   padding: 5px;
   border-radius: 5px;
   background: transparent;
@@ -395,12 +511,10 @@ button {
   color: #595a5c;
   border: 1px solid rgba(89, 90, 92, 0.267);
   transform: scale(1.05);
-  
 }
 
 .balance-donation {
   position: fixed;
-  
   right: 20px;
   top: 10px;
 }
@@ -515,6 +629,7 @@ button {
   font-size: 12px;
   background: linear-gradient(45deg, #58585c, #ffffff);
   -webkit-background-clip: text;
+  background-clip: text;
   font-weight: 300;
 }
 
@@ -535,6 +650,9 @@ button {
   align-items: center;
   gap: 8px;
   margin: 20px auto 0;
+}body.dark .saveButton {
+  background: #13a550;
+  color: white;
 }
 
 .saveButton:hover {
@@ -542,4 +660,29 @@ button {
   color: white;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(19, 165, 80, 0.2);
+}
+
+.updateButton {
+  background: #2b83e79f;
+  color: #0056a7;
+  border: 1px solid #0e3d72a2;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px auto 0;
+}body.dark .updateButton{
+  background: #1377e6;
+  color: white;
+}
+
+.updateButton:hover {
+  background: #1377e6;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(19, 119, 230, 0.2);
 }
