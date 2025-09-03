@@ -7,7 +7,8 @@ import { createDonationRequest, sendDonation, getStreamerData } from '../api/Don
 import './style/style.css';
 import Loading from '../components/Loading';
 import Alert from '../components/Alert';
-import NavBar from '../components/navbar/NavBar';
+import ThemeButton from '../components/buttons/ThemeButton';
+
 
 type PaymentStatus = 'pending' | 'success' | 'failed' | 'notfound' | 'error';
 
@@ -124,7 +125,7 @@ const StreamPixDonation: React.FC = () => {
 
   return (
     <div className='donation-container'>
-      <NavBar/>
+      <ThemeButton />
       {error && <div style={{ position: "fixed", top: "10px" }}><Alert error={error} /></div>}
     
       <div className="donation-wrapper">
