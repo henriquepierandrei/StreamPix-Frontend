@@ -1,4 +1,4 @@
-import { Settings } from 'lucide-react'
+import { CalendarArrowDown, Clapperboard, DollarSign, Filter, Settings } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { ApiConfig } from "./../../api/ApiConfig";
 import { getStreamerData } from "./../../api/GetStreamerData"; // ajuste o path se necessário
@@ -28,6 +28,11 @@ function DonationsPage() {
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
   );
+  const [minAmount, setMinAmount] = useState<number | undefined>();
+  const [maxAmount, setMaxAmount] = useState<number | undefined>();
+  const [startDate, setStartDate] = useState<string | undefined>();
+  const [endDate, setEndDate] = useState<string | undefined>();
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [apiKey, setApiKey] = useState<string>('');
@@ -48,26 +53,47 @@ function DonationsPage() {
     }
   });
 
+  // 🔹 Agora a função é global dentro do componente
+  const fetchDonates = async () => {
+    try {
+      setIsLoading(true);
+      const api = ApiConfig.getInstance();
+
+      const params = new URLSearchParams({
+        key: apiKey,
+        page: "0",
+        size: "10",
+        sort: "donatedAt,desc",
+      });
+
+      if (minAmount !== undefined) params.append("minAmount", minAmount.toString());
+      if (maxAmount !== undefined) params.append("maxAmount", maxAmount.toString());
+      if (startDate) params.append("startDate", startDate);
+      if (endDate) params.append("endDate", endDate);
+
+      const response = await api.get(`/log/donations?${params.toString()}`);
+      setDonates(response.data.content);
+    } catch (err) {
+      console.error("Erro ao buscar donates:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const clearDonates = () => {
+    setDonates([]);
+    setMinAmount(undefined);
+    setMaxAmount(undefined);
+    setStartDate(undefined);
+    setEndDate(undefined);
+  };
+
 
   useEffect(() => {
     if (isAuthenticated) {
-      const fetchDonates = async () => {
-        try {
-          setIsLoading(true);
-          const api = ApiConfig.getInstance();
-          const response = await api.get(`/log/donations?key=${apiKey}&&page=0&size=10&sort=donatedAt,desc`);
-          setDonates(response.data.content); // conforme JSON que você enviou
-        } catch (err) {
-          console.error("Erro ao buscar donates:", err);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchDonates();
+      fetchDonates(); // usa a função aqui também
     }
   }, [isAuthenticated, apiKey]);
-
 
   useEffect(() => {
     const savedKey = localStorage.getItem('streamer_api_key');
@@ -98,26 +124,89 @@ function DonationsPage() {
           <Settings size={20} color="#667eea" />
           <p>Donates Recebidos</p>
         </div>
+
+        <div className="filters-container">
+          {/* Título do Grupo de Valor */}
+          <div className="filter-group">
+            <p className="filter-group-title">Faixa de Valor</p>
+            <div className="input-wrapper">
+              <div className="input-with-icon">
+                <DollarSign className="input-icon" />
+                <input
+                  type="number"
+                  placeholder="Mínimo"
+                  value={minAmount ?? ""}
+                  onChange={(e) => setMinAmount(e.target.value ? Number(e.target.value) : undefined)}
+                />
+              </div>
+              <span className="separator">-</span>
+              <div className="input-with-icon">
+                <DollarSign className="input-icon" />
+                <input
+                  type="number"
+                  placeholder="Máximo"
+                  value={maxAmount ?? ""}
+                  onChange={(e) => setMaxAmount(e.target.value ? Number(e.target.value) : undefined)}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Título do Grupo de Data */}
+          <div className="filter-group">
+            <p className="filter-group-title">Período</p>
+            <div className="input-wrapper">
+              <div className="input-with-icon">
+                <CalendarArrowDown className="custom-icon" />
+                <input
+                  type="date"
+                  value={startDate ?? ""}
+                  onChange={(e) => setStartDate(e.target.value || undefined)}
+                />
+              </div>
+
+              <span className="separator">até</span>
+              <div className="input-with-icon">
+                <CalendarArrowDown className="input-icon" />
+                <input
+                  type="date"
+                  value={endDate ?? ""}
+                  onChange={(e) => setEndDate(e.target.value || undefined)}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Botões de Ação */}
+          <div className="filter-actions">
+            <button className="filter-button primary" onClick={fetchDonates}>
+              <Filter />
+              Filtrar
+            </button>
+            <button className="filter-button secondary" onClick={clearDonates}> {/* Adicionar uma função para limpar */}
+              <Clapperboard />
+              Limpar
+            </button>
+          </div>
+        </div>
+
         {donates.length === 0 ? (
           <p>Nenhum donate encontrado.</p>
         ) : (
           Object.entries(
             donates.reduce((groups: Record<string, typeof donates>, donate) => {
-              // Formata só a data (sem horas)
               const dateKey = new Date(donate.donated_at).toLocaleDateString('pt-BR', {
                 day: '2-digit',
                 month: 'long',
                 year: 'numeric',
               });
-
               if (!groups[dateKey]) groups[dateKey] = [];
               groups[dateKey].push(donate);
-
               return groups;
             }, {})
           ).map(([date, donations]) => (
             <div key={date} className="donation-group">
-              <br /><hr className='hr-dashboard'/>
+              <br /><hr className='hr-dashboard' />
               <h3 className="donation-date">{date}</h3>
 
               {donations.map((donate) => (
@@ -144,8 +233,8 @@ function DonationsPage() {
         )}
       </div>
     </div>
-
-  )
+  );
 }
+
 
 export default DonationsPage

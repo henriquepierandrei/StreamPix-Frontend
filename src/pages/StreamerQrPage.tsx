@@ -25,8 +25,8 @@ function StreamerQrPage() {
 
     // mensagens motivacionais para aparecer em loop
     const messages = [
-        "envia sua menagem!",
-        "aponte o celular pro qr code"
+        "envia sua mensagem!",
+        "aponte o celular para o qr-code"
     ];
     const [currentMessage, setCurrentMessage] = useState(0);
 

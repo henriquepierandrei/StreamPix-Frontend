@@ -3,11 +3,12 @@ import { ApiConfig } from "./../../api/ApiConfig";
 import { getStreamerData } from "./../../api/GetStreamerData"; // ajuste o path se necessário
 import { User, Settings, Save } from 'lucide-react'
 import '../style/dashboard.css';
+import NavBarDashboard from '../../components/navbar/NavBarDashboard';
 
 
 function StreamerSettings() {
     const [apiKey, setApiKey] = React.useState<string>('');
-
+    const [active, setActive] = useState("Streamer");
     const [isAuthenicated, setIsAuthenticated] = React.useState<boolean>(false);
     const [streamerData, setStreamerData] = useState<StreamerData>({
         streamer_name: "Carregando...",
@@ -71,7 +72,7 @@ function StreamerSettings() {
             [field]: value
         }));
     };
-    
+
 
     useEffect(() => {
         const savedKey = localStorage.getItem('streamer_api_key');
@@ -96,6 +97,7 @@ function StreamerSettings() {
 
     return (
         <div className="dashboardContainer">
+            <NavBarDashboard activeItem={active} onSelect={setActive} />
             <div className="gridContainer">
                 <div className="card">
                     <div className="formGroup">

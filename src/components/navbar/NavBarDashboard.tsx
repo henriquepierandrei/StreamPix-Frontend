@@ -60,9 +60,8 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
           <div className="desktop-nav">
             <button
               onClick={() => navigate("/streamer/dashboard/donations")}
-              className={`nav-item ${
-                activeItem === "Doações" ? "nav-item-active" : ""
-              }`}
+              className={`nav-item ${activeItem === "Doações" ? "nav-item-active" : ""
+                }`}
             >
               <MessageSquareHeart size={18} />
               <span>Doações</span>
@@ -70,39 +69,35 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
 
             <button
               onClick={() => navigate("/streamer/dashboard/goals")}
-              className={`nav-item ${
-                activeItem === "Metas" ? "nav-item-active" : ""
-              }`}
+              className={`nav-item ${activeItem === "Metas" ? "nav-item-active" : ""
+                }`}
             >
               <Goal size={18} />
               <span>Metas</span>
             </button>
 
             <button
-              onClick={() => onSelect?.("Streamer")}
-              className={`nav-item ${
-                activeItem === "Streamer" ? "nav-item-active" : ""
-              }`}
+              onClick={() => navigate("/streamer/dashboard/profile")}
+              className={`nav-item ${activeItem === "Streamer" ? "nav-item-active" : ""
+                }`}
             >
               <Settings size={18} />
               <span>Streamer</span>
             </button>
 
             <button
-              onClick={() => onSelect?.("QrCode")}
-              className={`nav-item ${
-                activeItem === "QrCode" ? "nav-item-active" : ""
-              }`}
+              onClick={() => navigate("/streamer/dashboard/qrcode/settings")}
+              className={`nav-item ${activeItem === "QrCode" ? "nav-item-active" : ""
+                }`}
             >
               <QrCode size={18} />
               <span>QrCode</span>
             </button>
 
             <button
-              onClick={() => onSelect?.("Mensagens")}
-              className={`nav-item ${
-                activeItem === "Mensagens" ? "nav-item-active" : ""
-              }`}
+              onClick={() => navigate("/streamer/dashboard/messages")}
+              className={`nav-item ${activeItem === "Mensagens" ? "nav-item-active" : ""
+                }`}
             >
               <MessageSquare size={18} />
               <span>Mensagens</span>
@@ -133,9 +128,8 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
                   navigate("/streamer/dashboard/donations")
                   setIsMenuOpen(false);
                 }}
-                className={`mobile-nav-item ${
-                  activeItem === "Doações" ? "mobile-nav-item-active" : ""
-                }`}
+                className={`mobile-nav-item ${activeItem === "Doações" ? "mobile-nav-item-active" : ""
+                  }`}
               >
                 <MessageSquareHeart size={18} />
                 <span>Doações</span>
@@ -146,9 +140,8 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
                   navigate("/streamer/dashboard/goals")
                   setIsMenuOpen(false);
                 }}
-                className={`mobile-nav-item ${
-                  activeItem === "Metas" ? "mobile-nav-item-active" : ""
-                }`}
+                className={`mobile-nav-item ${activeItem === "Metas" ? "mobile-nav-item-active" : ""
+                  }`}
               >
                 <Goal size={18} />
                 <span>Metas</span>
@@ -156,12 +149,11 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
 
               <button
                 onClick={() => {
-                  onSelect?.("Streamer");
+                  navigate("/streamer/dashboard/profile")
                   setIsMenuOpen(false);
                 }}
-                className={`mobile-nav-item ${
-                  activeItem === "Streamer" ? "mobile-nav-item-active" : ""
-                }`}
+                className={`mobile-nav-item ${activeItem === "Streamer" ? "mobile-nav-item-active" : ""
+                  }`}
               >
                 <Settings size={18} />
                 <span>Streamer</span>
@@ -169,12 +161,11 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
 
               <button
                 onClick={() => {
-                  onSelect?.("QrCode");
+                  navigate("/streamer/dashboard/qrcode/settings")
                   setIsMenuOpen(false);
                 }}
-                className={`mobile-nav-item ${
-                  activeItem === "QrCode" ? "mobile-nav-item-active" : ""
-                }`}
+                className={`mobile-nav-item ${activeItem === "QrCode" ? "mobile-nav-item-active" : ""
+                  }`}
               >
                 <QrCode size={18} />
                 <span>QrCode</span>
@@ -182,12 +173,11 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
 
               <button
                 onClick={() => {
-                  onSelect?.("Mensagens");
+                  navigate("/streamer/dashboard/messages")
                   setIsMenuOpen(false);
                 }}
-                className={`mobile-nav-item ${
-                  activeItem === "Mensagens" ? "mobile-nav-item-active" : ""
-                }`}
+                className={`mobile-nav-item ${activeItem === "Mensagens" ? "mobile-nav-item-active" : ""
+                  }`}
               >
                 <MessageSquare size={18} />
                 <span>Mensagens</span>

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Key, DoorOpen } from 'lucide-react';
+import { Key } from 'lucide-react';
 import { getStreamerData } from "./../api/GetStreamerData"; // ajuste o path se necessário
-import logo from '../assets/logo.png';
 import './style/dashboard.css';
-import GoalComponent from '../components/goal/GoalComponent';
 import DonationsPage from './dashboard/DonationsPage';
 import StreamerSettings from './dashboard/StreamerSettings';
-import AnalyticsPage from './dashboard/AnalyticsPage';
+import AnalyticsPage from './dashboard/QrCodeSettings';
 
 interface StreamerData {
   streamer_name: string;
@@ -26,7 +24,6 @@ interface StreamerData {
 
 const StreamerDashboard: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>('');
-
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [streamerData, setStreamerData] = useState<StreamerData>({
     streamer_name: "Carregando...",
@@ -130,7 +127,7 @@ const StreamerDashboard: React.FC = () => {
       <DonationsPage />
       <StreamerSettings />
       {/* Componente de Meta */}
-      {apiKey && <GoalComponent apiKey={apiKey} />}
+    
       <AnalyticsPage />
 
 
