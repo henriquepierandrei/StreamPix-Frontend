@@ -33,6 +33,7 @@ function ThemeButton() {
         width: "max-content",
         position: "absolute",
         top: "10px",
+        right: "10px"
       }}
     >
       {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}

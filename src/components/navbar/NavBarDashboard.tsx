@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import logo from '../../assets/logo.png'
+import logodark from '../../assets/logo-dark.png'
 import { useNavigate } from "react-router-dom";
 import {
   MessageSquareHeart,
@@ -46,6 +48,8 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
     <nav className="navbar" style={{ marginBottom: "20px" }}>
       <div className="navbar-container">
         <div className="navbar-content">
+        <img src={isDarkMode ? logo : logodark} alt="Logo" width={40} className="logo-dashboard-img"/>
+
           {/* Botão do menu mobile */}
           <div className="navbar-left">
             <button

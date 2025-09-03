@@ -25,7 +25,6 @@ const StreamPixDonation: React.FC = () => {
   const [voiceType, setVoiceType] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(false);
-
   // dados vindos da API do streamer
   const [minAmount, setMinAmount] = useState(10);
   const [maxNameLength, setMaxNameLength] = useState(20);
@@ -127,7 +126,7 @@ const StreamPixDonation: React.FC = () => {
     <div className='donation-container'>
       <ThemeButton />
       {error && <div style={{ position: "fixed", top: "10px" }}><Alert error={error} /></div>}
-    
+
       <div className="donation-wrapper">
         <div className="form-card">
 

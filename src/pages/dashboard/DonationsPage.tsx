@@ -1,4 +1,4 @@
-import { CalendarArrowDown, Clapperboard, DollarSign, Filter, Settings } from 'lucide-react'
+import { CalendarArrowDown, Clapperboard, DollarSign, Filter, MessageSquareMore, Settings } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { ApiConfig } from "./../../api/ApiConfig";
 import { getStreamerData } from "./../../api/GetStreamerData"; // ajuste o path se necessário
@@ -27,9 +27,6 @@ interface StreamerData {
 function DonationsPage() {
   const navigate = useNavigate();
   const [donates, setDonates] = useState<any[]>([]);
-  const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
   const [minAmount, setMinAmount] = useState<number | undefined>();
   const [maxAmount, setMaxAmount] = useState<number | undefined>();
   const [startDate, setStartDate] = useState<string | undefined>();
@@ -243,6 +240,9 @@ function DonationsPage() {
 
                   <p>
                     <strong><UserStarIcon size={12} /> Nome:</strong> {donate.name}
+                  </p>
+                  <p>
+                    <strong><MessageSquareMore size={12} /> Messagem:</strong> {donate.message}
                   </p>
 
                   <p style={{ fontSize: '12px', color: '#666', display: 'flex', alignItems: 'center', gap: "5px" }}>

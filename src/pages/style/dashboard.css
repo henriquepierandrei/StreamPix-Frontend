@@ -20,22 +20,17 @@ body.dark .container {
 /* Container principal dos filtros */
 .filters-container {
   display: flex;
-  flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+  flex-wrap: wrap;
+  /* Permite que os itens quebrem para a próxima linha */
   gap: 20px;
-  align-items: flex-end; /* Alinha os itens na parte de baixo */
-  padding: 16px;
-  background-color: #f8f9fa;
+  align-items: flex-end;
+  /* Alinha os itens na parte de baixo */
+  padding: 5px 10px;
   border-radius: 12px;
-  border: 1px solid #e9ecef;
   margin-top: 10px;
   font-size: 0.9rem;
 }
 
-/* Estilos para o modo escuro */
-body.dark .filters-container {
-  background-color: #2a2f35;
-  border-color: #3b4045;
-}
 
 /* Grupo de filtros (Valor, Data) */
 .filter-group {
@@ -82,12 +77,14 @@ body.dark .filter-group-title {
 }
 
 .input-with-icon input {
-  padding: 8px 12px 8px 36px; /* Espaço à esquerda para o ícone */
+  padding: 8px 12px 8px 36px;
+  /* Espaço à esquerda para o ícone */
   border: 1px solid #ced4da;
   border-radius: 8px;
   background-color: #fff;
   transition: all 0.2s ease-in-out;
-  width: 150px; /* Largura fixa para compactar */
+  width: 150px;
+  /* Largura fixa para compactar */
 }
 
 body.dark .input-with-icon input {
@@ -103,8 +100,8 @@ body.dark .input-with-icon input {
 }
 
 body.dark .input-with-icon input:focus {
-    border-color: #63b3ed;
-    box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.2);
+  border-color: #63b3ed;
+  box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.2);
 }
 
 /* Botões de Ação */
@@ -128,14 +125,19 @@ body.dark .input-with-icon input:focus {
 .filter-button.primary {
   background-color: #d9e1eb;
   color: rgb(85, 85, 85);
-}body.dark .filter-button.primary{
+}
+
+body.dark .filter-button.primary {
   background-color: #3e4855;
   color: rgb(214, 214, 214);
 }
+
 .filter-button.primary:hover {
   background-color: #c7d2df;
   scale: 1.05;
-}body.dark .filter-button.primary:hover{
+}
+
+body.dark .filter-button.primary:hover {
   background-color: #3e4855;
   scale: 1.05;
 }
@@ -161,7 +163,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .input-with-icon .custom-icon {
   position: absolute;
   left: 8px;
-  pointer-events: none; /* não bloqueia clique no input */
+  pointer-events: none;
+  /* não bloqueia clique no input */
   color: #b8bac4;
 }
 
@@ -169,7 +172,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .filter-button.secondary {
   background-color: #d9e1eb;
   color: rgb(85, 85, 85);
-}body.dark .filter-button.secondary{
+}
+
+body.dark .filter-button.secondary {
   background-color: #3e4855;
   color: rgb(214, 214, 214);
 }
@@ -178,7 +183,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .filter-button.secondary:hover {
   background-color: #c7d2df;
   scale: 1.05;
-}body.dark .filter-button.secondary:hover{
+}
+
+body.dark .filter-button.secondary:hover {
   background-color: #3e4855;
   color: rgb(214, 214, 214);
 }
@@ -189,11 +196,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* Ajustes para telas pequenas */
 @media (max-width: 768px) {
+
   /* 1. O container principal vira uma coluna */
   .filters-container {
     flex-direction: column;
-    align-items: stretch; /* Garante que os grupos ocupem a largura toda */
-    gap: 5px; /* Aumenta o espaço vertical entre os grupos de filtros */
+    align-items: stretch;
+    /* Garante que os grupos ocupem a largura toda */
+    gap: 5px;
+    /* Aumenta o espaço vertical entre os grupos de filtros */
     padding: 10px;
     flex-direction: column;
 
@@ -202,30 +212,33 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   /* 2. O wrapper dos pares de input (min/max) continua como linha */
   .input-wrapper {
     display: flex;
-    gap: 0px; /* Espaço entre o input da esquerda e da direita */
+    gap: 0px;
+    /* Espaço entre o input da esquerda e da direita */
     justify-content: space-between;
   }
-  
-  .input-wrapper .input-with-icon input[type="date"]{
+
+  .input-wrapper .input-with-icon input[type="date"] {
     width: 92%;
   }
 
   /* 3. Aqui está a mágica: cada input dentro do wrapper ocupa metade do espaço */
   .input-wrapper .input-with-icon {
-    flex: 2; /* Faz com que os dois inputs dividam o espaço igualmente */
-    max-width: 8rem; /* Necessário para o flex: 1 funcionar corretamente em alguns casos */
+    flex: 2;
+    /* Faz com que os dois inputs dividam o espaço igualmente */
+    max-width: 8rem;
+    /* Necessário para o flex: 1 funcionar corretamente em alguns casos */
   }
 
-  .input-with-icon{
+  .input-with-icon {
     gap: 0px;
   }
-  
+
   /* 4. O input em si deve ocupar 100% do seu container pai */
   .input-with-icon input {
     width: 100%;
     font-size: 0.7rem;
     margin: 5px;
-    
+
   }
 
   /* 5. Botões lado a lado para economizar espaço vertical */
@@ -235,9 +248,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 
   .filter-actions .filter-button {
-    flex: 1; /* Cada botão ocupa 50% do espaço */
-    justify-content: center; /* Centraliza o conteúdo (ícone + texto) */
-    padding: 5px 2px; /* Um padding mais confortável para toque */
+    flex: 1;
+    /* Cada botão ocupa 50% do espaço */
+    justify-content: center;
+    /* Centraliza o conteúdo (ícone + texto) */
+    padding: 5px 2px;
+    /* Um padding mais confortável para toque */
     font-size: 0.8rem;
   }
 }
@@ -247,7 +263,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 
 
-.play-button, .replay-button{
+.play-button,
+.replay-button {
   width: 28px;
   height: 28px;
   color: rgb(73, 73, 73);
@@ -259,32 +276,38 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;    
-}body.dark .play-button, body.dark .replay-button{
+  padding: 0;
+}
+
+body.dark .play-button,
+body.dark .replay-button {
   color: white;
   background: linear-gradient(45deg, #5a5a79, rgb(75, 82, 94));
 }
 
 @media (max-width: 768px) {
-  .play-button{
+  .play-button {
     position: absolute;
     bottom: 1px;
     left: 100px;
   }
-  .replay-button{
+
+  .replay-button {
     position: absolute;
     bottom: 1px;
     left: 65px;
   }
 }
 
-.hr-dashboard{
+.hr-dashboard {
   background-color: rgb(209, 209, 209);
   border: none;
   width: 100%;
   margin: auto;
   height: 1px;
-}body.dark .hr-dashboard{
+}
+
+body.dark .hr-dashboard {
   background-color: rgb(85, 85, 85);
 }
 
@@ -297,7 +320,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   -webkit-background-clip: text;
   background-clip: text;
   cursor: pointer;
-}body.dark .balance {
+}
+
+body.dark .balance {
   background: linear-gradient(45deg, #9494ac, rgb(124, 166, 243));
   color: transparent;
   -webkit-background-clip: text;
@@ -328,12 +353,13 @@ body.dark .balance:hover {
   text-wrap: nowrap;
   width: 100%;
 }
-body.dark .balance-display{
+
+body.dark .balance-display {
   background-color: rgb(54, 57, 58);
   border: 1px solid #6e6e6e;
 }
 
-body.dark .custom-checkbox-label{
+body.dark .custom-checkbox-label {
   background-color: rgb(53, 64, 70);
   border-color: #6e6e6e;
   color: #8d8c8c;
@@ -437,10 +463,12 @@ input {
   font-size: 16px;
   box-sizing: border-box;
   outline: none;
-}body.dark input{
+}
+
+body.dark input {
   background: #292c31;
-    border: 1px solid #4d4d4d;
-    color: #808080;
+  border: 1px solid #4d4d4d;
+  color: #808080;
 }
 
 body.dark input {
@@ -498,8 +526,10 @@ button {
   font-weight: 500;
   cursor: pointer;
   transition: transform 0.2s;
-}body.dark {
-color: rgb(77, 77, 77);
+}
+
+body.dark {
+  color: rgb(77, 77, 77);
 }
 
 .logoutButton {
@@ -517,7 +547,9 @@ color: rgb(77, 77, 77);
   width: 20%;
   align-items: center;
   gap: 8px;
-}body.dark .logoutButton{
+}
+
+body.dark .logoutButton {
   background: #dc2626;
   color: white;
 }
@@ -537,16 +569,20 @@ color: rgb(77, 77, 77);
   margin-bottom: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   border: 2px solid #e1e5e9;
-}body.dark .statusCard {
+}
+
+body.dark .statusCard {
   background: linear-gradient(135deg, #515253, #566069);
   border: 2px solid #5a5959;
   color: white;
 }
 
-.alert-message{
+.alert-message {
   background-color: rgb(243, 243, 243);
   border: 1px solid #ccc;
-}body.dark .alert-message{
+}
+
+body.dark .alert-message {
   background-color: rgb(49, 49, 49);
   border: 1px solid #3a3a3a;
 }
@@ -569,7 +605,9 @@ color: rgb(77, 77, 77);
   width: 100%;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   background-color: rgb(223, 223, 223);
-}body.dark .gridContainer{
+}
+
+body.dark .gridContainer {
   background-color: rgb(36, 39, 41);
 }
 
@@ -586,30 +624,35 @@ color: rgb(77, 77, 77);
   margin: 8px;
   min-height: 100px;
   border: 1px solid #e1e5e9;
-}body.dark .card-donations{
+}
+
+body.dark .card-donations {
   background: rgba(33, 37, 39, 0.95);
   border: 1px solid #646464;
 }
+
 .card-donations {
   overflow-y: auto;
   margin: auto;
 }
 
 
-body.dark .card{
+body.dark .card {
   background-color: rgb(38, 40, 44);
   border-color: #474747;
 }
 
-.card-donations{
+.card-donations {
   height: 100vh;
 }
 
-.donation-date{
+.donation-date {
   color: rgb(27, 72, 117);
   margin: 10px;
 
-}body.dark .donation-date{
+}
+
+body.dark .donation-date {
   color: rgb(67, 136, 206);
 }
 
@@ -630,7 +673,9 @@ body.dark .card{
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.03),
     0 1px 2px rgba(0, 0, 0, 0.06);
-}body.dark .cardTitle{
+}
+
+body.dark .cardTitle {
   background: linear-gradient(135deg, #414347 0%, #303131 50%, #43464d 100%);
   border: 1px solid rgba(126, 126, 126, 0.329);
 }
@@ -640,8 +685,10 @@ body.dark .card{
   background: linear-gradient(45deg, #373749, rgb(72, 103, 161));
   -webkit-background-clip: text;
   background-clip: text;
-}body.dark .cardTitle p{
-   color: transparent;
+}
+
+body.dark .cardTitle p {
+  color: transparent;
   background: linear-gradient(45deg, #ababcf, rgb(86, 134, 223));
   -webkit-background-clip: text;
   background-clip: text;
@@ -670,22 +717,26 @@ body.dark .card{
   /* Acessibilidade */
   outline: none;
   -webkit-tap-highlight-color: transparent;
-}body.dark .donateItem{
+}
+
+body.dark .donateItem {
   background: linear-gradient(135deg, #32363a 0%, #2c2727 50%, #252b33 100%);
   border: 1px solid rgba(98, 98, 99, 0.767);
 }
 
-.iframe-qrcode{
+.iframe-qrcode {
   width: 100%;
   height: 400px;
   margin-top: 10px;
   border: 1px solid #ccc;
   border-radius: 10px;
-}body.dark .iframe-qrcode{
+}
+
+body.dark .iframe-qrcode {
   border: 1px solid #383838;
 }
 
-.reload-page-button{
+.reload-page-button {
   background: #f7f7f7;
   position: relative;
   width: 30px;
@@ -697,17 +748,22 @@ body.dark .card{
   border-radius: 50%;
   transition: 1s;
   color: rgb(57, 68, 80);
-}.reload-page-button:hover{
+}
+
+.reload-page-button:hover {
   transform: rotate(360deg);
 }
-body.dark .reload-page-button{
+
+body.dark .reload-page-button {
   background: #2a2b2c;
   color: rgb(89, 101, 116);
 }
 
 .donateItem p {
   color: #5b7599;
-}body.dark .donateItem p{
+}
+
+body.dark .donateItem p {
   color: #9ea7b4;
 }
 
@@ -733,7 +789,9 @@ body.dark .reload-page-button{
     0 0 0 4px rgba(59, 130, 246, 0.1),
     0 4px 6px rgba(0, 0, 0, 0.04),
     0 10px 15px rgba(0, 0, 0, 0.06);
-}body.dark .donateItem:focus-visible{
+}
+
+body.dark .donateItem:focus-visible {
   outline: 3px solid #355fa1;
 }
 
@@ -768,8 +826,8 @@ body.dark .reload-page-button{
   position: absolute;
   right: 115px;
   display: flex;
-  gap: 2px;
-  bottom: 4%;
+  gap: 1px;
+  bottom: 2px;
   padding: 10px;
 }
 
@@ -779,6 +837,20 @@ body.dark .reload-page-button{
   border-radius: 5px;
 }
 
+
+
+@media (min-width: 1024px) {
+  .audio-container {
+    position: absolute;
+    right: 5px;
+    top: 25px;
+    display: flex;
+    gap: 1px;
+    
+    padding-top: 10px;
+    
+  }
+}
 
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
@@ -895,7 +967,9 @@ body.dark .reload-page-button{
   align-items: center;
   gap: 8px;
   margin: 20px auto 0;
-}body.dark .saveButton {
+}
+
+body.dark .saveButton {
   background: #13a550;
   color: white;
 }
@@ -920,7 +994,9 @@ body.dark .reload-page-button{
   align-items: center;
   gap: 8px;
   margin: 20px auto 0;
-}body.dark .updateButton{
+}
+
+body.dark .updateButton {
   background: #1377e6;
   color: white;
 }

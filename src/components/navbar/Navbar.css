@@ -204,6 +204,12 @@ body.dark .navbar {
   color: var( --nav-item-active-color);
 }
 
+@media (min-width: 1024px){
+  .logo-dashboard-img{
+    position: absolute;
+    left: 20px;
+  }
+}
 
 /* Responsive Design */
 @media (min-width: 640px) {

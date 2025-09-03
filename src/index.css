@@ -1,22 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
 
-*{
+* {
   font-family: "Saira", sans-serif;
 }
 
 body {
-    min-height: 100vh;
-    background: transparent;
-    background-size: 400% 400%;
-    animation: gradientMove 8s ease infinite;
-    position: relative;
-    overflow: hidden;
-    background-color: rgb(238, 238, 238);
+  min-height: 100vh;
+  background: transparent;
+  background-size: 400% 400%;
+  animation: gradientMove 8s ease infinite;
+  position: relative;
+  overflow: hidden;
+  background-color: rgb(238, 238, 238);
 }
 
-body.dark{
-  background-color: rgb(51, 51, 51);
+body.dark {
+  background-color: rgb(38, 40, 44);
 }
+
 /* ===================== */
 /* 🎨 Tema Light (padrão) */
 /* ===================== */
@@ -26,8 +27,10 @@ body.dark{
   --navbar-bg: #ffffff;
   --nav-item-color: #444;
   --nav-item-hover-bg: #e6e6e6;
-  --nav-item-active-bg: #dbeafe; /* azul clarinho */
-  --nav-item-active-color: #1d4ed8; /* azul principal */
+  --nav-item-active-bg: #dbeafe;
+  /* azul clarinho */
+  --nav-item-active-color: #1d4ed8;
+  /* azul principal */
   --border-color: #ddd;
 }
 
@@ -38,11 +41,12 @@ body.dark {
   --bg-color: #121212;
   --text-color: #cfcfcf;
   --navbar-bg: #1f1f1f;
-  --nav-item-color: #9ca3af; /* cinza claro */
+  --nav-item-color: #9ca3af;
+  /* cinza claro */
   --nav-item-hover-bg: #2c2c2c;
-  --nav-item-active-bg: rgba(59, 130, 246, 0.15); /* azul transparente */
-  --nav-item-active-color: #3b82f6; /* azul vivo */
+  --nav-item-active-bg: rgba(59, 130, 246, 0.15);
+  /* azul transparente */
+  --nav-item-active-color: #3b82f6;
+  /* azul vivo */
   --border-color: #464545;
 }
-
-
