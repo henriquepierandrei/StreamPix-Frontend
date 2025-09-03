@@ -4,12 +4,15 @@ import { getStreamerData } from "./../../api/GetStreamerData"; // ajuste o path 
 import { User, Settings, Save } from 'lucide-react'
 import '../style/dashboard.css';
 import NavBarDashboard from '../../components/navbar/NavBarDashboard';
+import { useNavigate } from "react-router-dom";
 
 
 function StreamerSettings() {
+    const navigate = useNavigate();
+
     const [apiKey, setApiKey] = React.useState<string>('');
     const [active, setActive] = useState("Streamer");
-    const [isAuthenicated, setIsAuthenticated] = React.useState<boolean>(false);
+    const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
     const [streamerData, setStreamerData] = useState<StreamerData>({
         streamer_name: "Carregando...",
         streamer_balance: 0,
@@ -72,6 +75,28 @@ function StreamerSettings() {
             [field]: value
         }));
     };
+
+
+    useEffect(() => {
+    const checkKey = async () => {
+      const storedKey = localStorage.getItem("streamer_api_key");
+
+      if (!storedKey) {
+        navigate("/streamer/dashboard/login");
+        return;
+      }
+
+      const isValid = await ApiConfig.validateKey(storedKey);
+      if (!isValid) {
+        navigate("/streamer/dashboard/login");
+        return;
+      }
+
+     
+    };
+
+    checkKey();
+  }, [isAuthenticated, apiKey, navigate]);
 
 
     useEffect(() => {

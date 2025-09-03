@@ -4,14 +4,16 @@ import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData"; // ajuste o path se necessário
 import NavBarDashboard from '../../components/navbar/NavBarDashboard';
 import logo from '../../assets/logo.png';
+import { useNavigate } from "react-router-dom";
+
 import '../style/messageStyle.css';
 
 function MessagesPage() {
+    const navigate = useNavigate();
     const [apiKey, setApiKey] = useState<string>('');
     const [active, setActive] = useState("Mensagens");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
     const [isDarkMessageMode, setIsDarkMessageMode] = useState<boolean>(false);
 
     interface StreamerData {
@@ -45,6 +47,26 @@ function MessagesPage() {
             message: "Carregando dados..."
         }
     });
+
+    useEffect(() => {
+        const checkKey = async () => {
+            const storedKey = localStorage.getItem("streamer_api_key");
+
+            if (!storedKey) {
+                navigate("/streamer/dashboard/login");
+                return;
+            }
+
+            const isValid = await ApiConfig.validateKey(storedKey);
+            if (!isValid) {
+                navigate("/streamer/dashboard/login");
+                return;
+            }
+        };
+
+        checkKey();
+    }, [isAuthenticated, apiKey, navigate]);
+
 
     useEffect(() => {
         const savedKey = localStorage.getItem('streamer_api_key');

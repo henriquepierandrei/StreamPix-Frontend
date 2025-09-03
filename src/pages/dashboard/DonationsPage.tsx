@@ -6,6 +6,7 @@ import { Clock, UserStarIcon } from 'lucide-react'
 import PlayButtonAudio from '../../components/buttons/PlayButtonAudio'
 import ReplayButtonDonation from '../../components/buttons/ReplayButtonDonation'
 import NavBarDashboard from '../../components/navbar/NavBarDashboard';
+import { useNavigate } from "react-router-dom";
 
 interface StreamerData {
   streamer_name: string;
@@ -24,6 +25,7 @@ interface StreamerData {
 }
 
 function DonationsPage() {
+  const navigate = useNavigate();
   const [donates, setDonates] = useState<any[]>([]);
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
@@ -89,11 +91,33 @@ function DonationsPage() {
   };
 
 
+
+
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchDonates(); // usa a função aqui também
-    }
-  }, [isAuthenticated, apiKey]);
+    const checkKey = async () => {
+      const storedKey = localStorage.getItem("streamer_api_key");
+
+      if (!storedKey) {
+        navigate("/streamer/dashboard/login");
+        return;
+      }
+
+      const isValid = await ApiConfig.validateKey(storedKey);
+      if (!isValid) {
+        navigate("/streamer/dashboard/login");
+        return;
+      }
+
+      if (isAuthenticated) {
+        fetchDonates();
+      }
+    };
+
+    checkKey();
+  }, [isAuthenticated, apiKey, navigate]);
+
+
+
 
   useEffect(() => {
     const savedKey = localStorage.getItem('streamer_api_key');
@@ -139,7 +163,7 @@ function DonationsPage() {
                   onChange={(e) => setMinAmount(e.target.value ? Number(e.target.value) : undefined)}
                 />
               </div>
-              <span className="separator">-</span>
+
               <div className="input-with-icon">
                 <DollarSign className="input-icon" />
                 <input
@@ -164,8 +188,6 @@ function DonationsPage() {
                   onChange={(e) => setStartDate(e.target.value || undefined)}
                 />
               </div>
-
-              <span className="separator">até</span>
               <div className="input-with-icon">
                 <CalendarArrowDown className="input-icon" />
                 <input

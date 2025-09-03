@@ -193,24 +193,39 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .filters-container {
     flex-direction: column;
     align-items: stretch; /* Garante que os grupos ocupem a largura toda */
-    gap: 24px; /* Aumenta o espaço vertical entre os grupos de filtros */
+    gap: 5px; /* Aumenta o espaço vertical entre os grupos de filtros */
+    padding: 10px;
+    flex-direction: column;
+
   }
 
   /* 2. O wrapper dos pares de input (min/max) continua como linha */
   .input-wrapper {
     display: flex;
-    gap: 12px; /* Espaço entre o input da esquerda e da direita */
+    gap: 0px; /* Espaço entre o input da esquerda e da direita */
+    justify-content: space-between;
   }
   
-  /* 3. Aqui está a mágica: cada input dentro do wrapper ocupa metade do espaço */
-  .input-wrapper .input-with-icon {
-    flex: 1; /* Faz com que os dois inputs dividam o espaço igualmente */
-    min-width: 0; /* Necessário para o flex: 1 funcionar corretamente em alguns casos */
+  .input-wrapper .input-with-icon input[type="date"]{
+    width: 92%;
   }
 
+  /* 3. Aqui está a mágica: cada input dentro do wrapper ocupa metade do espaço */
+  .input-wrapper .input-with-icon {
+    flex: 2; /* Faz com que os dois inputs dividam o espaço igualmente */
+    max-width: 8rem; /* Necessário para o flex: 1 funcionar corretamente em alguns casos */
+  }
+
+  .input-with-icon{
+    gap: 0px;
+  }
+  
   /* 4. O input em si deve ocupar 100% do seu container pai */
   .input-with-icon input {
     width: 100%;
+    font-size: 0.7rem;
+    margin: 5px;
+    
   }
 
   /* 5. Botões lado a lado para economizar espaço vertical */
@@ -222,9 +237,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .filter-actions .filter-button {
     flex: 1; /* Cada botão ocupa 50% do espaço */
     justify-content: center; /* Centraliza o conteúdo (ícone + texto) */
-    padding: 12px 8px; /* Um padding mais confortável para toque */
+    padding: 5px 2px; /* Um padding mais confortável para toque */
+    font-size: 0.8rem;
   }
 }
+
+
+
 
 
 

@@ -3,8 +3,11 @@ import { QrCode, Copy, Save, RefreshCcw } from 'lucide-react'
 import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData"; // ajuste o path se necessário
 import NavBarDashboard from '../../components/navbar/NavBarDashboard';
+import { useNavigate } from "react-router-dom";
+
 
 function AnalyticsPage() {
+    const navigate = useNavigate();
     const [apiKey, setApiKey] = useState<string>('');
     const [active, setActive] = useState("QrCode");
     const [isDarkMode, setIsDarkMode] = useState(
@@ -74,6 +77,25 @@ function AnalyticsPage() {
         }));
     };
 
+ useEffect(() => {
+    const checkKey = async () => {
+      const storedKey = localStorage.getItem("streamer_api_key");
+
+      if (!storedKey) {
+        navigate("/streamer/dashboard/login");
+        return;
+      }
+
+      const isValid = await ApiConfig.validateKey(storedKey);
+      if (!isValid) {
+        navigate("/streamer/dashboard/login");
+        return;
+      }
+    };
+
+    checkKey();
+  }, [isAuthenticated, apiKey, navigate]);
+
     useEffect(() => {
         const savedKey = localStorage.getItem('streamer_api_key');
         if (savedKey) {
@@ -100,7 +122,7 @@ function AnalyticsPage() {
         <div className="dashboardContainer">
             <NavBarDashboard activeItem={active} onSelect={setActive} />
 
-            <div className='gridContainer' style={{maxWidth: "720px", margin: "auto", borderRadius: "10px"}}>
+            <div className='gridContainer' style={{ maxWidth: "720px", margin: "auto", borderRadius: "10px" }}>
                 <div className='card'>
                     <div className="cardTitle">
                         <QrCode size={20} color="#667eea" />
@@ -168,7 +190,7 @@ function AnalyticsPage() {
                             URL copiada com sucesso!
                         </span>
                     </div>
-                     <button
+                    <button
                         className="saveButton"
                         onClick={handleSave}
                         disabled={isLoading}
@@ -180,11 +202,11 @@ function AnalyticsPage() {
                         <Save size={20} />
                         {isLoading ? 'Salvando...' : 'Salvar Alterações'}
                     </button><br />
-                    <button className='reload-page-button'><RefreshCcw size={18} onClick={() => window.location.reload()}/></button>
-                    <iframe src={ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/henrique"}  className='iframe-qrcode' ></iframe>
+                    <button className='reload-page-button'><RefreshCcw size={18} onClick={() => window.location.reload()} /></button>
+                    <iframe src={ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/henrique"} className='iframe-qrcode' ></iframe>
                 </div>
 
-                
+
 
                 {/* <div className='card'>
                     <div className="cardTitle">
