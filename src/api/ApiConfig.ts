@@ -1,11 +1,13 @@
-import axios, { type AxiosInstance, AxiosError } from "axios";
+import axios from "axios";
+
+
 
 export class ApiConfig {
-  private static instance: AxiosInstance;
-  private static publicInstance: AxiosInstance;
+  private static instance: any;
+  private static publicInstance: any;
 
   // Client autenticado (com Bearer + refresh)
-  public static getInstance(): AxiosInstance {
+  public static getInstance(): any {
     if (!ApiConfig.instance) {
       ApiConfig.instance = axios.create({
         baseURL: 'http://localhost:8080',
@@ -17,27 +19,29 @@ export class ApiConfig {
 
       // Interceptor global
       ApiConfig.instance.interceptors.request.use(
-        (config) => {
+        (config: any) => {
           const token = localStorage.getItem("token");
           if (token) {
-            config.headers!['Authorization'] = `Bearer ${token}`;
+            if (!config.headers) config.headers = {};
+            config.headers['Authorization'] = `Bearer ${token}`;
           }
           return config;
         },
-        (error) => Promise.reject(error)
+        (error: any) => Promise.reject(error)
       );
 
       ApiConfig.instance.interceptors.response.use(
-        (response) => response,
-        async (error: AxiosError) => {
-          const originalRequest = error.config as any;
+        (response: any) => response,
+        async (error: any) => {
+          const originalRequest = error.config;
 
           if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
             const newToken = await ApiConfig.refreshToken();
             if (newToken) {
-              originalRequest.headers!['Authorization'] = `Bearer ${newToken}`;
+              if (!originalRequest.headers) originalRequest.headers = {};
+              originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
               return axios(originalRequest);
             } else {
               ApiConfig.logout();
@@ -47,14 +51,13 @@ export class ApiConfig {
           return Promise.reject(error);
         }
       );
-
     }
 
     return ApiConfig.instance;
   }
 
   // Client público (sem Bearer)
-  public static getPublicInstance(): AxiosInstance {
+  public static getPublicInstance(): any {
     if (!ApiConfig.publicInstance) {
       ApiConfig.publicInstance = axios.create({
         baseURL: this.getBaseBackendURL(),
@@ -65,7 +68,6 @@ export class ApiConfig {
     return ApiConfig.publicInstance;
   }
 
-  // ... refreshToken, logout etc. ficam iguais
   private static async refreshToken(): Promise<string | null> {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
@@ -73,7 +75,15 @@ export class ApiConfig {
 
       const response = await axios.post(`${this.getBaseBackendURL()}/auth/refresh`, { refreshToken });
 
-      const { token, refreshToken: newRefresh, tokenExpireAt, refreshTokenExpireAt } = response.data;
+      interface RefreshResponse {
+        token: string;
+        refreshToken?: string;
+        tokenExpireAt: string;
+        refreshTokenExpireAt?: string;
+      }
+
+      const data = response.data as RefreshResponse;
+      const { token, refreshToken: newRefresh, tokenExpireAt, refreshTokenExpireAt } = data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("tokenExpireAt", tokenExpireAt);
@@ -91,7 +101,6 @@ export class ApiConfig {
       return null;
     }
   }
-
 
   public static logout() {
     localStorage.removeItem("token");
