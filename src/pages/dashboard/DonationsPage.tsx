@@ -1,4 +1,4 @@
-import { CalendarArrowDown, Clapperboard, DollarSign, Filter, MessageSquareMore, PlayIcon, Settings, SquarePlayIcon } from 'lucide-react'
+import { CalendarArrowDown, Clapperboard, DollarSign, Filter, MessageSquareMore, Settings, SquarePlayIcon } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { ApiConfig } from "./../../api/ApiConfig";
 import { getStreamerData } from "./../../api/GetStreamerData"; // ajuste o path se necessário
@@ -31,7 +31,7 @@ function DonationsPage() {
   const [maxAmount, setMaxAmount] = useState<number | undefined>();
   const [startDate, setStartDate] = useState<string | undefined>();
   const [endDate, setEndDate] = useState<string | undefined>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [, setIsLoading] = useState<boolean>(false);
   const [active, setActive] = useState("Doações");
   const [streamerData, setStreamerData] = useState<StreamerData>({
     streamer_name: "Carregando...",

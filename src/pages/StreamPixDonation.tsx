@@ -22,7 +22,7 @@ const StreamPixDonation: React.FC = () => {
   const [amount, setAmount] = useState<string>(''); // sempre string no input
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>('pending');
   const [currency, setCurrency] = useState('BRL');
-  const [isAudioEnabled, setIsAudioEnabled] = useState(false);
+  const [, setIsAudioEnabled] = useState(false);
   const [selectedQuickAmount, setSelectedQuickAmount] = useState<number | null>(null);
   const [voiceType, setVoiceType] = useState<string>('');
   const [loading, setLoading] = useState(false);

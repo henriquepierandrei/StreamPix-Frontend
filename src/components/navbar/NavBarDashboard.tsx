@@ -21,7 +21,7 @@ interface NavBarDashboardProps {
   onSelect?: (label: string) => void; // <- callback quando clicar
 }
 
-function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
+function NavBarDashboard({ activeItem, }: NavBarDashboardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem("theme") === "dark"

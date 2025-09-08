@@ -4,8 +4,6 @@ import { QRCode } from "react-qrcode-logo";
 import { ApiConfig } from "./../api/ApiConfig";
 import logo from "./../assets/logo-qrcode-to-request.png";
 import "./style/streamerQrStyle.css";
-import { getStreamerData } from "../api/DonationRequest";
-
 interface StreamerData {
     qr_code_url: string;
     streamerName: string;
