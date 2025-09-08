@@ -1,124 +1,91 @@
-import React, { useEffect, useState } from 'react'
-import { ApiConfig } from "./../../api/ApiConfig";
-import { getStreamerData } from "./../../api/GetStreamerData"; // ajuste o path se necessário
-import { User, Settings, Save } from 'lucide-react'
-import '../style/dashboard.css';
-import NavBarDashboard from '../../components/navbar/NavBarDashboard';
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ApiConfig } from "../../api/ApiConfig";
+import { getStreamerData } from "../../api/GetStreamerData";
+import NavBarDashboard from "../../components/navbar/NavBarDashboard";
+import { Save, Settings, User } from "lucide-react";
 
+interface StreamerData {
+  streamer_name: string;
+  streamer_balance: number;
+  is_auto_play: boolean;
+  min_amount: number;
+  max_characters_name: number;
+  max_characters_message: number;
+  qr_code_is_dark_theme: boolean;
+  add_messages_bellow: boolean;
+  donate_is_dark_theme: boolean;
+  http_response: {
+    status: string;
+    message: string;
+  };
+}
 
 function StreamerSettings() {
-    const navigate = useNavigate();
-
-    const [apiKey, setApiKey] = React.useState<string>('');
-    const [active, setActive] = useState("Streamer");
-    const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
-    const [streamerData, setStreamerData] = useState<StreamerData>({
-        streamer_name: "Carregando...",
-        streamer_balance: 0,
-        is_auto_play: false,
-        min_amount: 0,
-        max_characters_name: 0,
-        max_characters_message: 0,
-        qr_code_is_dark_theme: false,
-        add_messages_bellow: false,
-        donate_is_dark_theme: false,
-        http_response: {
-            status: "WAIT",
-            message: "Carregando dados..."
-        }
-    });
-    const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
-    interface StreamerData {
-        streamer_name: string;
-        streamer_balance: number;
-        is_auto_play: boolean;
-        min_amount: number;
-        max_characters_name: number;
-        max_characters_message: number;
-        qr_code_is_dark_theme: boolean;
-        add_messages_bellow: boolean;
-        donate_is_dark_theme: boolean;
-        http_response: {
-            status: string;
-            message: string;
-        };
+  const navigate = useNavigate();
+  const [active, setActive] = useState("Streamer");
+  const [streamerData, setStreamerData] = useState<StreamerData>({
+    streamer_name: "Carregando...",
+    streamer_balance: 0,
+    is_auto_play: false,
+    min_amount: 0,
+    max_characters_name: 0,
+    max_characters_message: 0,
+    qr_code_is_dark_theme: false,
+    add_messages_bellow: false,
+    donate_is_dark_theme: false,
+    http_response: {
+      status: "WAIT",
+      message: "Carregando dados..."
     }
+  });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const handleSave = async () => {
+  const handleSave = async () => {
+    setIsLoading(true);
+    try {
+      const api = ApiConfig.getInstance();
+      const response = await api.put(`/streamer`, streamerData); 
+      setStreamerData(prev => ({
+        ...prev,
+        http_response: response.data.http_response
+      }));
+    } catch (err) {
+      console.error("Erro ao salvar streamer:", err);
+      setStreamerData(prev => ({
+        ...prev,
+        http_response: {
+          status: "ERROR",
+          message: "Falha ao salvar alterações."
+        }
+      }));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateField = (field: keyof StreamerData, value: any) => {
+    setStreamerData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Buscar dados do streamer ao carregar o componente
+  useEffect(() => {
+    (async () => {
+      try {
         setIsLoading(true);
-        try {
-            const api = ApiConfig.getInstance();
-            const response = await api.put(`/streamer?key=${apiKey}`, streamerData);
-            setStreamerData(prev => ({
-                ...prev,
-                http_response: response.data.http_response
-            }));
-        } catch (err) {
-            console.error("Erro ao salvar streamer:", err);
-            setStreamerData(prev => ({
-                ...prev,
-                http_response: {
-                    status: "ERROR",
-                    message: "Falha ao salvar alterações."
-                }
-            }));
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const updateField = (field: keyof StreamerData, value: any) => {
-        setStreamerData(prev => ({
-            ...prev,
-            [field]: value
-        }));
-    };
-
-
-    useEffect(() => {
-    const checkKey = async () => {
-      const storedKey = localStorage.getItem("streamer_api_key");
-
-      if (!storedKey) {
-        navigate("/streamer/dashboard/login");
-        return;
+        const data = await getStreamerData(); // sem passar apiKey
+        setStreamerData(data);
+      } catch (err) {
+        console.error("Erro ao buscar streamer:", err);
+        navigate("/streamer/dashboard/login"); // se falhar, redireciona pro login
+      } finally {
+        setIsLoading(false);
       }
-
-      const isValid = await ApiConfig.validateKey(storedKey);
-      if (!isValid) {
-        navigate("/streamer/dashboard/login");
-        return;
-      }
-
-     
-    };
-
-    checkKey();
-  }, [isAuthenticated, apiKey, navigate]);
-
-
-    useEffect(() => {
-        const savedKey = localStorage.getItem('streamer_api_key');
-        if (savedKey) {
-            setApiKey(savedKey);
-            setIsAuthenticated(true);
-
-            (async () => {
-                try {
-                    setIsLoading(true);
-                    const data = await getStreamerData(savedKey);
-                    setStreamerData(data);
-                } catch (err) {
-                    console.error("Erro ao buscar streamer:", err);
-                    setIsAuthenticated(false);
-                } finally {
-                    setIsLoading(false);
-                }
-            })();
-        }
-    }, []);
+    })();
+  }, [navigate]);
 
     return (
         <div className="dashboardContainer">

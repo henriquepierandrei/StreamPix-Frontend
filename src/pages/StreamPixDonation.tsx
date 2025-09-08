@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, UserX, XIcon } from 'lucide-react';
 import streamerLogo from '../assets/image.png';
 import logo from '../assets/logo.png';
+import logoDark from '../assets/logo-dark.png';
+
 import { useNavigate, useParams } from 'react-router-dom';
 import { createDonationRequest, sendDonation, getStreamerData } from '../api/DonationRequest';
 import './style/style.css';
@@ -88,8 +90,8 @@ const StreamPixDonation: React.FC = () => {
 
   if (paymentStatus === 'notfound') {
     return (
-      <div className="payment-container" style={{ background: 'linear-gradient(-45deg, #441313ff, #131212ff)' }}>
-        <img src={logo} alt="Logo" width={40} style={{ position: 'absolute', left: "50%", top: "20px", transform: 'translateX(-50%)' }} />
+      <div className="payment-container" style={{ background: 'linear-gradient(-45deg, #dadadaff, #b3b3b3ff)' }}>
+        <img src={logoDark} alt="Logo" width={40} style={{ position: 'absolute', left: "50%", top: "20px", transform: 'translateX(-50%)' }} />
         <div className="error-card">
           <ArrowLeft className="button-go-back" onClick={() => window.history.back()} />
           <div className="error-icon">

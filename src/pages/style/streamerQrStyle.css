@@ -21,12 +21,14 @@
   -webkit-background-clip: text;
   background-clip: text;
   animation: fadeInOut 20s ease-in-out infinite;
+  position: relative;
+  bottom: 25px;
 }
 
 @keyframes fadeInOut {
   0% {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
 
   10% {
@@ -50,8 +52,8 @@
   padding: 0px 0px 10px 0px;
   border: 1px solid #ccc;
   border-radius: 20px;
-  height: 290px;
-  width: 280px;
+  height: 260px;
+  width: 250px;
 }
 
 .title-qrcode {
@@ -67,6 +69,8 @@
 .qr-container h2 {
   color: white;
   font-size: 1rem;
+  position: relative;
+  top: -2px;
 }
 
 .qr-code-container-streamer {

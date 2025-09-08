@@ -50,3 +50,43 @@ body.dark {
   /* azul vivo */
   --border-color: #464545;
 }
+
+
+input[type="checkbox"] {
+  appearance: none;
+  /* tira o estilo nativo */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 20px;
+  height: 20px;
+  border: 2px solid #CCC;
+  border-radius: 10px;
+  background-color: white;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.dark input[type="checkbox"] {
+  background-color: rgb(57, 74, 82);
+  border: 2px solid #6b6b6b;
+}
+
+input[type="checkbox"]:checked {
+  background-color: rgb(190, 192, 194);
+  border-color: white;
+  color: white;
+
+}
+
+body.dark input[type="checkbox"]:checked {
+  background-color: rgb(118, 122, 128);
+  color: white;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "◯";
+  font-size: 14px;
+}

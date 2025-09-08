@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-// import QRCode from "react-qr-code";
 import { QRCode } from "react-qrcode-logo";
 import { ApiConfig } from "./../api/ApiConfig";
 import logo from "./../assets/logo-qrcode-to-request.png";
 import "./style/streamerQrStyle.css";
+import { getStreamerData } from "../api/DonationRequest";
 
 interface StreamerData {
     qr_code_url: string;
+    streamerName: string;
 }
 
 interface QrCodeTheme {
@@ -48,8 +49,8 @@ function StreamerQrPage() {
     useEffect(() => {
         async function fetchQrCodeTheme() {
             try {
-                const api = ApiConfig.getInstance();
-                const response = await api.get(`/streamer/qrcode?key=keypublic`);
+                const api = ApiConfig.getPublicInstance();
+                const response = await api.get(`/streamer/qrcode?streamerName=${streamerName}`);
                 const data = response.data;
 
                 setQrCodeTheme({
@@ -61,7 +62,8 @@ function StreamerQrPage() {
             }
         }
         fetchQrCodeTheme();
-    }, []);
+    }, [streamerName]);
+
 
 
     // alterna mensagens a cada 3s
@@ -77,11 +79,11 @@ function StreamerQrPage() {
     if (error) return <p>{error}</p>;
 
     return (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}><div style={{ 
-            textAlign: "center", 
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}><div style={{
+            textAlign: "center",
             marginTop: "50px",
             background: qrCodeTheme?.qr_code_is_dark_theme ? "linear-gradient(45deg, #223446ea 0%, #222222f3 50%, #1c1d1ff5 100%)" : "linear-gradient(45deg, #f3f3f3ff 0% 50%, #ffffffff 100%)",
-         }} className="qr-container">
+        }} className="qr-container">
             <div className="title-qrcode">
                 <h2 style={{
                     color: qrCodeTheme?.qr_code_is_dark_theme ? "#ffffff" : "#21272b",
@@ -90,7 +92,7 @@ function StreamerQrPage() {
 
             {streamerData && (
                 <>
-                    <div style={{ position: "relative", display: "inline-block" }}>
+                    <div style={{ position: "relative", display: "inline-block", bottom: "10px" }}>
 
                         <QRCode
                             value={streamerData.qr_code_url}
@@ -116,12 +118,12 @@ function StreamerQrPage() {
 
                     </div>
 
-                    {/* mensagens rotativas */}
 
                 </>
             )}
             {qrCodeTheme?.add_messages_bellow && <p key={currentMessage} className="qr-message" style={{
-                color: qrCodeTheme?.qr_code_is_dark_theme ? "#ffffff" : "#21272b",}}>
+                color: qrCodeTheme?.qr_code_is_dark_theme ? "#ffffff" : "#21272b",
+            }}>
                 {messages[currentMessage]}
             </p>}
 

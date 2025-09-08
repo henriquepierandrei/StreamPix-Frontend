@@ -40,7 +40,10 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
   }, [isDarkMode]);
 
   const handleLogout = () => {
-    localStorage.removeItem("streamer_api_key");
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("tokenExpireAt")
+    localStorage.removeItem("refreshTokenExpireAt")
     window.location.reload();
   };
 
@@ -48,7 +51,7 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
     <nav className="navbar" style={{ marginBottom: "20px" }}>
       <div className="navbar-container">
         <div className="navbar-content">
-        <img src={isDarkMode ? logo : logodark} alt="Logo" width={40} className="logo-dashboard-img"/>
+          <img src={isDarkMode ? logo : logodark} alt="Logo" width={40} className="logo-dashboard-img" />
 
           {/* Botão do menu mobile */}
           <div className="navbar-left">
@@ -56,7 +59,7 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
               className="mobile-menu-button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
 

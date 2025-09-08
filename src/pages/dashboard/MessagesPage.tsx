@@ -1,7 +1,7 @@
 import { Link2, Save } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { ApiConfig } from "../../api/ApiConfig";
-import { getStreamerData } from "../../api/GetStreamerData"; // ajuste o path se necessário
+import { getStreamerData } from "../../api/GetStreamerData";
 import NavBarDashboard from '../../components/navbar/NavBarDashboard';
 import logo from '../../assets/logo.png';
 import { useNavigate } from "react-router-dom";
@@ -10,10 +10,8 @@ import '../style/messageStyle.css';
 
 function MessagesPage() {
     const navigate = useNavigate();
-    const [apiKey, setApiKey] = useState<string>('');
     const [active, setActive] = useState("Mensagens");
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [isDarkMessageMode, setIsDarkMessageMode] = useState<boolean>(false);
 
     interface StreamerData {
@@ -49,54 +47,28 @@ function MessagesPage() {
     });
 
     useEffect(() => {
-        const checkKey = async () => {
-            const storedKey = localStorage.getItem("streamer_api_key");
-
-            if (!storedKey) {
-                navigate("/streamer/dashboard/login");
-                return;
-            }
-
-            const isValid = await ApiConfig.validateKey(storedKey);
-            if (!isValid) {
-                navigate("/streamer/dashboard/login");
-                return;
-            }
-        };
-
-        checkKey();
-    }, [isAuthenticated, apiKey, navigate]);
-
-
-    useEffect(() => {
-        const savedKey = localStorage.getItem('streamer_api_key');
-        if (savedKey) {
-            setApiKey(savedKey);
-            setIsAuthenticated(true);
-
-            (async () => {
-                try {
-                    setIsLoading(true);
-                    const data = await getStreamerData(savedKey);
-                    setStreamerData(data);
-                    if (streamerData.donate_is_dark_theme) {
-                        setIsDarkMessageMode(true);
-                    }
-                } catch (err) {
-                    console.error("Erro ao buscar streamer:", err);
-                    setIsAuthenticated(false);
-                } finally {
-                    setIsLoading(false);
+        (async () => {
+            try {
+                setIsLoading(true);
+                const data = await getStreamerData(); // remove a key
+                setStreamerData(data);
+                if (data.donate_is_dark_theme) {
+                    setIsDarkMessageMode(true);
                 }
-            })();
-        }
-    }, []);
+            } catch (err) {
+                console.error("Erro ao buscar streamer:", err);
+                navigate("/streamer/dashboard/login"); // redireciona se erro
+            } finally {
+                setIsLoading(false);
+            }
+        })();
+    }, [navigate]);
 
     const handleSave = async () => {
         setIsLoading(true);
         try {
             const api = ApiConfig.getInstance();
-            const response = await api.put(`/streamer?key=${apiKey}`, streamerData);
+            const response = await api.put(`/streamer`, streamerData); // sem query key
             setStreamerData(prev => ({
                 ...prev,
                 http_response: response.data.http_response
@@ -121,6 +93,7 @@ function MessagesPage() {
             [field]: value
         }));
     };
+
 
 
 

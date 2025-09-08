@@ -27,6 +27,7 @@
     pointer-events: auto;
     border: 1px solid #ddd;
     color: #383838;
+    font-style: italic;
 }
 
 body.dark .toast {
@@ -36,7 +37,6 @@ body.dark .toast {
     padding: 8px 10px;
     border-radius: 12px;
     border: 1px solid #313131;
-    font-style: italic;
     padding: 12px 16px;
 }
 /* Quando aparece */

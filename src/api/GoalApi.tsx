@@ -25,31 +25,37 @@ export interface UpdateGoalPayload {
 export const useGoalApi = () => {
   const api = ApiConfig.getInstance();
 
-  const getGoal = async (key: string, streamerId: number): Promise<GoalPayload> => {
-    const response = await api.get(`/streamer/goal?key=${key}&streamer-id=${streamerId}`);
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("Usuário não autenticado (token ausente).");
+    return { Authorization: `Bearer ${token}` };
+  };
+
+  const getGoal = async (): Promise<GoalPayload> => {
+    const response = await api.get(`/streamer/goal`, {
+      headers: getAuthHeaders(),
+    });
     return response.data;
   };
 
-  const createGoal = async (
-    key: string,
-    streamerId: number,
-    payload: CreateGoalPayload
-  ): Promise<GoalPayload> => {
-    const response = await api.post(`/streamer/goal?key=${key}&streamer-id=${streamerId}`, payload);
+  const createGoal = async (payload: CreateGoalPayload): Promise<GoalPayload> => {
+    const response = await api.post(`/streamer/goal`, payload, {
+      headers: getAuthHeaders(),
+    });
     return response.data;
   };
 
-  const updateGoal = async (
-    key: string,
-    streamerId: number,
-    payload: UpdateGoalPayload
-  ): Promise<GoalPayload> => {
-    const response = await api.put(`/streamer/goal?key=${key}&streamer-id=${streamerId}`, payload);
+  const updateGoal = async (payload: UpdateGoalPayload): Promise<GoalPayload> => {
+    const response = await api.put(`/streamer/goal`, payload, {
+      headers: getAuthHeaders(),
+    });
     return response.data;
   };
 
-  const deleteGoal = async (key: string, streamerId: number): Promise<any> => {
-    const response = await api.delete(`/streamer/goal?key=${key}&streamer-id=${streamerId}`);
+  const deleteGoal = async (): Promise<any> => {
+    const response = await api.delete(`/streamer/goal`, {
+      headers: getAuthHeaders(),
+    });
     return response.data;
   };
 

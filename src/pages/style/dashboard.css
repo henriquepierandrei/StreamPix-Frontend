@@ -17,19 +17,95 @@ body.dark .container {
   min-height: 100vh;
 }
 
-/* Container principal dos filtros */
 .filters-container {
   display: flex;
   flex-wrap: wrap;
-  /* Permite que os itens quebrem para a próxima linha */
   gap: 20px;
   align-items: flex-end;
-  /* Alinha os itens na parte de baixo */
-  padding: 5px 10px;
+  padding: 5px 5px;
   border-radius: 12px;
   margin-top: 10px;
   font-size: 0.9rem;
 }
+
+.delete-alert {
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  background: linear-gradient(140deg, white, rgb(236, 242, 248));
+  border: 1px solid #cacaca;
+  color: #3d3d3d;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  z-index: 999;
+  animation: fadeInOut 3s ease-in-out forwards;
+}
+
+body.dark .delete-alert {
+  background: linear-gradient(140deg, #282b33, #27282c);
+  border-color: #36393d;
+  color: #dfdfdf;
+}
+
+.delete-alert p {
+  margin-bottom: 15px;
+  font-weight: 400;
+}
+
+.delete-alert .buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+
+}
+
+.delete-alert .buttons button {
+  padding: 5px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 500 !important;
+}
+
+.delete-alert .buttons .confirm {
+  background-color: #1ba04e;
+  color: white;
+
+}
+
+.delete-alert .buttons .confirm:hover {
+  background-color: #178541;
+  color: white;
+
+}
+
+.delete-alert .buttons .cancel {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.delete-alert .buttons .cancel:hover {
+  background-color: #7f8c8d;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+}
+
 
 
 /* Grupo de filtros (Valor, Data) */
@@ -78,13 +154,11 @@ body.dark .filter-group-title {
 
 .input-with-icon input {
   padding: 8px 12px 8px 36px;
-  /* Espaço à esquerda para o ícone */
   border: 1px solid #ced4da;
   border-radius: 8px;
   background-color: #fff;
   transition: all 0.2s ease-in-out;
   width: 150px;
-  /* Largura fixa para compactar */
 }
 
 body.dark .input-with-icon input {
@@ -159,15 +233,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   align-items: center;
 }
 
-/* Seu ícone custom */
 .input-with-icon .custom-icon {
   position: absolute;
   left: 8px;
   pointer-events: none;
-  /* não bloqueia clique no input */
   color: #b8bac4;
 }
-
 
 .filter-button.secondary {
   background-color: #d9e1eb;
@@ -179,7 +250,6 @@ body.dark .filter-button.secondary {
   color: rgb(214, 214, 214);
 }
 
-
 .filter-button.secondary:hover {
   background-color: #c7d2df;
   scale: 1.05;
@@ -190,30 +260,35 @@ body.dark .filter-button.secondary:hover {
   color: rgb(214, 214, 214);
 }
 
+@media (max-width: 425px) {
+  .button-toggle-play {
+    width: 100% !important;
+  }
 
-
+  .delete-alert{
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    bottom: 10%;
+    padding: 20px;
+  }  
+}
 
 
 /* Ajustes para telas pequenas */
 @media (max-width: 768px) {
-
-  /* 1. O container principal vira uma coluna */
   .filters-container {
     flex-direction: column;
     align-items: stretch;
-    /* Garante que os grupos ocupem a largura toda */
     gap: 5px;
-    /* Aumenta o espaço vertical entre os grupos de filtros */
     padding: 10px;
     flex-direction: column;
 
   }
 
-  /* 2. O wrapper dos pares de input (min/max) continua como linha */
   .input-wrapper {
     display: flex;
     gap: 0px;
-    /* Espaço entre o input da esquerda e da direita */
     justify-content: space-between;
   }
 
@@ -221,19 +296,15 @@ body.dark .filter-button.secondary:hover {
     width: 92%;
   }
 
-  /* 3. Aqui está a mágica: cada input dentro do wrapper ocupa metade do espaço */
   .input-wrapper .input-with-icon {
     flex: 2;
-    /* Faz com que os dois inputs dividam o espaço igualmente */
     max-width: 8rem;
-    /* Necessário para o flex: 1 funcionar corretamente em alguns casos */
   }
 
   .input-with-icon {
     gap: 0px;
   }
 
-  /* 4. O input em si deve ocupar 100% do seu container pai */
   .input-with-icon input {
     width: 100%;
     font-size: 0.7rem;
@@ -241,7 +312,6 @@ body.dark .filter-button.secondary:hover {
 
   }
 
-  /* 5. Botões lado a lado para economizar espaço vertical */
   .filter-actions {
     display: flex;
     gap: 12px;
@@ -249,19 +319,11 @@ body.dark .filter-button.secondary:hover {
 
   .filter-actions .filter-button {
     flex: 1;
-    /* Cada botão ocupa 50% do espaço */
     justify-content: center;
-    /* Centraliza o conteúdo (ícone + texto) */
     padding: 5px 2px;
-    /* Um padding mais confortável para toque */
     font-size: 0.8rem;
   }
 }
-
-
-
-
-
 
 .play-button,
 .replay-button {
@@ -475,6 +537,50 @@ body.dark input {
   border-color: rgb(88, 88, 92)
 }
 
+.login-container {
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: linear-gradient(45deg, rgb(223, 220, 220), rgb(183, 208, 211));
+  color: rgb(49, 57, 61);
+  padding: 20px;
+}
+
+.login-container input {
+  border: none;
+  background-color: rgb(243, 243, 243);
+}
+
+body.dark .login-container {
+  transition: 1s;
+  background: linear-gradient(45deg, rgb(32, 35, 37), rgb(28, 33, 34));
+  border-color: #36393b;
+  color: rgb(117, 117, 117);
+
+}
+
+body.dark .login-container input {
+  background-color: rgb(63, 60, 60);
+}
+
+.login-container button {
+  background-color: rgb(236, 236, 236);
+  border: 1px solid #ccc;
+  color: rgb(94, 94, 94);
+}
+
+.message-donation {
+  width: 93%;
+  word-wrap: break-word;
+}
+
+.login-container button:hover {
+  background-color: rgb(216, 213, 213);
+  scale: 1.05;
+}
+
 
 .progress-bar-goal {
   height: 50px;
@@ -577,15 +683,7 @@ body.dark .statusCard {
   color: white;
 }
 
-.alert-message {
-  background-color: rgb(243, 243, 243);
-  border: 1px solid #ccc;
-}
 
-body.dark .alert-message {
-  background-color: rgb(49, 49, 49);
-  border: 1px solid #3a3a3a;
-}
 
 .statusIndicator {
   display: flex;
@@ -602,9 +700,10 @@ body.dark .alert-message {
 /* Grid e Cards */
 .gridContainer {
   display: grid;
-  width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  background-color: rgb(223, 223, 223);
+  width: 50%;
+  grid-template-rows: repeat(auto-fit, minmax(300px, 1fr));
+  margin: auto;
+  
 }
 
 body.dark .gridContainer {
@@ -846,14 +945,18 @@ body.dark .donateItem:focus-visible {
     top: 25px;
     display: flex;
     gap: 1px;
-    
+
     padding-top: 10px;
-    
+
   }
 }
 
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
+  .message-donation {
+    font-size: 0.75rem;
+  }
+
   .cardTitle {
     font-size: 18px;
     padding: 14px 16px;
@@ -880,6 +983,10 @@ body.dark .donateItem:focus-visible {
   .donateItem {
     padding: 16px;
     font-size: 14px;
+  }
+
+  .gridContainer{
+    width: 100%;
   }
 }
 

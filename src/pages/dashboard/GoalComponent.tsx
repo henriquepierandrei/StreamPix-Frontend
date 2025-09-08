@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Save, Replace, Trash, Goal, GoalIcon, Copy, AlertCircle } from "lucide-react";
 import { ApiConfig } from "../../api/ApiConfig";
-import { getStreamerData } from "./../../api/GetStreamerData"; // ajuste o path se necessário
+import { getStreamerData } from "../../api/GetStreamerData";
 import type { CreateGoalPayload, UpdateGoalPayload } from "../../api/GoalApi";
 import { useGoalApi } from "../../api/GoalApi";
 import '../../pages/style/dashboard.css'
-import NavBarDashboard from "../navbar/NavBarDashboard";
+import NavBarDashboard from "../../components/navbar/NavBarDashboard";
 
-const streamerId = 1; // altere conforme necessário
-
-interface GoalComponentProps {
-  apiKeyTwo: string;
-}
 
 interface GoalData {
   uuid?: string;
@@ -37,7 +32,7 @@ interface StreamerData {
   };
 }
 
-const GoalComponent: React.FC<GoalComponentProps> = ({ apiKeyTwo }) => {
+const GoalComponent: React.FC = () => {
   const { getGoal, createGoal, updateGoal, deleteGoal } = useGoalApi();
   const [goal, setGoal] = useState<GoalData | null>(null);
   const [createGoalData, setCreateGoalData] = useState<GoalData>({
@@ -50,9 +45,9 @@ const GoalComponent: React.FC<GoalComponentProps> = ({ apiKeyTwo }) => {
   const [copied, setCopied] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [active, setActive] = useState("Metas");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [apiKey, setApiKey] = useState<string>('');
+
   const [streamerData, setStreamerData] = useState<StreamerData>({
     streamer_name: "Carregando...",
     streamer_balance: 0,
@@ -69,76 +64,54 @@ const GoalComponent: React.FC<GoalComponentProps> = ({ apiKeyTwo }) => {
     }
   });
 
+  // Buscar dados do streamer
   useEffect(() => {
-    const savedKey = localStorage.getItem('streamer_api_key');
-    if (savedKey) {
-      setApiKey(savedKey);
-      setIsAuthenticated(true);
-
-      (async () => {
-        try {
-          setIsLoading(true);
-          const data = await getStreamerData(savedKey);
-          setStreamerData(data);
-        } catch (err) {
-          console.error("Erro ao buscar streamer:", err);
-          setIsAuthenticated(false);
-        } finally {
-          setIsLoading(false);
-        }
-      })();
-    }
+    (async () => {
+      try {
+        setIsLoading(true);
+        const data = await getStreamerData();
+        setStreamerData(data);
+      } catch (err) {
+        console.error("Erro ao buscar streamer:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
   }, []);
 
-  // Busca a meta quando a apiKey estiver disponível
+  // Buscar meta existente
   useEffect(() => {
-    if (!apiKey) return;
-
-    const fetchGoal = async () => {
+    (async () => {
       try {
-        const existingGoal = await getGoal(apiKey, streamerId);
+        const existingGoal = await getGoal(); // sem streamerId
         if (existingGoal) {
           setGoal(existingGoal);
           setUpdateGoalData(existingGoal);
         }
       } catch (err) {
         console.error("Erro ao buscar meta:", err);
-        setAlertMessage("Erro ao carregar meta existente.");
+        setAlertMessage("Nenhuma meta existente.");
       }
-    };
-
-    fetchGoal();
-  }, [apiKey]); // <-- apenas quando apiKey mudar
-
+    })();
+  }, []);
 
   const handleCreate = async () => {
-    if (!apiKey) {
-      setAlertMessage("API key não encontrada!");
-      return;
-    }
-
     if (!createGoalData.reason.trim()) {
       setAlertMessage("Por favor, informe o motivo da meta.");
       return;
     }
-
     if (createGoalData.balance_to_achieve <= 0) {
       setAlertMessage("O valor a alcançar deve ser maior que zero.");
       return;
     }
-
     setIsLoading(true);
-    setAlertMessage("");
-
     try {
-      const created = await createGoal(apiKey, streamerId, createGoalData as CreateGoalPayload);
+      const created = await createGoal(createGoalData as CreateGoalPayload); // sem streamerId
       setGoal(created);
       setUpdateGoalData(created);
       setCreateGoalData({ balance_to_achieve: 0, reason: "", end_at_in_days: 1 });
       setAlertMessage("Meta criada com sucesso!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      setTimeout(() => window.location.reload(), 1500);
     } catch (err) {
       console.error("Erro ao criar meta:", err);
       setAlertMessage("Erro ao criar meta. Tente novamente.");
@@ -148,19 +121,15 @@ const GoalComponent: React.FC<GoalComponentProps> = ({ apiKeyTwo }) => {
   };
 
   const handleUpdate = async () => {
-    if (!apiKey || !updateGoalData || !updateGoalData.uuid) {
+    if (!updateGoalData || !updateGoalData.uuid) {
       setAlertMessage("Dados insuficientes para atualizar a meta.");
       return;
     }
-
     if (!updateGoalData.reason.trim()) {
       setAlertMessage("Por favor, informe o motivo da meta.");
       return;
     }
-
     setIsLoading(true);
-    setAlertMessage("");
-
     try {
       const payload: UpdateGoalPayload = {
         uuid: updateGoalData.uuid,
@@ -168,14 +137,11 @@ const GoalComponent: React.FC<GoalComponentProps> = ({ apiKeyTwo }) => {
         reason: updateGoalData.reason,
         end_at_in_days: updateGoalData.end_at_in_days,
       };
-      const updated = await updateGoal(apiKey, streamerId, payload);
+      const updated = await updateGoal(payload); // sem streamerId
       setGoal(updated);
       setUpdateGoalData(updated);
       setAlertMessage("Meta atualizada com sucesso!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-
+      setTimeout(() => window.location.reload(), 1500);
     } catch (err) {
       console.error("Erro ao atualizar meta:", err);
       setAlertMessage("Erro ao atualizar meta. Tente novamente.");
@@ -185,26 +151,22 @@ const GoalComponent: React.FC<GoalComponentProps> = ({ apiKeyTwo }) => {
   };
 
   const handleDelete = async () => {
-    if (!apiKey || !goal || !goal.uuid) {
+    if (!goal || !goal.uuid) {
       setAlertMessage("Nenhuma meta para deletar.");
       return;
     }
+    setShowDeleteConfirm(true); // abre a div de confirmação
+  };
 
-    if (!window.confirm("Tem certeza que deseja deletar esta meta?")) {
-      return;
-    }
-
+  const confirmDelete = async () => {
+    setShowDeleteConfirm(false); // fecha o alerta
     setIsLoading(true);
-    setAlertMessage("");
-
     try {
-      await deleteGoal(apiKey, streamerId);
+      await deleteGoal();
       setGoal(null);
       setUpdateGoalData(null);
       setAlertMessage("Meta deletada com sucesso!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      setTimeout(() => window.location.reload(), 1500);
     } catch (err) {
       console.error("Erro ao deletar meta:", err);
       setAlertMessage("Erro ao deletar meta. Tente novamente.");
@@ -212,6 +174,12 @@ const GoalComponent: React.FC<GoalComponentProps> = ({ apiKeyTwo }) => {
       setIsLoading(false);
     }
   };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false); // apenas fecha o alerta
+  };
+
+
 
   const handleChange = (field: keyof GoalData, value: any, type: "create" | "update") => {
     if (type === "create") {
@@ -223,7 +191,7 @@ const GoalComponent: React.FC<GoalComponentProps> = ({ apiKeyTwo }) => {
 
   const handleCopyURL = async () => {
     try {
-      await navigator.clipboard.writeText(ApiConfig.getBaseBackendURL() + "/goal-component/index.html");
+      await navigator.clipboard.writeText(ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/goal/to-show/" + streamerData.streamer_name);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -234,6 +202,7 @@ const GoalComponent: React.FC<GoalComponentProps> = ({ apiKeyTwo }) => {
 
   return (
     <div>
+
       <NavBarDashboard activeItem={active} onSelect={setActive} />
       <div className="dashboardContainer">
         <div className="gridContainer">
@@ -331,7 +300,7 @@ const GoalComponent: React.FC<GoalComponentProps> = ({ apiKeyTwo }) => {
                   <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
                     <input
                       type="text"
-                      value={ApiConfig.getBaseBackendURL() + "/goal-component/index.html"}
+                      value={ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/goal/to-show/" + streamerData.streamer_name}
                       readOnly
                       className="input"
                       style={{ flex: 1 }}
@@ -341,6 +310,17 @@ const GoalComponent: React.FC<GoalComponentProps> = ({ apiKeyTwo }) => {
                     </button>
                   </div>
                   {copied && <span style={{ color: "#9398a1", fontSize: "0.8rem", marginTop: -5 }}>URL copiada com sucesso!</span>}
+                  {showDeleteConfirm && (
+                    <div className="delete-alert">
+                      <p>Tem certeza que deseja deletar?</p>
+                      <div className="buttons">
+                        <button className="confirm" onClick={confirmDelete}>Sim</button>
+                        <button className="cancel" onClick={cancelDelete}>Não</button>
+                      </div>
+                    </div>
+                  )}
+
+
                   <button
                     className="logoutButton"
                     onClick={handleDelete}
@@ -366,7 +346,7 @@ const GoalComponent: React.FC<GoalComponentProps> = ({ apiKeyTwo }) => {
                 padding: "8px",
                 borderRadius: "4px",
               }}
-              className="alert-message">
+                className="alert-message">
                 {alertMessage}
               </p>
             )}

@@ -1,4 +1,4 @@
-import { CalendarArrowDown, Clapperboard, DollarSign, Filter, MessageSquareMore, Settings } from 'lucide-react'
+import { CalendarArrowDown, Clapperboard, DollarSign, Filter, MessageSquareMore, PlayIcon, Settings, SquarePlayIcon } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { ApiConfig } from "./../../api/ApiConfig";
 import { getStreamerData } from "./../../api/GetStreamerData"; // ajuste o path se necessário
@@ -31,10 +31,7 @@ function DonationsPage() {
   const [maxAmount, setMaxAmount] = useState<number | undefined>();
   const [startDate, setStartDate] = useState<string | undefined>();
   const [endDate, setEndDate] = useState<string | undefined>();
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [apiKey, setApiKey] = useState<string>('');
   const [active, setActive] = useState("Doações");
   const [streamerData, setStreamerData] = useState<StreamerData>({
     streamer_name: "Carregando...",
@@ -52,14 +49,61 @@ function DonationsPage() {
     }
   });
 
-  // 🔹 Agora a função é global dentro do componente
-  const fetchDonates = async () => {
+
+
+  const updateField = (field: keyof StreamerData, value: any) => {
+    setStreamerData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSave = async (data?: StreamerData) => {
+    setIsLoading(true);
+    try {
+      const api = ApiConfig.getInstance();
+      const payload = data ?? streamerData; // se passar algo, usa, senão usa o atual
+      const response = await api.put(`/streamer`, payload);
+
+      setStreamerData(prev => ({
+        ...prev,
+        http_response: response.data.http_response
+      }));
+    } catch (err) {
+      console.error("Erro ao salvar streamer:", err);
+      setStreamerData(prev => ({
+        ...prev,
+        http_response: {
+          status: "ERROR",
+          message: "Falha ao salvar alterações."
+        }
+      }));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
+  const handleToggleAutoPlay = (checked: boolean) => {
+    updateField("is_auto_play", checked); // atualiza state
+    handleSave({ ...streamerData, is_auto_play: checked }); // já envia o valor novo
+  };
+
+
+
+
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("token");
+    return { Authorization: `Bearer ${token}` };
+  };
+
+  const fetchDonates = async (token?: string) => {
     try {
       setIsLoading(true);
       const api = ApiConfig.getInstance();
+      const authHeaders = token ? { Authorization: `Bearer ${token}` } : getAuthHeaders();
 
       const params = new URLSearchParams({
-        key: apiKey,
         page: "0",
         size: "10",
         sort: "donatedAt,desc",
@@ -70,7 +114,9 @@ function DonationsPage() {
       if (startDate) params.append("startDate", startDate);
       if (endDate) params.append("endDate", endDate);
 
-      const response = await api.get(`/log/donations?${params.toString()}`);
+      const response = await api.get(`/streamer/log/donations?${params.toString()}`, {
+        headers: authHeaders, // corrigido
+      });
       setDonates(response.data.content);
     } catch (err) {
       console.error("Erro ao buscar donates:", err);
@@ -78,6 +124,38 @@ function DonationsPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const initialize = async () => {
+      const token = localStorage.getItem("token");
+      console.log("DonationsPage:" + localStorage.getItem('token')); // deve mostrar o token
+      if (token == null) {
+        navigate("/streamer/dashboard/login");
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+
+        // Busca dados do streamer
+        const data = await getStreamerData(); // não precisa passar token
+        setStreamerData(data);
+
+        // Busca donates
+        await fetchDonates(); // fetchDonates já pega token do localStorage
+      } catch (err: any) {
+        console.error("Erro ao inicializar página:", err.message || err);
+        // localStorage.removeItem("token");
+        navigate("/streamer/dashboard/login");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initialize();
+  }, [navigate]);
+
+
 
   const clearDonates = () => {
     setDonates([]);
@@ -88,54 +166,6 @@ function DonationsPage() {
   };
 
 
-
-
-  useEffect(() => {
-    const checkKey = async () => {
-      const storedKey = localStorage.getItem("streamer_api_key");
-
-      if (!storedKey) {
-        navigate("/streamer/dashboard/login");
-        return;
-      }
-
-      const isValid = await ApiConfig.validateKey(storedKey);
-      if (!isValid) {
-        navigate("/streamer/dashboard/login");
-        return;
-      }
-
-      if (isAuthenticated) {
-        fetchDonates();
-      }
-    };
-
-    checkKey();
-  }, [isAuthenticated, apiKey, navigate]);
-
-
-
-
-  useEffect(() => {
-    const savedKey = localStorage.getItem('streamer_api_key');
-    if (savedKey) {
-      setApiKey(savedKey);
-      setIsAuthenticated(true);
-
-      (async () => {
-        try {
-          setIsLoading(true);
-          const data = await getStreamerData(savedKey);
-          setStreamerData(data);
-        } catch (err) {
-          console.error("Erro ao buscar streamer:", err);
-          setIsAuthenticated(false);
-        } finally {
-          setIsLoading(false);
-        }
-      })();
-    }
-  }, []);
 
   return (
     <div className='container'>
@@ -198,15 +228,34 @@ function DonationsPage() {
 
           {/* Botões de Ação */}
           <div className="filter-actions">
-            <button className="filter-button primary" onClick={fetchDonates}>
+            <button className="filter-button primary" onClick={() => fetchDonates()}>
               <Filter />
               Filtrar
             </button>
+
             <button className="filter-button secondary" onClick={clearDonates}> {/* Adicionar uma função para limpar */}
               <Clapperboard />
               Limpar
             </button>
           </div>
+          <button className='button-toggle-play'
+                  onClick={() => handleToggleAutoPlay(!streamerData.is_auto_play)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "8px 12px",
+                    borderRadius: "8px",
+                    border: "1px solid",
+                    cursor: "pointer",
+                    color: streamerData.is_auto_play ? "#4caf50" : "#ff3d3dff",
+                    fontWeight: 600,
+                    width: "max-content"
+                  }}
+                >
+                  <SquarePlayIcon strokeWidth={3} />
+                  {streamerData.is_auto_play ? "Auto Play Ativado" : "Auto Play Desativado"}
+                </button>
         </div>
 
         {donates.length === 0 ? (
@@ -225,6 +274,7 @@ function DonationsPage() {
             }, {})
           ).map(([date, donations]) => (
             <div key={date} className="donation-group">
+
               <br /><hr className='hr-dashboard' />
               <h3 className="donation-date">{date}</h3>
 
@@ -239,10 +289,10 @@ function DonationsPage() {
                   </div>
 
                   <p>
-                    <strong><UserStarIcon size={12} /> Nome:</strong> {donate.name}
+                    <UserStarIcon size={12} strokeWidth={4} /> {donate.name}
                   </p>
-                  <p>
-                    <strong><MessageSquareMore size={12} /> Messagem:</strong> {donate.message}
+                  <p className='message-donation' style={{ fontWeight: "500" }}>
+                    <MessageSquareMore size={12} strokeWidth={4} /> {donate.message}
                   </p>
 
                   <p style={{ fontSize: '12px', color: '#666', display: 'flex', alignItems: 'center', gap: "5px" }}>

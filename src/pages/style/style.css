@@ -20,9 +20,9 @@ body {
 
 
     background: linear-gradient(350deg,
-            rgb(139, 142, 145) 0%,
-            rgb(187, 187, 187) 57%,
-            rgb(31, 33, 34) 100%);
+            rgb(255, 255, 255) 0%,
+            rgb(216, 227, 236) 57%,
+            rgb(240, 242, 243) 100%);
     background-size: 400% 400%;
     animation: gradientMove 12s ease infinite;
     height: auto;
@@ -84,7 +84,7 @@ body.dark .donation-container {
 
 /* Card de sucesso */
 .success-card {
-    background: linear-gradient(50deg, #cef0d9, #dcfce7);
+    background: linear-gradient(140deg, #ffffff, #f3fff7);
     border-radius: 16px;
     padding: 40px 30px;
     text-align: center;
@@ -99,10 +99,11 @@ body.dark .donation-container {
 .success-icon {
     width: 80px;
     height: 80px;
-    background: #45da51;
+    background: linear-gradient(to right, #0b571b, #085f36);
     border-radius: 50%;
     display: flex;
     align-items: center;
+    border: 1px solid #117445;
     justify-content: center;
     margin: 0 auto 24px;
     animation: pulse 2s infinite;
@@ -112,7 +113,7 @@ body.dark .donation-container {
     font-size: 24px;
     font-weight: 600;
     color: transparent;
-    background: linear-gradient(to right, #186149, #10b981);
+    background: linear-gradient(to right, #0b571b, #085f36);
     -webkit-background-clip: text;
     background-clip: text;
     margin-bottom: 12px;
@@ -127,7 +128,7 @@ body.dark .donation-container {
 
 /* Card de erro */
 .error-card {
-    background: linear-gradient(to right, #fef2f2, #f7b1b1);
+    background: linear-gradient(140deg, #fef2f2, #ffa3a396);
     border-radius: 16px;
     padding: 40px 30px;
     text-align: center;
@@ -135,15 +136,14 @@ body.dark .donation-container {
     width: 100%;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     position: relative;
-    border-bottom: 5px solid #ac8e8e;
-
+    border: 1px solid #9c9c9c;
     animation: fadeIn 0.3s ease;
 }
 
 .error-icon {
     width: 80px;
     height: 80px;
-    background: #b93131;
+    background: linear-gradient(to right, #383131, #5e1f1f);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -155,7 +155,7 @@ body.dark .donation-container {
     font-size: 24px;
     font-weight: 600;
     color: transparent;
-    background: linear-gradient(to right, #ff3e3e, #7e0000);
+    background: linear-gradient(to right, #383131, #5e1f1f);
     -webkit-background-clip: text;
     background-clip: text;
     margin-bottom: 12px;
@@ -335,8 +335,7 @@ body.dark .voice-selection {
 
 .form-card {
     border-bottom: 3px solid #d8d9da;
-    border-left: 3px solid #d8d9da;
-
+    border: 2px solid #d8d9da;
     background: linear-gradient(350deg,
             rgb(255, 255, 255) 0%,
             rgb(220, 225, 235) 57%,
@@ -344,7 +343,8 @@ body.dark .voice-selection {
     border-radius: 20px;
     padding: 25px;
     width: 100%;
-    box-shadow: 0 0px 999px rgb(0, 0, 0);
+    box-shadow: 2px 2px 20px rgba(2, 2, 2, 0.103);
+
 }
 
 body.dark .form-card {
@@ -352,7 +352,8 @@ body.dark .form-card {
             rgb(37, 36, 36) 0%,
             rgb(57, 60, 66) 57%,
             rgb(34, 36, 36) 100%);
-    box-shadow: 0 0px 999px rgb(255, 255, 255);
+        box-shadow: 2px 2px 20px rgba(143, 182, 255, 0.103);
+
     border-color: #545555;
     ;
 }
@@ -432,10 +433,14 @@ body.dark .quick-button {
     background: #32363b;
     color: #d1d1d1;
     border: 1px solid #747474;
-}body.dark .quick-button:hover {
+}
+
+body.dark .quick-button:hover {
     background: #5e676b;
     border-color: #6681bb;
-}body.dark .quick-button.active {
+}
+
+body.dark .quick-button.active {
     background: #3765c9;
     color: #ffffff;
     border-color: #6696ff;
@@ -483,11 +488,14 @@ body.dark .quick-button {
 .textarea-wrapper {
     position: relative;
 }
-.textarea-wrapper textarea{
+
+.textarea-wrapper textarea {
     background-color: rgb(235, 235, 235);
     border-color: #ccc;
     color: rgb(34, 35, 36);
-}body.dark textarea{
+}
+
+body.dark textarea {
     background-color: rgb(43, 46, 54);
     border-color: #424242;
     color: rgb(202, 202, 202);
@@ -622,7 +630,9 @@ body.dark .quick-button {
     font-size: 14px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid rgb(173, 173, 173);
-}body.dark .footer-brand{
+}
+
+body.dark .footer-brand {
     background: linear-gradient(60deg, #353541, #1f1f24);
     color: #ffffff;
     border-color: rgb(105, 105, 105);
@@ -636,7 +646,9 @@ body.dark .quick-button {
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
-}body.dark .footer-brand span {
+}
+
+body.dark .footer-brand span {
     background: linear-gradient(350deg,
             rgb(255, 255, 255) 0%,
             rgb(190, 208, 247) 57%,
