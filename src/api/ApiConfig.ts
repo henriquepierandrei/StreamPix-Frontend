@@ -10,7 +10,7 @@ export class ApiConfig {
   public static getInstance(): any {
     if (!ApiConfig.instance) {
       ApiConfig.instance = axios.create({
-        baseURL: 'http://localhost:8080',
+        baseURL: this.getBaseBackendURL(),
         timeout: 10000,
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export class ApiConfig {
   }
 
   public static getBaseBackendURL(): string {
-    return "http://localhost:8080";
+    return "https://a811ccb98165.ngrok-free.app";
   }
 
   public static getBaseFrontendURL(): string {
