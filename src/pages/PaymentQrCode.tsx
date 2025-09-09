@@ -20,17 +20,17 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
 
     // Carrega QR code inicial (uma vez)
     useEffect(() => {
-    if (!transactionId) return;
+        if (!transactionId) return;
 
-    getDonation(transactionId)
-        .then(res => setPaymentInfo(res))
-        .catch(err => {
-            if (err.expired) {
-                setPaymentInfo(null);
-                setLocalTimeLeft(0); // dispara expired
-            }
-        });
-}, [transactionId]);
+        getDonation(transactionId)
+            .then(res => setPaymentInfo(res))
+            .catch(err => {
+                if (err.expired) {
+                    setPaymentInfo(null);
+                    setLocalTimeLeft(0); // dispara expired
+                }
+            });
+    }, [transactionId]);
 
 
     // Define status do pagamento baseado no hook
@@ -62,14 +62,15 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
         if (localTimeLeft === null) return;
 
         const interval = setInterval(() => {
-            setLocalTimeLeft((prev: number | null) => {
+            setLocalTimeLeft(prev => {
                 if (prev === null) return null;
                 return prev > 0 ? prev - 1 : 0;
             });
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [localTimeLeft]);
+    }, []); // ⬅️ dependência vazia, roda apenas uma vez
+
 
     return (
         <>
