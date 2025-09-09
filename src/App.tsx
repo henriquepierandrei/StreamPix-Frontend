@@ -19,7 +19,7 @@ function App() {
         {/* ROTAS ESPECÍFICAS - DEVEM VIR PRIMEIRO */}
         
         {/* Página raiz */}
-        <Route path="/" element={<div>StreamPix - Página Inicial</div>} />
+        <Route path="/" element={<NotFoundPage />} />
         
         {/* Rotas de pagamento e transações */}
         <Route path="/donation/:transactionId" element={<PaymentQrCode />} />
