@@ -1,4 +1,4 @@
-import { Link2, Save } from 'lucide-react';
+import { Link2, Save, Copy } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
@@ -13,6 +13,7 @@ function MessagesPage() {
     const [active, setActive] = useState("Mensagens");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDarkMessageMode, setIsDarkMessageMode] = useState<boolean>(false);
+    const [copied, setCopied] = useState(false);
 
     interface StreamerData {
         streamer_name: string;
@@ -50,14 +51,14 @@ function MessagesPage() {
         (async () => {
             try {
                 setIsLoading(true);
-                const data = await getStreamerData(); // remove a key
+                const data = await getStreamerData();
                 setStreamerData(data);
                 if (data.donate_is_dark_theme) {
                     setIsDarkMessageMode(true);
                 }
             } catch (err) {
                 console.error("Erro ao buscar streamer:", err);
-                navigate("/streamer/dashboard/login"); // redireciona se erro
+                navigate("/streamer/dashboard/login");
             } finally {
                 setIsLoading(false);
             }
@@ -68,7 +69,7 @@ function MessagesPage() {
         setIsLoading(true);
         try {
             const api = ApiConfig.getInstance();
-            const response = await api.put(`/streamer`, streamerData); // sem query key
+            const response = await api.put(`/streamer`, streamerData);
             setStreamerData(prev => ({
                 ...prev,
                 http_response: response.data.http_response
@@ -94,18 +95,54 @@ function MessagesPage() {
         }));
     };
 
-
-
+    const handleCopyURL = async () => {
+        try {
+            await navigator.clipboard.writeText(
+                `https://streampix-backend.onrender.com/messaging/index.html`
+            );
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error("Erro ao copiar URL:", err);
+        }
+    };
 
     return (
         <div>
             <NavBarDashboard activeItem={active} onSelect={setActive} />
             <div className='card' style={{ maxWidth: "720px", margin: "auto", borderRadius: "10px" }}>
-                <div className="cardTitle" >
+                <div className="cardTitle">
                     <Link2 size={20} />
                     <p>URL Mensagens {streamerData.streamer_name}</p>
-                </div><br />
-                <div className="formGroup">
+                </div>
+                <br />
+
+                {/* Campo de URL com botão copiar */}
+                <div style={{ display: "flex", gap: 10, flexDirection: "column", marginTop: 10 }}>
+                    <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                        <input
+                            type="text"
+                            value={ApiConfig.getBaseBackendURL() + "/messaging/index.html"}
+                            readOnly
+                            className="input"
+                            style={{ flex: 1 }}
+                        />
+                        <button
+                            className="iconButton"
+                            style={{ width: 40, height: 40 }}
+                            onClick={handleCopyURL}
+                        >
+                            <Copy size={20} />
+                        </button>
+                    </div>
+                    {copied && (
+                        <span style={{ color: "#9398a1", fontSize: "0.8rem", marginTop: -5 }}>
+                            URL copiada com sucesso!
+                        </span>
+                    )}
+                </div>
+
+                <div className="formGroup" style={{ marginTop: 20 }}>
                     <div className='custom-checkbox-label'>
                         <input
                             type="checkbox"
@@ -115,6 +152,7 @@ function MessagesPage() {
                         <p>Tema Escuro</p>
                     </div>
                 </div>
+
                 <button
                     className="saveButton"
                     onClick={handleSave}
@@ -128,23 +166,19 @@ function MessagesPage() {
                     {isLoading ? 'Salvando...' : 'Salvar Alterações'}
                 </button>
 
-
                 <div className={`toast show ${isDarkMessageMode ? "dark" : ""}`}>
                     <img src={logo} className="toast-logo" alt="logo" />
                     <div className="toast-content">
                         <div>
                             <span className="toast-name">Teste</span> enviou
-                            <strong>R$ 999</strong>
+                            <strong> R$ 999</strong>
                         </div>
                         "Eu gosto muito da sua live"
                     </div>
                 </div>
-
             </div>
         </div>
-
-
     )
 }
 
-export default MessagesPage
+export default MessagesPage;

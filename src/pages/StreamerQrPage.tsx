@@ -85,7 +85,7 @@ function StreamerQrPage() {
             <div className="title-qrcode">
                 <h2 style={{
                     color: qrCodeTheme?.qr_code_is_dark_theme ? "#ffffff" : "#21272b",
-                }}>streampix.gg/{streamerName}</h2>
+                }}>{ApiConfig.getBaseFrontendURL().replace("https://", "")}/{streamerName}</h2>
             </div>
 
             {streamerData && (

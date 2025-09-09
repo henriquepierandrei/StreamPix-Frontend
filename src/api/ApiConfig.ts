@@ -113,7 +113,7 @@ export class ApiConfig {
   }
 
   public static getBaseFrontendURL(): string {
-    return "https://streampix.vercel.app/";
+    return "https://streampix.vercel.app";
   }
 }
 
