@@ -8,7 +8,6 @@ export default defineConfig({
   build: {
     outDir: 'dist'
   },
-  // base: './',
   server: {
     host: true,
     port: 5173,

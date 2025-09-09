@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
+import { ApiConfig } from "./ApiConfig";
 
 interface PaymentUpdate {
   isDonated?: boolean;
@@ -12,14 +13,14 @@ export function usePaymentWebSocket(transactionId: string | null) {
 
   useEffect(() => {
     if (!transactionId) return;
-
+  
     let stompClient: Client | null = null;
     let mounted = true;
 
     import("sockjs-client").then((SockJS) => {
       if (!mounted) return;
 
-      const socket = new SockJS.default("http://localhost:8080/streampix-websocket");
+      const socket = new SockJS.default(ApiConfig.getBaseBackendURL() + "/streampix-websocket");
 
       stompClient = new Client({
         webSocketFactory: () => socket,

@@ -1,6 +1,8 @@
 // useGoalWebSocket.ts
 import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
+import { ApiConfig } from "../api/ApiConfig";
+
 
 export interface Goal {
   reason?: string;
@@ -25,7 +27,7 @@ export function useGoalWebSocket(streamerName: string) {
     async function loadInitialGoal() {
       try {
         const res = await fetch(
-          `http://localhost:8080/streamer/goal/to-show?streamerName=${streamerName}`
+          ApiConfig.getBaseBackendURL() + `/streamer/goal/to-show?streamerName=${streamerName}`
         );
         if (!res.ok) throw new Error("Erro ao carregar meta inicial");
         const data: Goal = await res.json();
@@ -41,7 +43,7 @@ export function useGoalWebSocket(streamerName: string) {
     import("sockjs-client").then((SockJS) => {
       if (!mounted) return;
 
-      const socket = new SockJS.default("http://localhost:8080/streampix-websocket");
+      const socket = new SockJS.default(ApiConfig.getBaseBackendURL() + "/streampix-websocket");
 
       stompClient = new Client({
         webSocketFactory: () => socket,
