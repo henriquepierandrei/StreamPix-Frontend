@@ -19,11 +19,15 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
     const [copied, setCopied] = useState(false);
 
     // Carrega QR code inicial (uma vez)
+    // Carrega QR code inicial (uma vez)
     useEffect(() => {
         if (!transactionId) return;
 
         getDonation(transactionId)
-            .then(res => setPaymentInfo(res))
+            .then(res => {
+                setPaymentInfo(res);
+                setLocalTimeLeft(res.time_remaining_seconds); // ⬅️ inicializa aqui
+            })
             .catch(err => {
                 if (err.expired) {
                     setPaymentInfo(null);
@@ -31,6 +35,7 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
                 }
             });
     }, [transactionId]);
+
 
 
     // Define status do pagamento baseado no hook
