@@ -260,6 +260,8 @@ body.dark .filter-button.secondary:hover {
   color: rgb(214, 214, 214);
 }
 
+
+
 @media (max-width: 425px) {
   .button-toggle-play {
     width: 100% !important;

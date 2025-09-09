@@ -3,14 +3,12 @@ import { ArrowLeft, UserX, XIcon } from 'lucide-react';
 import streamerLogo from '../assets/image.png';
 import logo from '../assets/logo.png';
 import logoDark from '../assets/logo-dark.png';
-
 import { useNavigate, useParams } from 'react-router-dom';
 import { createDonationRequest, sendDonation, getStreamerData } from '../api/DonationRequest';
 import './style/style.css';
 import Loading from '../components/Loading';
 import Alert from '../components/Alert';
 import ThemeButton from '../components/buttons/ThemeButton';
-
 
 type PaymentStatus = 'pending' | 'success' | 'failed' | 'notfound' | 'error';
 

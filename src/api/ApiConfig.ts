@@ -109,11 +109,11 @@ export class ApiConfig {
   }
 
   public static getBaseBackendURL(): string {
-    return "https://a811ccb98165.ngrok-free.app";
+    return "https://streampix-backend.onrender.com";
   }
 
   public static getBaseFrontendURL(): string {
-    return "http://localhost:5173";
+    return "https://streampix.vercel.app/";
   }
 }
 
