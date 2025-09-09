@@ -57,10 +57,7 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     };
 
-    // sempre que o timeLeft do hook mudar, atualiza o estado local
-    useEffect(() => {
-        setLocalTimeLeft(timeLeft);
-    }, [timeLeft]);
+    
 
     // decrementa a cada segundo
     useEffect(() => {
