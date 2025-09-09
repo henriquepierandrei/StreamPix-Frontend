@@ -12,26 +12,25 @@ interface PaymentQrCodeProps { }
 
 const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
     const { transactionId } = useParams<{ transactionId: string }>();
-    const { alreadyPaid, timeLeft } = usePaymentWebSocket(transactionId ?? null);
+    const { alreadyPaid, } = usePaymentWebSocket(transactionId ?? null);
     const [paymentInfo, setPaymentInfo] = useState<{ qrcode?: string } | null>(null);
-    const [localTimeLeft, setLocalTimeLeft] = useState<number | null>(timeLeft);
+    const [localTimeLeft, setLocalTimeLeft] = useState<number | null>(null);
 
     const [copied, setCopied] = useState(false);
 
-    // Carrega QR code inicial (uma vez)
-    // Carrega QR code inicial (uma vez)
+    // Inicializa quando o QR code chega
     useEffect(() => {
         if (!transactionId) return;
 
         getDonation(transactionId)
             .then(res => {
                 setPaymentInfo(res);
-                setLocalTimeLeft(res.time_remaining_seconds); // ⬅️ inicializa aqui
+                setLocalTimeLeft(res.time_remaining_seconds);
             })
             .catch(err => {
                 if (err.expired) {
                     setPaymentInfo(null);
-                    setLocalTimeLeft(0); // dispara expired
+                    setLocalTimeLeft(0);
                 }
             });
     }, [transactionId]);
@@ -57,9 +56,9 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     };
 
-    
 
-    // decrementa a cada segundo
+
+    // Decrementa cada segundo usando a função de callback do estado
     useEffect(() => {
         if (localTimeLeft === null) return;
 
@@ -71,7 +70,7 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, []); // ⬅️ dependência vazia, roda apenas uma vez
+    }, [localTimeLeft]); // ⬅️ observe que agora depende de localTimeLeft
 
 
     return (
