@@ -16,13 +16,24 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Rotas públicas */}
-        <Route path="/:streamerName" element={<StreamPixDonation />} />
+        {/* ROTAS ESPECÍFICAS - DEVEM VIR PRIMEIRO */}
+        
+        {/* Página raiz */}
+        <Route path="/" element={<div>StreamPix - Página Inicial</div>} />
+        
+        {/* Rotas de pagamento e transações */}
         <Route path="/donation/:transactionId" element={<PaymentQrCode />} />
+        
+        {/* Rotas do streamer - QR Code */}
         <Route path="/streamer/qrcode/:streamerName" element={<StreamerQrPage />} />
+        
+        {/* Rota de login do dashboard */}
         <Route path="/streamer/dashboard/login" element={<DashboardLogin />} />
+        
+        {/* Rota do componente de meta para exibição */}
         <Route path="/streamer/dashboard/goal/to-show/:streamerName" element={<GoalComponentToShow />} />
-        {/* Rotas privadas */}
+        
+        {/* ROTAS PRIVADAS DO DASHBOARD */}
         <Route
           path="/streamer/dashboard/messages"
           element={
@@ -31,6 +42,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        
         <Route
           path="/streamer/dashboard/goals"
           element={
@@ -39,6 +51,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        
         <Route
           path="/streamer/dashboard/donations"
           element={
@@ -47,6 +60,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        
         <Route
           path="/streamer/dashboard/profile"
           element={
@@ -55,6 +69,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        
         <Route
           path="/streamer/dashboard/qrcode/settings"
           element={
@@ -64,7 +79,10 @@ function App() {
           }
         />
 
-        {/* Página 404 */}
+        {/* ROTA GENÉRICA - DEVE VIR APÓS AS ESPECÍFICAS */}
+        <Route path="/:streamerName" element={<StreamPixDonation />} />
+
+        {/* ROTA 404 - SEMPRE POR ÚLTIMO */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
