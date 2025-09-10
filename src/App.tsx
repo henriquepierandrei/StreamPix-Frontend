@@ -11,6 +11,7 @@ import MessagesPage from './pages/dashboard/MessagesPage';
 import DashboardLogin from './pages/dashboard/DashboardLogin';
 import PrivateRoute from './api/PrivateRoute';
 import { GoalComponentToShow } from '././components/GoalComponentToShow'
+import HomePage from './pages/home/HomePage';
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         {/* ROTAS ESPECÍFICAS - DEVEM VIR PRIMEIRO */}
         
         {/* Página raiz */}
-        <Route path="/" element={<NotFoundPage />} />
+        <Route path="/" element={<HomePage />} />
         
         {/* Rotas de pagamento e transações */}
         <Route path="/donation/:transactionId" element={<PaymentQrCode />} />
