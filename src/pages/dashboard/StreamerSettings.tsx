@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
 import NavBarDashboard from "../../components/navbar/NavBarDashboard";
-import { Save, Settings, User } from "lucide-react";
+import { Eye, EyeClosed, Save, Settings, User } from "lucide-react";
 
 interface StreamerData {
   streamer_name: string;
