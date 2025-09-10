@@ -2,15 +2,19 @@ import { useState, useEffect } from "react";
 import logo from '../../assets/logo.png'
 import logodark from '../../assets/logo-dark.png'
 import {
-    DoorOpen,
     Sun,
     Moon,
+    User2
 } from "lucide-react";
 import "./Navbar.css";
+import { useNavigate } from "react-router-dom";
 
 
 
 function NavbarHome() {
+
+    const navigate = useNavigate();
+    
     const [isDarkMode, setIsDarkMode] = useState(
         localStorage.getItem("theme") === "dark"
     );
@@ -46,10 +50,11 @@ function NavbarHome() {
                         </button>
 
                         <button className="nav-item" style={{ fontSize: "1.2rem", fontWeight: "300" }}
+                        onClick={() => navigate("/streamer/dashboard/login")}
                         >
-
-                            <DoorOpen size={18} strokeWidth={2} />
-                            <span>Sair</span>
+                            
+                            <User2 size={18} strokeWidth={2} />
+                            <span>Entrar</span>
                         </button>
                     </div>
                 </div>

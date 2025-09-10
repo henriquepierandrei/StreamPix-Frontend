@@ -1,25 +1,30 @@
 import { QrCode, Settings, Wallet, Users, TrendingUp, Shield, Zap } from 'lucide-react';
 import NavbarHome from '../../components/navbar/NavbarHome'
+import { useNavigate } from 'react-router-dom';
 import MessagePerson from './Typing-rafiki.svg'
+import { ApiConfig } from "../../api/ApiConfig";
+
 import './HomeStyle.css';
 
 function HomePage() {
+  const navigate = useNavigate();
   return (
-    <div style={{overflowX: "hidden"}}>
+    <div style={{ overflowX: "hidden" }}>
       <NavbarHome />
       <div className='component-title-home'>
         <div className="arc-shape"></div>
         <div className="hero-content">
           <h1>Monetize. Engaje. Cresça.</h1>
           <h2>Mais engajamento, mais receita, mais liberdade para criar.</h2>
-          <button className='button-home-dashboard'>Acessar Dashboard</button>
+          <button className='button-home-dashboard' onClick={() => navigate("/streamer/dashboard/login")}
+          >Acessar Dashboard</button>
         </div>
         <div className="arc-shape-invert"></div>
       </div>
 
       <div className='how-work-container'>
         <h1 className='title-how-work'>Como funciona</h1>
-        
+
         <div className='flex-how-work-card'>
           <div className='how-work-card'>
             <div className="card-icon-wrapper">
@@ -53,7 +58,7 @@ function HomePage() {
             <p>
               Receba mensagens via Pix ou Cartão de Crédito e exiba os alertas na sua transmissão em tempo real.
             </p>
-            <button className='button-secondary'>Saiba mais</button>
+            <button className='button-secondary' onClick={() => navigate("/streamer/dashboard/login")}>Saiba mais</button>
           </div>
         </div>
       </div>
@@ -108,8 +113,8 @@ function HomePage() {
         <h2>Pronto para monetizar seu conteúdo?</h2>
         <p>Junte-se a milhares de criadores que já estão transformando sua paixão em receita</p>
         <div className="cta-buttons">
-          <button className="button-primary-large">Começar Agora</button>
-          <button className="button-outline-large">Ver Demonstração</button>
+          <button className="button-primary-large" onClick={() => navigate("/streamer/dashboard/login")}>Começar Agora</button>
+          <button className="button-outline-large" onClick={() => navigate("/streamer/dashboard/login")}>Ver Demonstração</button>
         </div>
       </div>
 
