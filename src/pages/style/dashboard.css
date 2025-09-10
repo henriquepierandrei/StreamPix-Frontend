@@ -413,9 +413,16 @@ body.dark .balance:hover {
   display: flex;
   align-items: center;
   justify-content: start;
+  gap: 20px;
   flex-direction: row;
   text-wrap: nowrap;
   width: 100%;
+}
+
+.button-eye-blurred{
+  color: rgb(49, 49, 59);
+}body.dark .button-eye-blurred{
+  color: rgb(166, 166, 190);
 }
 
 body.dark .balance-display {

@@ -115,7 +115,7 @@ function StreamerSettings() {
                 className='balance'
                 style={{ filter: balanceBlurred ? "blur(8px)" : "none", transition: "filter 0.3s ease" }}
               >R${streamerData.streamer_balance}</p>
-              <div onClick={blurBalance} style={{ cursor: 'pointer' }}>
+              <div onClick={blurBalance} style={{ cursor: 'pointer' }} className="button-eye-blurred">
                 {balanceBlurred ? <EyeClosed size={32} /> : <Eye size={32} />}
               </div>
             </div>
