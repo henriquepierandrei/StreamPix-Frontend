@@ -484,8 +484,9 @@ export default function AudioComponent({ onVoiceChange }: AudioComponentProps) {
           type="button"
           onClick={() => setIsVoiceSelectorOpen(true)}
           className="voice-selector-button"
+          style={{display: "flex", justifyContent: "center", alignItems: "center"}}
         >
-          <span className="voice-icon"><Mic size={15}/></span>
+          <span className="voice-icon"><Mic size={15} strokeWidth={3}/></span>
           {selectedVoiceId ? getVoiceName(selectedVoiceId) : "Selecionar Voz"}
         </button>
         

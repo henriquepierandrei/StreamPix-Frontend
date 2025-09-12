@@ -112,6 +112,7 @@ export class ApiConfig {
     return "https://streampix-backend.onrender.com";
   }
 
+
   public static getBaseFrontendURL(): string {
     return "https://streampix.vercel.app";
   }
