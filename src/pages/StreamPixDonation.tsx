@@ -131,6 +131,7 @@ const StreamPixDonation: React.FC = () => {
 
   return (
     <div className='donation-container'>
+      
       <ThemeButton />
       {error && <div style={{ position: "fixed", top: "10px" }}><Alert error={error} /></div>}
 
