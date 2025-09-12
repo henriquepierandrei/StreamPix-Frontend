@@ -9,6 +9,7 @@ import './style/style.css';
 import Loading from '../components/Loading';
 import Alert from '../components/Alert';
 import ThemeButton from '../components/buttons/ThemeButton';
+import AudioComponent from '../components/audio/AudioComponent';
 
 type PaymentStatus = 'pending' | 'success' | 'failed' | 'notfound' | 'error';
 
@@ -20,9 +21,9 @@ const StreamPixDonation: React.FC = () => {
   const [amount, setAmount] = useState<string>(''); // sempre string no input
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>('pending');
   const [currency, setCurrency] = useState('BRL');
-  const [, setIsAudioEnabled] = useState(false);
   const [selectedQuickAmount, setSelectedQuickAmount] = useState<number | null>(null);
   const [voiceType, setVoiceType] = useState<string>('');
+  const [voiceSettings, setVoiceSettings] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(false);
   // dados vindos da API do streamer
@@ -66,7 +67,13 @@ const StreamPixDonation: React.FC = () => {
       return alert(`O valor mínimo é R$ ${minAmount},00`);
 
     setLoading(true);
-    const donation = createDonationRequest(username, message, amount, voiceType);
+    const donation = createDonationRequest(
+      username,
+      message,
+      amount,
+      voiceType,
+      voiceSettings
+    );
 
     try {
       const response = await sendDonation(donation);
@@ -175,28 +182,13 @@ const StreamPixDonation: React.FC = () => {
             </div>
           </div>
 
-          <div className="form-group">
-            <div className="voice-selection">
-              <label className="radio-label">
-                <input
-                  type="radio"
-                  name="voiceType"
-                  value="male"
-                  checked={voiceType === 'male'}
-                  onChange={() => { setVoiceType('male'); setIsAudioEnabled(true); }}
-                /> Voz Masculina
-              </label>
-              <label className="radio-label">
-                <input
-                  type="radio"
-                  name="voiceType"
-                  value="female"
-                  checked={voiceType === 'female'}
-                  onChange={() => { setVoiceType('female'); setIsAudioEnabled(true); }}
-                /> Voz Feminina
-              </label>
-            </div>
-          </div>
+          <AudioComponent
+            onVoiceChange={(voiceId, settings) => {
+              setVoiceType(voiceId);
+              setVoiceSettings(settings);
+            }}
+          />
+
 
           <div className="form-group">
             <div className="amount-row">

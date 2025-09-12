@@ -21,7 +21,7 @@ function App() {
         
         {/* Página raiz */}
         <Route path="/" element={<HomePage />} />
-        
+
         {/* Rotas de pagamento e transações */}
         <Route path="/donation/:transactionId" element={<PaymentQrCode />} />
         

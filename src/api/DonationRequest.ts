@@ -1,23 +1,40 @@
 import { ApiConfig } from "./ApiConfig";
 
 
+export interface SettingsAIVoice {
+    voice_type: string;
+    rate: number;
+    pitch: number;
+    volume: number;
+    style: string;
+    styledegree: number; // atenção: backend usa "styledegree" tudo minúsculo
+}
+
 export interface DonationRequest {
     name: string;
     message: string;
-    amount: string;
-    voice_type: string;
+    amount: string; // no TS mantém string (input do usuário), backend converte p/ Double
+    settings_ai_voice: SettingsAIVoice;
 }
 
 export const createDonationRequest = (
     name: string,
     message: string,
     amount: string,
-    voiceType: string
+    voiceType: string,
+    voiceSettings: SettingsAIVoice
 ): DonationRequest => ({
     name,
     message,
     amount,
-    voice_type: voiceType
+    settings_ai_voice: {
+        voice_type: voiceType,
+        rate: voiceSettings.rate,
+        pitch: voiceSettings.pitch,
+        volume: voiceSettings.volume,
+        style: voiceSettings.style,
+        styledegree: voiceSettings.styledegree
+    }
 });
 
 export const sendDonation = async (donation: DonationRequest) => {
