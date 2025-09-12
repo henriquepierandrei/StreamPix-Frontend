@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 
 function NavbarHome() {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const navigate = useNavigate();
     
@@ -35,7 +36,9 @@ function NavbarHome() {
     return (
         <nav className="navbar" style={{position: "fixed"}}>
             <div className="navbar-container">
+                
                 <div className="navbar-content">
+                    
                     <img src={isDarkMode ? logo : logodark} alt="Logo" width={50} className="logo-dashboard-img" style={{ position: "absolute", left: "20px" }} />
                     {/* Menu Desktop */}
                     <div className="desktop-nav" style={{ display: "flex", position: "absolute", right: "20px" }}>

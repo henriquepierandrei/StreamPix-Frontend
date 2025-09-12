@@ -1,0 +1,784 @@
+/* Tema Claro (padrão) */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f5;
+    --bg-modal: rgba(0, 0, 0, 0.5);
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --text-tertiary: #999999;
+    --border-color: #d0e7f5;
+    --card-bg: #f8f8f8;
+    --card-hover: #eeeeee;
+    --card-selected: #e9f0f5;
+    --button-primary: #000000;
+    --button-primary-text: #ffffff;
+    --button-secondary: #f0f0f0;
+    --button-secondary-text: #333333;
+    --accent-color: linear-gradient(135deg, #38d0ff, #4f84c2, #f093fb, #157aa8);
+    --success-color: #4caf50;
+    --slider-track: #f3e1e1;
+    --slider-thumb: #498fcc;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Tema Escuro */
+body.dark {
+    --bg-primary: #1b1d1f;
+    --bg-secondary: #2a2a2a;
+    --bg-modal: rgba(0, 0, 0, 0.8);
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-tertiary: #808080;
+    --border-color: #3a3a3a;
+    --card-bg: #2e2e2e;
+    --card-hover: #3a3a3a;
+    --card-selected: #2f3947;
+    --button-primary: #ffffff;
+    --button-primary-text: #000000;
+    --button-secondary: #333333;
+    --button-secondary-text: #ffffff;
+    --accent-color: linear-gradient(135deg, #38d0ff, #4f84c2, #f093fb, #157aa8);
+    --success-color: #305832;
+    --slider-track: #4a4a4a;
+    --slider-thumb: #43484d;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+.voice-selector-button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.6s ease;
+    background: linear-gradient(135deg, #ffad14, #4facfe, #f093fb, #00f2fe, #ff9a9e);
+    color: rgb(255, 255, 255);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    background-size: 300% 100%;
+    /* Para permitir a animação */
+}
+
+.avatar-text {
+    color: rgb(31, 85, 107);
+}
+
+body.dark .avatar-text {
+    color: rgb(215, 228, 233);
+}
+
+/* Efeito de brilho animado ao passar o mouse */
+.voice-selector-button:hover {
+    background: linear-gradient(135deg, #fe7200, #4facfe, #f093fb, #00f2fe, #ff9a9e);
+    background-size: 300% 100%;
+    box-shadow: 0 2px 12px rgba(255, 255, 255, 0.411);
+    animation: gradientShift 1.5s ease infinite;
+}
+
+/* Animação do gradiente */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+
+
+
+/* Container principal */
+.voice-selector-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.voice-selector-container {
+    background: var(--bg-primary);
+    border-radius: 24px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s ease-out;
+}
+
+/* Animações */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
+
+@keyframes soundWave {
+
+    0%,
+    100% {
+        height: 3px;
+    }
+
+    50% {
+        height: 15px;
+    }
+}
+
+/* Header */
+.voice-header {
+    text-align: center;
+    padding: 30px 20px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.voice-avatar-main {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    box-shadow: var(--shadow-md);
+}
+
+.avatar-emoji {
+    font-size: 40px;
+}
+
+.voice-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.verified {
+    color: var(--accent-color);
+    font-size: 18px;
+}
+
+.voice-subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Seletor de gênero */
+.gender-selector {
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.gender-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: 2px solid var(--border-color);
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.gender-btn:hover {
+    background: var(--card-hover);
+    transform: translateY(-2px);
+}
+
+.gender-btn.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.gender-icon {
+    font-size: 20px;
+}
+
+/* Instrução */
+body.dark .voice-instruction {
+    color: var(--text-secondary);
+}
+
+/* Grid de vozes */
+body.dark .voice-card {
+    background: var(--card-bg);
+}
+
+body.dark .voice-card:hover {
+    background: var(--card-hover);
+}
+
+body.dark .voice-card.selected {
+    background: var(--card-selected);
+    border-color: var(--accent-color);
+}
+
+body.dark .voice-name {
+    color: var(--text-primary);
+}
+
+body.dark .play-btn {
+    background: var(--accent-color);
+    border: 3px solid var(--bg-primary);
+}
+
+/* Botão de configurações */
+body.dark .settings-toggle {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+body.dark .settings-toggle:hover {
+    background: var(--card-hover);
+}
+
+/* Painel de configurações */
+body.dark .settings-panel {
+    background: var(--bg-secondary);
+}
+
+body.dark .setting-label {
+    color: var(--text-primary);
+}
+
+body.dark .setting-value {
+    color: var(--text-primary);
+}
+
+/* Slider tema dark */
+body.dark .setting-slider {
+    background: var(--slider-track);
+}
+
+body.dark .setting-slider::-webkit-slider-thumb {
+    background: var(--slider-thumb);
+}
+
+body.dark .setting-slider::-moz-range-thumb {
+    background: var(--slider-thumb);
+}
+
+/* Select tema dark */
+body.dark .setting-select {
+    border: 2px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+body.dark .setting-select:hover {
+    border-color: var(--accent-color);
+}
+
+/* Botão Continuar tema dark */
+body.dark .continue-btn {
+    background: var(--button-primary);
+    color: var(--button-primary-text);
+}
+
+body.dark .continue-btn:disabled {
+    background: var(--text-tertiary);
+}
+
+.voice-instruction {
+    padding: 15px 20px 10px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Grid de vozes */
+.voices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
+.voice-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 15px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.voice-card:hover {
+    background: var(--card-hover);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.voice-card.selected {
+    background: var(--card-selected);
+    border-color: var(--border-color);
+}
+
+.voice-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #e4e3e4 0%, #bac2c7 100%);
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    position: relative;
+}
+
+body.dark .voice-avatar {
+    background: linear-gradient(135deg, #3f4955 0%, #30424d 100%);
+    border: 1px solid #585757;
+}
+
+.avatar-text {
+    font-size: 28px;
+}
+
+.play-btn {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    width: 28px;
+    height: 28px;
+    background: var(--accent-color);
+    border: 3px solid var(--bg-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.play-btn:hover {
+    transform: scale(1.1);
+}
+
+.voice-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-top: 5px;
+}
+
+/* Indicador de reprodução */
+.playing-indicator {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+}
+
+.playing-indicator span {
+    width: 3px;
+    background: var(--accent-color);
+    animation: soundWave 0.5s ease-in-out infinite;
+    border-radius: 2px;
+}
+
+.playing-indicator span:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.playing-indicator span:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+/* Botão de configurações */
+.settings-toggle {
+    width: calc(100% - 40px);
+    margin: 0 20px;
+    padding: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.settings-toggle:hover {
+    background: var(--card-hover);
+}
+
+/* Painel de configurações */
+.settings-panel {
+    padding: 20px;
+    background: var(--bg-secondary);
+    margin: 20px;
+    border-radius: 12px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+    }
+
+    to {
+        opacity: 1;
+        max-height: 500px;
+    }
+}
+
+.setting-group {
+    margin-bottom: 20px;
+}
+
+.setting-group:last-child {
+    margin-bottom: 0;
+}
+
+.setting-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    justify-content: space-between;
+}
+
+.setting-icon {
+    font-size: 16px;
+}
+
+.setting-value {
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+/* Slider personalizado */
+.setting-slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--slider-track);
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 15px;
+}
+
+.setting-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--slider-thumb);
+    cursor: pointer;
+    border: 2px solid rgb(223, 223, 223);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.setting-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-md);
+}
+
+.setting-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--slider-thumb);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.setting-slider::-moz-range-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-md);
+}
+
+/* Select personalizado */
+.setting-select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+.setting-select:hover {
+    border-color: var(--accent-color);
+}
+
+.setting-select:focus {
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+/* Botão Continuar */
+.continue-btn {
+    width: calc(100% - 40px);
+    margin: 20px;
+    padding: 15px;
+    background: var(--button-primary);
+    color: var(--button-primary-text);
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.continue-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.continue-btn:disabled {
+    background: var(--text-tertiary);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Loading spinner */
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--text-tertiary);
+    border-top: 2px solid var(--accent-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .voice-selector-modal {
+        padding: 10px;
+    }
+
+    .voice-selector-container {
+        border-radius: 16px;
+        max-height: 95vh;
+    }
+
+    .voices-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 12px;
+        padding: 15px;
+    }
+
+    .voice-card {
+        padding: 12px 8px;
+    }
+
+    .voice-avatar {
+        width: 50px;
+        height: 50px;
+    }
+
+    .avatar-text {
+        font-size: 24px;
+    }
+
+    .play-btn {
+        width: 24px;
+        height: 24px;
+        bottom: -3px;
+        right: -3px;
+    }
+
+    .voice-name {
+        font-size: 11px;
+    }
+
+    .gender-selector {
+        padding: 15px;
+        gap: 8px;
+    }
+
+    .gender-btn {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+
+    .gender-icon {
+        font-size: 18px;
+    }
+
+    .settings-panel {
+        margin: 15px;
+        padding: 15px;
+    }
+
+    .continue-btn {
+        margin: 15px;
+        padding: 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .voices-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .voice-card {
+        padding: 10px 5px;
+    }
+
+    .voice-avatar {
+        width: 45px;
+        height: 45px;
+    }
+
+    .avatar-text {
+        font-size: 22px;
+    }
+
+    .voice-name {
+        font-size: 10px;
+        margin-top: 3px;
+    }
+}
+
+/* Estados de foco para acessibilidade */
+.gender-btn:focus,
+.settings-toggle:focus,
+.continue-btn:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+.voice-card:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+
+
+/* Animações suaves para elementos interativos */
+.voice-card,
+.gender-btn,
+.settings-toggle,
+.continue-btn,
+.play-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Melhorias de performance */
+.voice-selector-container {
+    will-change: transform;
+    contain: layout style paint;
+}
+
+.playing-indicator span {
+    will-change: height;
+}
+
+/* Suporte para redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
