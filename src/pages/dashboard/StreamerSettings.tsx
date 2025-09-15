@@ -104,9 +104,9 @@ function StreamerSettings() {
   }, [navigate]);
 
   return (
-    <div className="dashboardContainer">
+    <div className="dashboardContainer" style={{display: "flex", gap: "10px"}}>
       <NavBarDashboard activeItem={active} onSelect={setActive} />
-      <div className="gridContainer">
+      <div className="gridContainer" style={{width: "100%"}}>
         <div className="card">
           <div className="formGroup">
             <label>Saldo</label>

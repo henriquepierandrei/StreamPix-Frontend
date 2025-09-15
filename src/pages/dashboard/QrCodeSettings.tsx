@@ -85,9 +85,9 @@ function AnalyticsPage() {
     }, []);
 
     return (
-        <div className="dashboardContainer">
+        <div className="dashboardContainer" style={{display: "flex", gap: "10px"}}>
             <NavBarDashboard activeItem={active} onSelect={setActive} />
-            <div className='gridContainer' style={{ maxWidth: "720px", margin: "auto", borderRadius: "10px" }}>
+            <div className='gridContainer' style={{ width: "100%", borderRadius: "10px" }}>
                 <div className='card'>
                     <div className="cardTitle">
                         <QrCode size={20} color="#667eea" />

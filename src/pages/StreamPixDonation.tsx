@@ -10,6 +10,7 @@ import Loading from '../components/Loading';
 import Alert from '../components/Alert';
 import ThemeButton from '../components/buttons/ThemeButton';
 import AudioComponent from '../components/audio/AudioComponent';
+import { TermsPopup } from '../components/terms/TermsPopup';
 
 type PaymentStatus = 'pending' | 'success' | 'failed' | 'notfound' | 'error';
 
@@ -26,10 +27,11 @@ const StreamPixDonation: React.FC = () => {
   const [voiceSettings, setVoiceSettings] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(false);
-  // dados vindos da API do streamer
   const [minAmount, setMinAmount] = useState(10);
   const [maxNameLength, setMaxNameLength] = useState(20);
   const [maxMessageLength, setMaxMessageLength] = useState(162);
+
+  
 
   useEffect(() => {
     if (!streamerName) return;
@@ -95,12 +97,12 @@ const StreamPixDonation: React.FC = () => {
 
   if (paymentStatus === 'notfound') {
     return (
-      <div className="payment-container" style={{ background: 'linear-gradient(-45deg, #dadadaff, #b3b3b3ff)' }}>
-        <img src={logoDark} alt="Logo" width={40} style={{ position: 'absolute', left: "50%", top: "20px", transform: 'translateX(-50%)' }} />
+      <div className="payment-container">
+        <img src={localStorage.getItem("theme") != null ? logo  : logoDark} alt="Logo" width={40} style={{ position: 'absolute', left: "50%", top: "20px", transform: 'translateX(-50%)' }} />
         <div className="error-card">
           <ArrowLeft className="button-go-back" onClick={() => window.history.back()} />
           <div className="error-icon">
-            <UserX size={40} color="white" />
+            <UserX size={40} strokeWidth={1}/>
           </div>
           <h2 className="error-title">Streamer Não Encontrado</h2>
           <p className="error-message">
@@ -113,12 +115,12 @@ const StreamPixDonation: React.FC = () => {
 
   if (paymentStatus === 'error') {
     return (
-      <div className="payment-container" style={{ background: 'linear-gradient(-45deg, #441313ff, #0c0c0cff)' }}>
+      <div className="payment-container">
         <img src={logo} alt="Logo" width={40} style={{ position: 'absolute', left: "50%", top: "20px", transform: 'translateX(-50%)' }} />
         <div className="error-card">
           <ArrowLeft className="button-go-back" onClick={() => window.history.back()} />
           <div className="error-icon">
-            <XIcon size={40} color="white" />
+            <XIcon size={40} strokeWidth={1} />
           </div>
           <h2 className="error-title">Erro ao realizar a doação</h2>
           <p className="error-message">
@@ -134,8 +136,8 @@ const StreamPixDonation: React.FC = () => {
       
       <ThemeButton />
       {error && <div style={{ position: "fixed", top: "10px" }}><Alert error={error} /></div>}
-
-      <div className="donation-wrapper">
+      
+      <div className="donation-wrapper"  style={{marginTop: "20px"}}>
         <div className="form-card">
 
           <div className='header-card'>
@@ -212,13 +214,17 @@ const StreamPixDonation: React.FC = () => {
           </div>
 
           <button type="button" onClick={handleSubmit} className="submit-button">
-            ENVIAR DOAÇÃO
+            CONTINUAR
           </button>
+
+          <TermsPopup />
         </div>
+
+              
 
         <div className="footer">
           <div className="footer-brand">
-            <img src={logo} alt="Logo" width={15} />
+            <img src={logo} alt="Logo" width={22} style={{background: "#333333", padding: "5px", borderRadius: "50px"}}/>
             <span>StreamPix</span>
           </div>
         </div>

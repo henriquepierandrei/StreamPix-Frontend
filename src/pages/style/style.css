@@ -11,28 +11,26 @@ body {
 }
 
 .donation-container {
+    width: 100%;
     min-height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
-    padding: 20px;
-    font-family: 'Saira', sans-serif;
-
-
-    background: linear-gradient(350deg,
-            rgb(255, 255, 255) 0%,
-            rgb(216, 227, 236) 57%,
-            rgb(240, 242, 243) 100%);
-    background-size: 400% 400%;
-    animation: gradientMove 12s ease infinite;
-    height: auto;
+    align-items: center;
+    /* Fundo base (preto → roxo) */
+    /* Efeitos de glow (esfumaçados) */
+    background-image:
+        url('https://res.cloudinary.com/dvadwwvub/image/upload/v1757963203/banner-light_i8lkus.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
+
+
 body.dark .donation-container {
-    background: linear-gradient(350deg,
-            rgb(28, 30, 32) 0%,
-            rgb(29, 32, 43) 57%,
-            rgb(31, 33, 34) 100%);
+    background-image:
+        url('https://res.cloudinary.com/dvadwwvub/image/upload/v1757964375/banner-dark_ytrsva.png');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 @keyframes gradientMove {
@@ -64,6 +62,35 @@ body.dark .donation-container {
     transform: translate(-50%, -50%);
 }
 
+.button-toggle-theme-principal {
+    background-color: rgba(255, 255, 255, 0.459);
+    border: 1px solid #c0bebe;
+    backdrop-filter: 101px;
+    color: rgb(63, 71, 77);
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    gap: 5px;
+    width: max-content;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+body.dark .button-toggle-theme-principal {
+    background-color: rgba(0, 0, 0, 0.315);
+    color: rgb(222, 223, 224);
+    border-color: #424242;
+
+}
+
+
+.vertical-line {
+    width: 1px;
+    height: 20px;
+    background-color: rgb(221, 134, 134);
+}
 
 
 @keyframes slide {
@@ -129,7 +156,7 @@ body.dark .donation-container {
 
 /* Card de erro */
 .error-card {
-    background: linear-gradient(140deg, #fef2f2, #ffa3a396);
+    background: linear-gradient(140deg, #fffefe33, #ffdada41);
     border-radius: 16px;
     padding: 40px 30px;
     text-align: center;
@@ -137,36 +164,56 @@ body.dark .donation-container {
     width: 100%;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     position: relative;
-    border: 1px solid #9c9c9c;
+    border: 1px solid #ccc;
     animation: fadeIn 0.3s ease;
+}
+body.dark .error-card{
+    background: linear-gradient(140deg, #00000048, #79171742);
+    border-color: #3b3b3b;
 }
 
 .error-icon {
     width: 80px;
     height: 80px;
-    background: linear-gradient(to right, #383131, #5e1f1f);
+    background: linear-gradient(to right, #2b0c0cc2, #1d0a0a);
+    color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid #9e9e9e;
     margin: 0 auto 24px;
+}body.dark .error-icon{
+    background: linear-gradient(to right, #131212, #310303);
+    color: rgb(168, 168, 168);
+    border-color: #2c2c2c;
 }
 
 .error-title {
     font-size: 24px;
     font-weight: 600;
     color: transparent;
-    background: linear-gradient(to right, #383131, #5e1f1f);
+    background: linear-gradient(190deg, #252424, #5a0404);
     -webkit-background-clip: text;
     background-clip: text;
     margin-bottom: 12px;
+}body.dark .error-title{
+    color: transparent;
+    background: linear-gradient(190deg, #e6cdcd, #da7474);
+    -webkit-background-clip: text;
+    background-clip: text;
 }
 
 .error-message {
-    font-size: 16px;
-    color: #374151;
+    font-size: 12px;
+    color: #252424;
     margin-bottom: 24px;
     line-height: 1.5;
+    font-weight: 400;
+}body.dark .error-message{
+    color: #caa3a3;
+    
+
 }
 
 /* Botões */
@@ -328,6 +375,7 @@ body.dark .voice-selection {
 }
 
 
+
 .stat-item {
     display: flex;
     align-items: center;
@@ -338,25 +386,23 @@ body.dark .voice-selection {
     border-bottom: 3px solid #d8d9da;
     border: 2px solid #d8d9da;
     background: linear-gradient(350deg,
-            rgb(255, 255, 255) 0%,
-            rgb(220, 225, 235) 57%,
-            rgb(232, 233, 233) 100%);
+            rgba(255, 255, 255, 0.788) 0%,
+            rgba(255, 255, 255, 0.822) 57%,
+            rgba(230, 231, 231, 0.13) 100%);
     border-radius: 20px;
-    padding: 25px;
+    padding: 20px 18px;
     width: 100%;
     box-shadow: 2px 2px 20px rgba(2, 2, 2, 0.103);
-
 }
 
 body.dark .form-card {
     background: linear-gradient(350deg,
-            rgb(37, 36, 36) 0%,
-            rgb(57, 60, 66) 57%,
-            rgb(34, 36, 36) 100%);
+            rgba(37, 36, 36, 0.795) 0%,
+            rgba(57, 60, 66, 0.788) 57%,
+            rgba(34, 36, 36, 0.178) 100%);
     box-shadow: 2px 2px 20px rgba(143, 182, 255, 0.103);
-
     border-color: #545555;
-    ;
+
 }
 
 .form-group {
@@ -388,7 +434,7 @@ body.dark .input,
 body.dark .select {
     background: #292c31;
     border: 1px solid #4d4d4d;
-    color: #808080;
+    color: #d3d3d3;
 }
 
 
@@ -491,9 +537,17 @@ body.dark .quick-button.active {
 }
 
 .textarea-wrapper textarea {
-    background-color: rgb(235, 235, 235);
+    background-color: rgb(255, 250, 250);
     border-color: #ccc;
     color: rgb(34, 35, 36);
+}
+
+.textarea-wrapper textarea:focus {
+    border-color: #477ff8;
+}
+
+body.dark .textarea-wrapper textarea:focus {
+    border-color: #2c4c91;
 }
 
 body.dark textarea {
@@ -564,6 +618,13 @@ body.dark textarea {
 .amount-input {
     flex: 1;
     width: 100%;
+    border: 1px solid #ccc;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .min-amount {
@@ -576,8 +637,7 @@ body.dark textarea {
 .submit-button {
     width: 100%;
     padding: 9px 20px;
-    background: linear-gradient(-45deg,
-            rgb(30, 30, 43), rgb(26, 32, 41));
+    background: black;
     color: #f3f4f5;
     font-weight: 600;
     border-radius: 10px;
@@ -588,22 +648,15 @@ body.dark textarea {
 }
 
 .submit-button:hover {
-    background: linear-gradient(-45deg,
-            rgb(65, 71, 78), rgb(33, 42, 56));
     transform: translateY(-1px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.11);
 }
 
 body.dark .submit-button {
-    background: linear-gradient(-45deg,
-            rgb(36, 36, 39), rgb(79, 87, 99), rgb(69, 84, 109));
-    color: #cfcfd6;
+    background: white;
+    color: #000000;
 }
 
-body.dark .submit-button:hover {
-    background: linear-gradient(-45deg,
-            rgb(94, 94, 117), rgb(75, 88, 107), rgb(101, 110, 128));
-}
+
 
 
 .submit-button:active {
@@ -636,7 +689,7 @@ body.dark .submit-button:hover {
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
-    background: linear-gradient(60deg, #ffffff, #f4f4ff);
+    background: linear-gradient(60deg, #ffffff, #ddddee);
     border-radius: 20px;
     color: #ffffff;
     font-weight: 500;
@@ -680,9 +733,18 @@ body.dark .footer-brand span {
     justify-content: center;
     padding: 20px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(-45deg,
-            #111111, #213b46);
+    background-image:
+        url('https://res.cloudinary.com/dvadwwvub/image/upload/v1757963203/banner-light_i8lkus.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        
 }
+
+body.dark .payment-container {
+    background-image:
+        url('https://res.cloudinary.com/dvadwwvub/image/upload/v1757964375/banner-dark_ytrsva.png');
+}
+
 
 .qr-card {
     background: #ffffff;

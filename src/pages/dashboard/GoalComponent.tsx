@@ -201,11 +201,10 @@ const GoalComponent: React.FC = () => {
   };
 
   return (
-    <div>
-
-      <NavBarDashboard activeItem={active} onSelect={setActive} />
-      <div className="dashboardContainer">
-        <div className="gridContainer">
+    <div style={{display: "flex", gap: "10px"}}>
+      <NavBarDashboard activeItem={active} onSelect={setActive}/>
+      <div className="dashboardContainer" style={{width: "100%"}}>
+        <div className="gridContainer" style={{width: "100%"}}>
 
           {/* Criar / Atualizar Meta */}
           <div className="card">

@@ -98,7 +98,7 @@ function MessagesPage() {
     const handleCopyURL = async () => {
         try {
             await navigator.clipboard.writeText(
-                `https://streampix-backend.onrender.com/messaging/index.html`
+                ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/messages/to-show"
             );
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
@@ -108,9 +108,9 @@ function MessagesPage() {
     };
 
     return (
-        <div>
+        <div style={{display: "flex", gap: "10px"}}>
             <NavBarDashboard activeItem={active} onSelect={setActive} />
-            <div className='card' style={{ maxWidth: "720px", margin: "auto", borderRadius: "10px" }}>
+            <div className='card' style={{ width: "100%", margin: "auto", borderRadius: "10px" }}>
                 <div className="cardTitle">
                     <Link2 size={20} />
                     <p>URL Mensagens {streamerData.streamer_name}</p>
@@ -122,7 +122,7 @@ function MessagesPage() {
                     <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
                         <input
                             type="text"
-                            value={ApiConfig.getBaseBackendURL() + "/messaging/index.html"}
+                            value={ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/messages/to-show"}
                             readOnly
                             className="input"
                             style={{ flex: 1 }}
@@ -166,16 +166,7 @@ function MessagesPage() {
                     {isLoading ? 'Salvando...' : 'Salvar Alterações'}
                 </button>
 
-                <div className={`toast show ${isDarkMessageMode ? "dark" : ""}`}>
-                    <img src={logo} className="toast-logo" alt="logo" />
-                    <div className="toast-content">
-                        <div>
-                            <span className="toast-name">Teste</span> enviou
-                            <strong> R$ 999</strong>
-                        </div>
-                        "Eu gosto muito da sua live"
-                    </div>
-                </div>
+                
             </div>
         </div>
     )

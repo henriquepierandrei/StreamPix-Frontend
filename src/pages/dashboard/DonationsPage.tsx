@@ -168,9 +168,9 @@ function DonationsPage() {
 
 
   return (
-    <div className='container'>
+    <div className='container' style={{display: "flex",gap: "10px"}}>
       <NavBarDashboard activeItem={active} onSelect={setActive} />
-      <div className="card-donations">
+      <div className="card-donations" style={{width: "100%"}}>
         <div className="cardTitle">
           <Settings size={20} color="#667eea" />
           <p>Donates Recebidos</p>

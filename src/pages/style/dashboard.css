@@ -378,38 +378,31 @@ body.dark .hr-dashboard {
 .balance {
   transition: 1s;
   font-weight: 800;
-  font-size: 1.95rem;
+  font-size: 2.5rem;
   color: transparent;
-  background: linear-gradient(45deg, #373749, rgb(72, 103, 161));
+  background: linear-gradient(45deg, #2c2c2e, rgb(38, 38, 39));
   -webkit-background-clip: text;
   background-clip: text;
   cursor: pointer;
 }
 
 body.dark .balance {
-  background: linear-gradient(45deg, #9494ac, rgb(124, 166, 243));
+  background: linear-gradient(45deg, #f3f3f7, rgb(206, 223, 255));
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
 }
 
 .balance:hover {
-  color: #0f5ccf;
   scale: 1.05;
   transform: rotate(2deg);
 }
 
-body.dark .balance:hover {
-  color: #468ffd;
-}
 
 .custom-checkbox-label,
 .balance-display {
-  background-color: rgb(250, 248, 248);
   border-radius: 10px;
-  padding: 10px;
   margin-bottom: 20px;
-  border: 1px solid #e1e5e9;
   display: flex;
   align-items: center;
   justify-content: start;
@@ -418,6 +411,11 @@ body.dark .balance:hover {
   text-wrap: nowrap;
   width: 100%;
 }
+.custom-checkbox-label{
+  background-color: rgb(250, 248, 248);
+  border: 1px solid #e1e5e9;
+  padding: 10px;
+}
 
 .button-eye-blurred{
   color: rgb(49, 49, 59);
@@ -425,10 +423,6 @@ body.dark .balance:hover {
   color: rgb(166, 166, 190);
 }
 
-body.dark .balance-display {
-  background-color: rgb(54, 57, 58);
-  border: 1px solid #6e6e6e;
-}
 
 body.dark .custom-checkbox-label {
   background-color: rgb(53, 64, 70);

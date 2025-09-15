@@ -1,6 +1,6 @@
 .alert-container {
-    padding: 12px;
-    background: linear-gradient(90deg, #ffffffff, #ffdfdfff);
+    padding: 6px 12px;
+    background: linear-gradient(90deg, #ffffffff, rgb(236, 246, 255));
     width: 100%;
     border-radius: 10px;
     color: #af0000ff;
@@ -10,17 +10,18 @@
     justify-content: space-between;
     position: relative;
     margin-bottom: 15px;
+
 }
 
 body.dark .alert-container {
-    background: linear-gradient(90deg, rgb(38, 42, 51), rgb(26, 30, 37));
+    background: linear-gradient(90deg, rgb(27, 29, 31), rgb(34, 39, 44));
     border-color: #525252;
 }
 
 .alert-message {
     margin: 0;
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 400;
     border: none;
     display: flex;
     align-items: center;
@@ -40,7 +41,7 @@ body.dark .alert-container {
     cursor: pointer;
     padding-left: 16px;
     position: relative;
-    top: -20px;
+    top: -10px;
     right: -18px;
     font-size: 16px;
     

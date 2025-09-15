@@ -1,7 +1,7 @@
 // useGoalWebSocket.ts
 import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
-import { ApiConfig } from "../api/ApiConfig";
+import { ApiConfig } from "../../api/ApiConfig";
 
 
 export interface Goal {

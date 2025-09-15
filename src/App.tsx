@@ -10,8 +10,13 @@ import QrCodeSettings from './pages/dashboard/QrCodeSettings';
 import MessagesPage from './pages/dashboard/MessagesPage';
 import DashboardLogin from './pages/dashboard/DashboardLogin';
 import PrivateRoute from './api/PrivateRoute';
-import { GoalComponentToShow } from '././components/GoalComponentToShow'
+import { GoalComponentToShow } from './components/goal/GoalComponentToShow'
 import HomePage from './pages/home/HomePage';
+import { MessageComponentToShow } from "./components/message/MessageComponentToShow";
+
+
+
+
 
 function App() {
   return (
@@ -34,6 +39,9 @@ function App() {
         {/* Rota do componente de meta para exibição */}
         <Route path="/streamer/dashboard/goal/to-show/:streamerName" element={<GoalComponentToShow />} />
         
+        {/* Rota do componente de mensagens para exibição */}
+        <Route path="/streamer/dashboard/messages/to-show" element={<MessageComponentToShow />} />
+
         {/* ROTAS PRIVADAS DO DASHBOARD */}
         <Route
           path="/streamer/dashboard/messages"
