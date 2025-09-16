@@ -25,6 +25,74 @@ body.dark .navbar {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
 }
 
+.navbar-home-root {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var( rgba(255, 255, 255, 0.425));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  z-index: 1000;
+  border-bottom: 1px solid #ccc;
+}
+
+body.dark .navbar-home-root {
+  background: var(--navbar-bg-dark, rgba(29, 30, 31, 0.85));
+  border-color: #474747;
+
+}
+
+.navbar-home-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2em 1rem;
+  color: rgb(35, 54, 66);
+}body.dark .navbar-home-wrapper{
+  color: white;
+}
+
+.navbar-home-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+
+.navbar-home-logo {
+  width: 50px;
+  position: absolute;
+  left: 20px;
+}
+
+.navbar-home-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: absolute;
+  right: 20px;
+}
+
+.navbar-home-btn {
+  font-size: 1.1rem;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 5px 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  transition: opacity 0.2s;
+}
+
+.navbar-home-btn:hover {
+  opacity: 0.75;
+}
+
+
+
 /* Container principal */
 .navbar-container {
   width: 100%;
@@ -193,6 +261,7 @@ body.dark .mobile-menu-header {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: max-content;
   transition: transform 0.2s ease;
 }
 

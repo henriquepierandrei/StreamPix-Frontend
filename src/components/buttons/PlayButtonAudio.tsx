@@ -30,7 +30,7 @@ const PlayButtonAudio = ({ src }: { src: string }) => {
         <source src={src} type="audio/mpeg" />
       </audio>
       <button onClick={togglePlay} className="play-button">
-        {isPlaying ? <Pause size={12} /> : <Play size={12} />}
+        {isPlaying ? <Pause size={10} /> : <Play size={10} />}
       </button>
     </div>
   );

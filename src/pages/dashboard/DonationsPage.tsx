@@ -168,9 +168,9 @@ function DonationsPage() {
 
 
   return (
-    <div className='container' style={{display: "flex",gap: "10px"}}>
+    <div className='container' style={{ display: "flex", gap: "10px" }}>
       <NavBarDashboard activeItem={active} onSelect={setActive} />
-      <div className="card-donations" style={{width: "100%"}}>
+      <div className="card-donations" style={{ width: "100%" }}>
         <div className="cardTitle">
           <Settings size={20} color="#667eea" />
           <p>Donates Recebidos</p>
@@ -239,23 +239,23 @@ function DonationsPage() {
             </button>
           </div>
           <button className='button-toggle-play'
-                  onClick={() => handleToggleAutoPlay(!streamerData.is_auto_play)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    padding: "6px 8px",
-                    borderRadius: "8px",
-                    border: "1px solid",
-                    cursor: "pointer",
-                    color: streamerData.is_auto_play ? "#4caf50" : "#ff3d3dff",
-                    fontWeight: 600,
-                    width: "max-content"
-                  }}
-                >
-                  <SquarePlayIcon strokeWidth={3} />
-                  {streamerData.is_auto_play ? "Auto Play Ativado" : "Auto Play Desativado"}
-                </button>
+            onClick={() => handleToggleAutoPlay(!streamerData.is_auto_play)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "6px 8px",
+              borderRadius: "8px",
+              border: "1px solid",
+              cursor: "pointer",
+              color: streamerData.is_auto_play ? "#4caf50" : "#ff3d3dff",
+              fontWeight: 600,
+              width: "max-content"
+            }}
+          >
+            <SquarePlayIcon strokeWidth={3} />
+            {streamerData.is_auto_play ? "Auto Play Ativado" : "Auto Play Desativado"}
+          </button>
         </div>
 
         {donates.length === 0 ? (
@@ -275,18 +275,16 @@ function DonationsPage() {
           ).map(([date, donations]) => (
             <div key={date} className="donation-group">
 
-              <br /><hr className='hr-dashboard' />
+              <br /><div className='horizontal-line'></div>
               <h3 className="donation-date">{date}</h3>
 
               {donations.map((donate) => (
                 <div key={donate.uuid} className="donateItem">
+                  
                   <p className='balance-donation'>
                     R${donate.amount}
                   </p>
-                  <div className='audio-container'>
-                    <ReplayButtonDonation uuid={donate.uuid} />
-                    {donate.audio_url && (<PlayButtonAudio src={donate.audio_url} />)}
-                  </div>
+
 
                   <p>
                     <UserStarIcon size={12} strokeWidth={4} /> {donate.name}
@@ -295,9 +293,16 @@ function DonationsPage() {
                     <MessageSquareMore size={12} strokeWidth={4} /> {donate.message}
                   </p>
 
-                  <p style={{ fontSize: '12px', color: '#666', display: 'flex', alignItems: 'center', gap: "5px" }}>
-                    <Clock size={12} /> Data: {new Date(donate.donated_at).toLocaleString()}
-                  </p>
+                  <div style={{
+                    fontSize: '12px', display: 'flex', alignItems: 'center', justifyContent: "space-between", width: "100%",
+                    padding: "0px"
+                  }}>
+                    <div style={{width: "max-content"}}><p style={{fontSize: "0.75rem", display: "flex", alignItems: "center", gap: "5px"}}> <Clock size={10} /> Data: {new Date(donate.donated_at).toLocaleString()}</p></div>
+                    <div className='audio-container'>
+                      <ReplayButtonDonation uuid={donate.uuid} />
+                      {donate.audio_url && (<PlayButtonAudio src={donate.audio_url} />)}
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>

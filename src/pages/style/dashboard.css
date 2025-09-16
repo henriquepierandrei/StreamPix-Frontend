@@ -6,7 +6,7 @@
 }
 
 body.dark .container {
-  background-color: rgb(47, 50, 51);
+  background-color: #1f1f1f;
 }
 
 /* Container de login */
@@ -329,10 +329,10 @@ body.dark .filter-button.secondary:hover {
 
 .play-button,
 .replay-button {
-  width: 28px;
-  height: 28px;
-  color: rgb(73, 73, 73);
-  background: linear-gradient(45deg, #dddde6, rgb(227, 232, 243));
+  width: 26px;
+  height: 26px;
+  color: rgb(255, 255, 255);
+  background: linear-gradient(45deg, #4e4e72, rgb(100, 120, 161));
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -343,36 +343,19 @@ body.dark .filter-button.secondary:hover {
   padding: 0;
 }
 
+.horizontal-line{
+  background: linear-gradient(to right, rgb(240, 233, 233), rgb(213, 213, 218));
+  width: 100%;
+  margin: 10px 0px 10px 0px;
+  height: 1px;
+}body.dark .horizontal-line{
+  background: linear-gradient(to right, rgb(59, 58, 58), rgb(56, 56, 61));
+}
+
 body.dark .play-button,
 body.dark .replay-button {
-  color: white;
-  background: linear-gradient(45deg, #5a5a79, rgb(75, 82, 94));
-}
-
-@media (max-width: 768px) {
-  .play-button {
-    position: absolute;
-    bottom: 1px;
-    left: 100px;
-  }
-
-  .replay-button {
-    position: absolute;
-    bottom: 1px;
-    left: 65px;
-  }
-}
-
-.hr-dashboard {
-  background-color: rgb(209, 209, 209);
-  border: none;
-  width: 100%;
-  margin: auto;
-  height: 1px;
-}
-
-body.dark .hr-dashboard {
-  background-color: rgb(85, 85, 85);
+  color: #4e4e72;
+  background: linear-gradient(45deg, #ffffff, rgb(225, 236, 255));
 }
 
 .balance {
@@ -448,8 +431,6 @@ body.dark .custom-checkbox-label {
   height: 20px;
   cursor: pointer;
 }
-
-
 
 /* Pequeno ícone de áudio opcional (se quiser colocar ao lado) */
 .audioIcon {
@@ -704,9 +685,8 @@ body.dark .statusCard {
 .gridContainer {
   display: grid;
   width: 50%;
-  grid-template-rows: repeat(auto-fit, minmax(300px, 1fr));
-  margin: auto;
-  
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  margin: 0;
 }
 
 body.dark .gridContainer {
@@ -729,7 +709,7 @@ body.dark .gridContainer {
 }
 
 body.dark .card-donations {
-  background: rgba(33, 37, 39, 0.95);
+  background: #1f1f1f;
   border: 1px solid #646464;
 }
 
@@ -740,7 +720,7 @@ body.dark .card-donations {
 
 
 body.dark .card {
-  background-color: rgb(38, 40, 44);
+  background-color:#1f1f1f;
   border-color: #474747;
 }
 
@@ -752,10 +732,11 @@ body.dark .card {
   color: rgb(27, 72, 117);
   margin: 10px;
 
+
 }
 
 body.dark .donation-date {
-  color: rgb(67, 136, 206);
+  color: rgb(90, 115, 141);
 }
 
 /* ===== TÍTULO DO CARD ===== */
@@ -778,20 +759,20 @@ body.dark .donation-date {
 }
 
 body.dark .cardTitle {
-  background: linear-gradient(135deg, #414347 0%, #303131 50%, #43464d 100%);
+  background: linear-gradient(135deg, #2a2c2e 0%, #1f1f1f 50%, #2a2c2e 100%);
   border: 1px solid rgba(126, 126, 126, 0.329);
 }
 
 .cardTitle p {
   color: transparent;
-  background: linear-gradient(45deg, #373749, rgb(72, 103, 161));
+  background: linear-gradient(45deg, #373749, rgb(83, 106, 148));
   -webkit-background-clip: text;
   background-clip: text;
 }
 
 body.dark .cardTitle p {
   color: transparent;
-  background: linear-gradient(45deg, #ababcf, rgb(86, 134, 223));
+  background: linear-gradient(45deg, #ababcf, rgb(77, 104, 155));
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -822,7 +803,7 @@ body.dark .cardTitle p {
 }
 
 body.dark .donateItem {
-  background: linear-gradient(135deg, #32363a 0%, #2c2727 50%, #252b33 100%);
+  background: linear-gradient(135deg, #282829 0%, #1f1f1f 50%, #252525 100%);
   border: 1px solid rgba(98, 98, 99, 0.767);
 }
 
@@ -924,13 +905,15 @@ body.dark .donateItem:focus-visible {
   top: 10px;
 }
 
-.audio-container {
-  position: absolute;
-  right: 115px;
+.audio-container{
   display: flex;
-  gap: 1px;
-  bottom: 2px;
-  padding: 10px;
+  background-color: rgb(241, 235, 235);
+  border: 1px solid #ccc;
+  padding: 3px 5px;
+  border-radius: 8px;
+}body.dark .audio-container{
+  background-color: rgb(58, 63, 66);
+  border-color: #616161;
 }
 
 /* ===== TEXTO STRONG ===== */
@@ -943,13 +926,8 @@ body.dark .donateItem:focus-visible {
 
 @media (min-width: 1024px) {
   .audio-container {
-    position: absolute;
-    right: 5px;
-    top: 25px;
     display: flex;
     gap: 1px;
-
-    padding-top: 10px;
 
   }
 }

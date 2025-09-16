@@ -89,7 +89,10 @@ body.dark .button-toggle-theme-principal {
 .vertical-line {
     width: 1px;
     height: 20px;
-    background-color: rgb(221, 134, 134);
+    background-color: rgb(71, 73, 77);
+}body.dark .vertical-line{
+    background-color: rgb(255, 255, 255);
+
 }
 
 

@@ -110,7 +110,7 @@ function MessagesPage() {
     return (
         <div style={{display: "flex", gap: "10px"}}>
             <NavBarDashboard activeItem={active} onSelect={setActive} />
-            <div className='card' style={{ width: "100%", margin: "auto", borderRadius: "10px" }}>
+            <div className='card' style={{ width: "100%", borderRadius: "10px" }}>
                 <div className="cardTitle">
                     <Link2 size={20} />
                     <p>URL Mensagens {streamerData.streamer_name}</p>

@@ -113,7 +113,7 @@ export class ApiConfig {
   // }
 
   public static getBaseBackendURL(): string {
-    return "http://localhost:8080";
+    return "https://streampix.fun";
   }
 
 

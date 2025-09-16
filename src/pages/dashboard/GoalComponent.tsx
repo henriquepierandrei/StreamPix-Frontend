@@ -201,9 +201,9 @@ const GoalComponent: React.FC = () => {
   };
 
   return (
-    <div style={{display: "flex", gap: "10px"}}>
+    <div className="dashboardContainer" style={{display: "flex", gap: "10px"}}>
       <NavBarDashboard activeItem={active} onSelect={setActive}/>
-      <div className="dashboardContainer" style={{width: "100%"}}>
+      <div className="gridContainer" style={{width: "100%"}}>
         <div className="gridContainer" style={{width: "100%"}}>
 
           {/* Criar / Atualizar Meta */}
@@ -349,7 +349,10 @@ const GoalComponent: React.FC = () => {
                 {alertMessage}
               </p>
             )}
+            <div className="horizontal-line"></div>
           </div>
+
+          
 
         </div>
       </div>

@@ -1,27 +1,18 @@
 import { useState, useEffect } from "react";
 import logo from '../../assets/logo.png'
 import logodark from '../../assets/logo-dark.png'
-import {
-    Sun,
-    Moon,
-    User2
-} from "lucide-react";
+import { Sun, Moon, User2 } from "lucide-react";
 import "./Navbar.css";
 import { useNavigate } from "react-router-dom";
 
-
-
 function NavbarHome() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    const navigate = useNavigate();
-    
     const [isDarkMode, setIsDarkMode] = useState(
         localStorage.getItem("theme") === "dark"
     );
 
+    const navigate = useNavigate();
 
-    // aplica a classe no body sempre que mudar
     useEffect(() => {
         if (isDarkMode) {
             document.body.classList.add("dark");
@@ -32,40 +23,44 @@ function NavbarHome() {
         }
     }, [isDarkMode]);
 
-
     return (
-        <nav className="navbar" style={{position: "fixed"}}>
-            <div className="navbar-container">
-                
-                <div className="navbar-content">
+        <nav className="navbar-home-root">
+            <div className="navbar-home-wrapper">
+                <div className="navbar-home-inner">
                     
-                    <img src={isDarkMode ? logo : logodark} alt="Logo" width={50} className="logo-dashboard-img" style={{ position: "absolute", left: "20px" }} />
-                    {/* Menu Desktop */}
-                    <div className="desktop-nav" style={{ display: "flex", position: "absolute", right: "20px" }}>
+                    {/* Logo */}
+                    <img
+                        src={isDarkMode ? logo : logodark}
+                        alt="Logo"
+                        className="navbar-home-logo"
+                    />
+
+                    {/* Links / Botões */}
+                    <div className="navbar-home-actions">
                         {/* Botão Dark/Light */}
                         <button
                             onClick={() => setIsDarkMode(!isDarkMode)}
-                            className="nav-item"
-                            style={{ fontSize: "1.2rem", fontWeight: "300", width: "max-content", padding: "5px" }}
+                            className="navbar-home-btn"
                         >
-                            {isDarkMode ? <Sun size={22} strokeWidth={3} /> : <Moon size={22} strokeWidth={3} />}
-                            
+                            {isDarkMode ? (
+                                <Sun size={22} strokeWidth={2} />
+                            ) : (
+                                <Moon size={22} strokeWidth={2} />
+                            )}
                         </button>
 
-                        <button className="nav-item" style={{ fontSize: "1.2rem", fontWeight: "300" }}
-                        onClick={() => navigate("/streamer/dashboard/login")}
+                        {/* Entrar */}
+                        <button
+                            className="navbar-home-btn"
+                            onClick={() => navigate("/streamer/dashboard/login")}
                         >
-                            
                             <User2 size={18} strokeWidth={2} />
                             <span>Entrar</span>
                         </button>
                     </div>
                 </div>
-
-
             </div>
         </nav>
-    )
+    );
 }
-export default NavbarHome
-
+export default NavbarHome;

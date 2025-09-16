@@ -28,9 +28,8 @@ body.dark {
   --nav-item-color: #444;
   --nav-item-hover-bg: #e6e6e6;
   --nav-item-active-bg: #dbeafe;
-  /* azul clarinho */
   --nav-item-active-color: #1d4ed8;
-  /* azul principal */
+
   --border-color: #ddd;
 }
 
