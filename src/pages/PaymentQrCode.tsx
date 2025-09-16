@@ -7,6 +7,7 @@ import { usePaymentWebSocket } from '../api/usePaymentStatus';
 import logo from '../assets/logo.png';
 import logoQrCode from '../assets/logo-qrcode.png';
 import './style/style.css';
+import Loading from '../components/Loading';
 
 interface PaymentQrCodeProps { }
 
@@ -14,11 +15,11 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
     const { transactionId } = useParams<{ transactionId: string }>();
     const { alreadyPaid } = usePaymentWebSocket(transactionId ?? null);
     const [isAlreadyPaidApi, setAlreadyPaidApi] = useState<boolean>(false);
-
     const [paymentInfo, setPaymentInfo] = useState<{ qrcode?: string } | null>(null);
     const [localTimeLeft, setLocalTimeLeft] = useState<number | null>(null);
-
     const [copied, setCopied] = useState(false);
+    const [loading, setLoading] = useState(true);
+
 
     // Inicializa quando o QR code chega
     useEffect(() => {
@@ -28,14 +29,9 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
             .then(res => {
                 setPaymentInfo(res);
                 setLocalTimeLeft(res.time_remaining_seconds);
-                setAlreadyPaidApi(res.already_paid)
+                setAlreadyPaidApi(res.already_paid);
             })
-            .catch(err => {
-                if (err.expired) {
-                    setPaymentInfo(null);
-                    setLocalTimeLeft(0);
-                }
-            });
+            .finally(() => setLoading(false));
     }, [transactionId]);
 
 
@@ -47,7 +43,7 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
     if (alreadyPaid || isAlreadyPaidApi) {
         paymentStatus = 'success';
     }
-     else if (localTimeLeft !== null && localTimeLeft <= 0) {
+    else if (localTimeLeft !== null && localTimeLeft <= 0) {
         paymentStatus = 'expired';
     } else {
         paymentStatus = 'pending';
@@ -79,7 +75,9 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
 
     return (
         <>
-            {paymentStatus === 'success' && (
+            {loading && <Loading />}
+            
+            {!loading && paymentStatus === 'success' && (
                 <div className="payment-container">
                     <img src={logo} alt="" width={40} style={{ position: 'absolute', left: '50%', top: 20, transform: 'translateX(-50%)' }} />
                     <div className="success-card">
@@ -91,7 +89,7 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
                 </div>
             )}
 
-            {paymentStatus === 'expired' && (
+            {!loading && paymentStatus === 'expired' && (
                 <div className="payment-container">
                     <img src={logo} alt="" width={40} style={{ position: 'absolute', left: '50%', top: 20, transform: 'translateX(-50%)' }} />
                     <div className="error-card">
@@ -103,7 +101,7 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
                 </div>
             )}
 
-            {paymentStatus === 'pending' && paymentInfo && (
+            {!loading && paymentStatus === 'pending' && paymentInfo && (
                 <div className="payment-container">
                     <img src={logo} alt="" width={40} style={{ position: 'absolute', left: '50%', top: 20, transform: 'translateX(-50%)' }} />
                     <div className="qr-card">
