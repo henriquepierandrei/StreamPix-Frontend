@@ -12,7 +12,9 @@ interface PaymentQrCodeProps { }
 
 const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
     const { transactionId } = useParams<{ transactionId: string }>();
-    const { alreadyPaid, } = usePaymentWebSocket(transactionId ?? null);
+    const { alreadyPaid } = usePaymentWebSocket(transactionId ?? null);
+    const [isAlreadyPaidApi, setAlreadyPaidApi] = useState<boolean>(false);
+
     const [paymentInfo, setPaymentInfo] = useState<{ qrcode?: string } | null>(null);
     const [localTimeLeft, setLocalTimeLeft] = useState<number | null>(null);
 
@@ -26,6 +28,7 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
             .then(res => {
                 setPaymentInfo(res);
                 setLocalTimeLeft(res.time_remaining_seconds);
+                setAlreadyPaidApi(res.already_paid)
             })
             .catch(err => {
                 if (err.expired) {
@@ -41,9 +44,10 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
     let paymentStatus: 'pending' | 'success' | 'expired' = 'pending';
 
 
-    if (alreadyPaid) {
+    if (alreadyPaid || isAlreadyPaidApi) {
         paymentStatus = 'success';
-    } else if (localTimeLeft !== null && localTimeLeft <= 0) {
+    }
+     else if (localTimeLeft !== null && localTimeLeft <= 0) {
         paymentStatus = 'expired';
     } else {
         paymentStatus = 'pending';

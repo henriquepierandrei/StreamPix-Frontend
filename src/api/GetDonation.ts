@@ -4,6 +4,7 @@ interface DonationResponse {
     amount: string;
     name: string;
     time_remaining_seconds: number;
+    already_paid: boolean;
 }
 
 
