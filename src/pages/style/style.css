@@ -113,8 +113,9 @@ body.dark .button-toggle-theme-principal {
 }
 
 /* Card de sucesso */
+/* Success Card - estilo "blur e vidro" */
 .success-card {
-    background: linear-gradient(140deg, #ffffff, #f3fff7);
+    background: linear-gradient(140deg, #ffffff33, #d4fff541); /* vidro claro */
     border-radius: 16px;
     padding: 40px 30px;
     text-align: center;
@@ -122,32 +123,49 @@ body.dark .button-toggle-theme-principal {
     width: 100%;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     position: relative;
+    border: 1px solid #ccc;
     animation: fadeIn 0.3s ease;
-    border: 2px solid #879472;
+}
+
+body.dark .success-card {
+    background: linear-gradient(140deg, #00000048, #11714542); /* vidro escuro */
+    border-color: #3b3b3b;
 }
 
 .success-icon {
     width: 80px;
     height: 80px;
-    background: linear-gradient(to right, #0b571b, #085f36);
+    background: linear-gradient(to right, #1b4d2f, #0b3720); /* gradiente verde */
     border-radius: 50%;
     display: flex;
     align-items: center;
-    border: 1px solid #117445;
     justify-content: center;
+    border: 1px solid #117445;
     margin: 0 auto 24px;
     animation: pulse 2s infinite;
 }
 
+body.dark .success-icon {
+    background: linear-gradient(to right, #0d1b13, #094726);
+    border-color: #2c2c2c;
+    color: rgb(168, 168, 168);
+}
 
 .success-title {
     font-size: 24px;
     font-weight: 600;
     color: transparent;
-    background: linear-gradient(to right, #0b571b, #085f36);
+    background: linear-gradient(190deg, #0b571b, #085f36);
     -webkit-background-clip: text;
     background-clip: text;
     margin-bottom: 12px;
+}
+
+body.dark .success-title {
+    background: linear-gradient(190deg, #7fe08d, #44a764);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .success-message {
@@ -156,6 +174,11 @@ body.dark .button-toggle-theme-principal {
     margin-bottom: 24px;
     line-height: 1.5;
 }
+
+body.dark .success-message {
+    color: #b4d7b4;
+}
+
 
 /* Card de erro */
 .error-card {

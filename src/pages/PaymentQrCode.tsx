@@ -103,7 +103,7 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
                 </div>
             )}
 
-            {paymentStatus === 'pending' && (
+            {paymentStatus === 'pending' && paymentInfo && (
                 <div className="payment-container">
                     <img src={logo} alt="" width={40} style={{ position: 'absolute', left: '50%', top: 20, transform: 'translateX(-50%)' }} />
                     <div className="qr-card">
