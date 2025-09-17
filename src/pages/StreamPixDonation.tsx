@@ -70,6 +70,7 @@ const StreamPixDonation: React.FC = () => {
 
     setLoading(true);
     const donation = createDonationRequest(
+      streamerName!,
       username,
       message,
       amount,

@@ -108,18 +108,21 @@ export class ApiConfig {
     window.location.href = "/login";
   }
 
+  public static getBaseBackendURL(): string {
+    return "http://localhost:8080";
+  }
+
   // public static getBaseBackendURL(): string {
-  //   return "https://streampix-backend.onrender.com";
+  //   return "https://streampix.fun";
   // }
 
-  public static getBaseBackendURL(): string {
-    return "https://streampix.fun";
-  }
-
-
   public static getBaseFrontendURL(): string {
-    return "https://streampix.vercel.app";
+    return "http://localhost:5173";
   }
+
+  // public static getBaseFrontendURL(): string {
+  //   return "https://streampix.vercel.app";
+  // }
 }
 
 export const api = ApiConfig.getInstance();      // usa quando precisa de token

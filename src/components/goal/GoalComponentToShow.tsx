@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 import { useGoalWebSocket } from "./GoalWebSocket";
 
 export const GoalComponentToShow: React.FC = () => {
-  const { streamerName } = useParams<{ streamerName: string }>();
-  if (!streamerName) return <p>Streamer não definido</p>;
+  const { id } = useParams<{ id: string }>();
+  if (!id) return <p>Streamer não definido</p>;
 
-  const goal = useGoalWebSocket(streamerName);
+  const goal = useGoalWebSocket(id);
 
   const percent =
     goal.balance_to_achieve > 0

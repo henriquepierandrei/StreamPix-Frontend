@@ -6,6 +6,8 @@ import { ApiConfig } from "../../api/ApiConfig";
 import "./message-style.css";
 import logo from "./logo.png";
 import logoDark from "./../../assets/logo-dark.png"
+import { useParams } from "react-router-dom";
+
 
 export interface Donation {
   id: string; // chave única
@@ -21,6 +23,7 @@ export interface Donation {
 }
 
 export const MessageComponentToShow: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const [toastQueue, setToastQueue] = useState<Donation[]>([]);
   const [toasts, setToasts] = useState<Donation[]>([]);
   const currentAudio = useRef<HTMLAudioElement | null>(null);
@@ -184,7 +187,7 @@ export const MessageComponentToShow: React.FC = () => {
 
       client.onConnect = () => {
         console.log("✅ Conectado via STOMP");
-        client.subscribe("/topics/donation", (msg: IMessage) => {
+        client.subscribe("/topics/donation/" + id, (msg: IMessage) => {
           try {
             const donationData = JSON.parse(msg.body);
             const { payload, audioUrl, donateIsDarkTheme, qrCodeIsDarkTheme } = donationData;

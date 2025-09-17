@@ -11,7 +11,7 @@ export interface Goal {
   end_at_in_days?: number;
 }
 
-export function useGoalWebSocket(streamerName: string) {
+export function useGoalWebSocket(id: string) {
   const [goal, setGoal] = useState<Goal>({
     reason: "---",
     current_balance: 0,
@@ -24,10 +24,10 @@ export function useGoalWebSocket(streamerName: string) {
     let mounted = true;
 
     // 1️⃣ Carregar meta inicial
-    async function loadInitialGoal() {
+    async function loadInitialGoal(id: string) {
       try {
         const res = await fetch(
-          ApiConfig.getBaseBackendURL() + `/streamer/goal/to-show?streamerName=${streamerName}`
+          ApiConfig.getBaseBackendURL() + `/streamer/goal/to-show?id=` + id 
         );
         if (!res.ok) throw new Error("Erro ao carregar meta inicial");
         const data: Goal = await res.json();
@@ -37,7 +37,7 @@ export function useGoalWebSocket(streamerName: string) {
       }
     }
 
-    loadInitialGoal();
+    loadInitialGoal(id);
 
     // 2️⃣ Conectar WebSocket
     import("sockjs-client").then((SockJS) => {
@@ -54,7 +54,7 @@ export function useGoalWebSocket(streamerName: string) {
       stompClient.onConnect = () => {
         console.log("✅ Conectado via STOMP");
         if (stompClient) {
-          stompClient.subscribe("/topics/goal/", (message) => {
+          stompClient.subscribe("/topics/goal/" + id, (message) => {
             try {
               const data: Goal = JSON.parse(message.body);
               setGoal(data);
@@ -72,7 +72,7 @@ export function useGoalWebSocket(streamerName: string) {
       mounted = false;
       if (stompClient) stompClient.deactivate();
     };
-  }, [streamerName]);
+  }, [id]);
 
   return goal;
 }

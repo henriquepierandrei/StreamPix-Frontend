@@ -9,7 +9,7 @@ export const getStreamerData = async () => {
       throw new Error("Usuário não autenticado (token ausente).");
     }
 
-    const response = await api.get("/streamer", {
+    const response = await api.get("/streamer" , {
       headers: {
         Authorization: `Bearer ${token}`,
       },

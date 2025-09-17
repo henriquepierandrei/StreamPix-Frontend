@@ -37,10 +37,10 @@ function App() {
         <Route path="/streamer/dashboard/login" element={<DashboardLogin />} />
         
         {/* Rota do componente de meta para exibição */}
-        <Route path="/streamer/dashboard/goal/to-show/:streamerName" element={<GoalComponentToShow />} />
+        <Route path="/streamer/dashboard/goal/to-show/:id" element={<GoalComponentToShow />} />
         
         {/* Rota do componente de mensagens para exibição */}
-        <Route path="/streamer/dashboard/messages/to-show" element={<MessageComponentToShow />} />
+        <Route path="/streamer/dashboard/messages/to-show/:id" element={<MessageComponentToShow />} />
 
         {/* ROTAS PRIVADAS DO DASHBOARD */}
         <Route

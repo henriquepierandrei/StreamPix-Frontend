@@ -11,6 +11,7 @@ export interface SettingsAIVoice {
 }
 
 export interface DonationRequest {
+    streamer_name: string;
     name: string;
     message: string;
     amount: string; // no TS mantém string (input do usuário), backend converte p/ Double
@@ -18,12 +19,14 @@ export interface DonationRequest {
 }
 
 export const createDonationRequest = (
+    streamer_name: string,
     name: string,
     message: string,
     amount: string,
     voiceType: string,
     voiceSettings: SettingsAIVoice
 ): DonationRequest => ({
+    streamer_name,
     name,
     message,
     amount,
@@ -40,7 +43,7 @@ export const createDonationRequest = (
 export const sendDonation = async (donation: DonationRequest) => {
     try {
         const api = ApiConfig.getInstance(); // pega a instância do axios
-        const response = await api.post('/donation', donation); // POST com body
+        const response = await api.post('/donation?streamer-name=' + donation.streamer_name, donation); // POST com body
         return response.data;
     } catch (error) {
         throw error;

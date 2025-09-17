@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
 import NavBarDashboard from '../../components/navbar/NavBarDashboard';
-import logo from '../../assets/logo.png';
 import { useNavigate } from "react-router-dom";
 
 import '../style/messageStyle.css';
@@ -16,6 +15,7 @@ function MessagesPage() {
     const [copied, setCopied] = useState(false);
 
     interface StreamerData {
+        id: number;
         streamer_name: string;
         streamer_balance: number;
         is_auto_play: boolean;
@@ -32,6 +32,7 @@ function MessagesPage() {
     }
 
     const [streamerData, setStreamerData] = useState<StreamerData>({
+        id: 0,
         streamer_name: "Carregando...",
         streamer_balance: 0,
         is_auto_play: false,
@@ -98,7 +99,7 @@ function MessagesPage() {
     const handleCopyURL = async () => {
         try {
             await navigator.clipboard.writeText(
-                ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/messages/to-show"
+                ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/messages/to-show/" + streamerData.id
             );
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
@@ -122,7 +123,7 @@ function MessagesPage() {
                     <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
                         <input
                             type="text"
-                            value={ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/messages/to-show"}
+                            value={ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/messages/to-show/" + streamerData.id}
                             readOnly
                             className="input"
                             style={{ flex: 1 }}

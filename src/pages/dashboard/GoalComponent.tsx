@@ -17,6 +17,7 @@ interface GoalData {
 }
 
 interface StreamerData {
+  id: number;
   streamer_name: string;
   streamer_balance: number;
   is_auto_play: boolean;
@@ -49,6 +50,7 @@ const GoalComponent: React.FC = () => {
 
 
   const [streamerData, setStreamerData] = useState<StreamerData>({
+    id: 0,
     streamer_name: "Carregando...",
     streamer_balance: 0,
     is_auto_play: false,
@@ -191,7 +193,7 @@ const GoalComponent: React.FC = () => {
 
   const handleCopyURL = async () => {
     try {
-      await navigator.clipboard.writeText(ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/goal/to-show/" + streamerData.streamer_name);
+      await navigator.clipboard.writeText(ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/goal/to-show?id=" + streamerData.id);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -299,7 +301,7 @@ const GoalComponent: React.FC = () => {
                   <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
                     <input
                       type="text"
-                      value={ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/goal/to-show/" + streamerData.streamer_name}
+                      value={ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/goal/to-show?id=" + streamerData.id}
                       readOnly
                       className="input"
                       style={{ flex: 1 }}
