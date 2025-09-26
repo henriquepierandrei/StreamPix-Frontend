@@ -1,4 +1,4 @@
-import { Link2, Save, Copy } from 'lucide-react';
+import { Link2, Save, Copy, View } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
@@ -109,66 +109,115 @@ function MessagesPage() {
     };
 
     return (
-        <div style={{display: "flex", gap: "10px"}}>
+        <div className="dashboardContainer" style={{ display: "flex", gap: "10px" }}>
             <NavBarDashboard activeItem={active} onSelect={setActive} />
-            <div className='card' style={{ width: "100%", borderRadius: "10px" }}>
-                <div className="cardTitle">
-                    <Link2 size={20} />
-                    <p>URL Mensagens {streamerData.streamer_name}</p>
-                </div>
-                <br />
+            <div className='gridContainer' style={{ width: "100%" }}>
+                <div className='gridContainer' style={{ width: "100%" }}>
 
-                {/* Campo de URL com botão copiar */}
-                <div style={{ display: "flex", gap: 10, flexDirection: "column", marginTop: 10 }}>
-                    <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                        <input
-                            type="text"
-                            value={ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/messages/to-show/" + streamerData.id}
-                            readOnly
-                            className="input"
-                            style={{ flex: 1 }}
-                        />
-                        <button
-                            className="iconButton"
-                            style={{ width: 40, height: 40 }}
-                            onClick={handleCopyURL}
-                        >
-                            <Copy size={20} />
-                        </button>
+                    <div className='card'>
+                        <div className="cardTitle">
+                            <Link2 size={20} />
+                            <p>URL Mensagens {streamerData.streamer_name}</p>
+                        </div>
+                        <br />
+
+                        {/* Campo de URL com botão copiar */}
+                        <div style={{ display: "flex", gap: 10, flexDirection: "column", marginTop: 10 }}>
+                            <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                                <input
+                                    type="text"
+                                    value={ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/messages/to-show/" + streamerData.id}
+                                    readOnly
+                                    className="input"
+                                    style={{ flex: 1 }}
+                                />
+                                <button
+                                    className="iconButton"
+                                    style={{ width: 40, height: 40 }}
+                                    onClick={handleCopyURL}
+                                >
+                                    <Copy size={20} />
+                                </button>
+                            </div>
+                            {copied && (
+                                <span style={{ color: "#9398a1", fontSize: "0.8rem", marginTop: -5 }}>
+                                    URL copiada com sucesso!
+                                </span>
+                            )}
+                        </div>
+
+                        <div className="formGroup" style={{ marginTop: 20 }}>
+                            <div className='custom-checkbox-label'>
+                                <input
+                                    type="checkbox"
+                                    checked={streamerData.donate_is_dark_theme}
+                                    onChange={(e) => updateField('donate_is_dark_theme', e.target.checked)}
+                                />
+                                <p>Tema Escuro</p>
+                            </div>
+                            <button
+                                className="saveButton"
+                                onClick={handleSave}
+                                disabled={isLoading}
+                                style={{
+                                    opacity: isLoading ? 0.7 : 1,
+                                    cursor: isLoading ? 'not-allowed' : 'pointer'
+                                }}
+                            >
+                                <Save size={20} />
+                                {isLoading ? 'Salvando...' : 'Salvar Alterações'}
+                            </button>
+                        </div>
+
                     </div>
-                    {copied && (
-                        <span style={{ color: "#9398a1", fontSize: "0.8rem", marginTop: -5 }}>
-                            URL copiada com sucesso!
-                        </span>
-                    )}
-                </div>
 
-                <div className="formGroup" style={{ marginTop: 20 }}>
-                    <div className='custom-checkbox-label'>
-                        <input
-                            type="checkbox"
-                            checked={streamerData.donate_is_dark_theme}
-                            onChange={(e) => updateField('donate_is_dark_theme', e.target.checked)}
-                        />
-                        <p>Tema Escuro</p>
+                    <div className='card'>
+                        <div className='card'>
+                            <div className='cardTitle'>
+                                <View size={20} color="#667eea" />
+                                <p>Especificações no OBS</p>
+                            </div>
+
+                            <table className='specsTable'>
+                                <thead>
+                                    <tr>
+                                        <th>Propriedade</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Width</strong></td>
+                                        <td>580px</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Height</strong></td>
+                                        <td>150px</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>FPS</strong></td>
+                                        <td>60</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>CSS</strong></td>
+                                        <td>Fundo transparente</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Shutdown source when not visible</strong></td>
+                                        <td>❎</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Refresh browser when scene becomes active</strong></td>
+                                        <td>❎</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
-                <button
-                    className="saveButton"
-                    onClick={handleSave}
-                    disabled={isLoading}
-                    style={{
-                        opacity: isLoading ? 0.7 : 1,
-                        cursor: isLoading ? 'not-allowed' : 'pointer'
-                    }}
-                >
-                    <Save size={20} />
-                    {isLoading ? 'Salvando...' : 'Salvar Alterações'}
-                </button>
-
-                
             </div>
+
         </div>
     )
 }

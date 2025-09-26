@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
 import NavBarDashboard from "../../components/navbar/NavBarDashboard";
-import { Eye, EyeClosed, Save, Settings, User } from "lucide-react";
+import { Eye, EyeClosed, LockOpenIcon, Save, Settings, User } from "lucide-react";
 
 interface StreamerData {
   streamer_name: string;
@@ -104,9 +104,9 @@ function StreamerSettings() {
   }, [navigate]);
 
   return (
-    <div className="dashboardContainer" style={{display: "flex", gap: "10px"}}>
+    <div className="dashboardContainer" style={{ display: "flex", gap: "10px" }}>
       <NavBarDashboard activeItem={active} onSelect={setActive} />
-      <div className="gridContainer" style={{width: "100%"}}>
+      <div className="gridContainer" style={{ width: "100%" }}>
         <div className="card">
           <div className="formGroup">
             <label>Saldo</label>
@@ -145,6 +145,21 @@ function StreamerSettings() {
               <p>Auto Play Ativado</p>
             </div>
           </div>
+
+
+          <button
+            className="default-button"
+            onClick={handleSave}
+            disabled={isLoading}
+            style={{
+              opacity: isLoading ? 0.7 : 1,
+              cursor: isLoading ? 'not-allowed' : 'pointer'
+            }}
+          >
+            <LockOpenIcon size={20} /> Atualizar Senhar
+            
+          </button>
+
         </div>
 
         <div className="card">

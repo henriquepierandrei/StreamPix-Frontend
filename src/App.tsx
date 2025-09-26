@@ -8,11 +8,14 @@ import GoalComponent from './pages/dashboard/GoalComponent';
 import StreamerSettings from './pages/dashboard/StreamerSettings';
 import QrCodeSettings from './pages/dashboard/QrCodeSettings';
 import MessagesPage from './pages/dashboard/MessagesPage';
-import DashboardLogin from './pages/dashboard/DashboardLogin';
+import DashboardLogin from './pages/dashboard/auth/DashboardLogin';
 import PrivateRoute from './api/PrivateRoute';
 import { GoalComponentToShow } from './components/goal/GoalComponentToShow'
 import HomePage from './pages/home/HomePage';
 import { MessageComponentToShow } from "./components/message/MessageComponentToShow";
+import DashboardRegister from './pages/dashboard/auth/DashboardRegister';
+import EmailVerification from './pages/dashboard/auth/DashboardVerifyEmail.tsx';
+import AccountPage from './pages/dashboard/AccountPage.tsx';
 
 
 
@@ -23,22 +26,30 @@ function App() {
     <Router>
       <Routes>
         {/* ROTAS ESPECÍFICAS - DEVEM VIR PRIMEIRO */}
-        
+
         {/* Página raiz */}
         <Route path="/" element={<HomePage />} />
 
         {/* Rotas de pagamento e transações */}
         <Route path="/donation/:transactionId" element={<PaymentQrCode />} />
-        
+
         {/* Rotas do streamer - QR Code */}
-        <Route path="/streamer/qrcode/:streamerName" element={<StreamerQrPage />} />
-        
+        <Route path="/streamer/qrcode/:nickname" element={<StreamerQrPage />} />
+
+
+
         {/* Rota de login do dashboard */}
         <Route path="/streamer/dashboard/login" element={<DashboardLogin />} />
-        
+
+        {/* Rota de Registro do dashboard */}
+        <Route path="/streamer/dashboard/register" element={<DashboardRegister />} />
+
+        {/* Rota de Validação do código do dashboard */}
+        <Route path="/streamer/dashboard/verify/email" element={<EmailVerification />} />
+
         {/* Rota do componente de meta para exibição */}
         <Route path="/streamer/dashboard/goal/to-show/:id" element={<GoalComponentToShow />} />
-        
+
         {/* Rota do componente de mensagens para exibição */}
         <Route path="/streamer/dashboard/messages/to-show/:id" element={<MessageComponentToShow />} />
 
@@ -51,7 +62,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        
+
         <Route
           path="/streamer/dashboard/goals"
           element={
@@ -60,7 +71,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        
+
         <Route
           path="/streamer/dashboard/donations"
           element={
@@ -69,7 +80,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        
+
         <Route
           path="/streamer/dashboard/profile"
           element={
@@ -78,12 +89,21 @@ function App() {
             </PrivateRoute>
           }
         />
-        
+
         <Route
           path="/streamer/dashboard/qrcode/settings"
           element={
             <PrivateRoute>
               <QrCodeSettings />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/streamer/dashboard/account"
+          element={
+            <PrivateRoute>
+              <AccountPage />
             </PrivateRoute>
           }
         />

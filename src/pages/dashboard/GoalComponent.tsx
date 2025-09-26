@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Save, Replace, Trash, Goal, GoalIcon, Copy, AlertCircle } from "lucide-react";
+import { Save, Replace, Trash, Goal, GoalIcon, Copy, AlertCircle, View } from "lucide-react";
 import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
 import type { CreateGoalPayload, UpdateGoalPayload } from "../../api/GoalApi";
@@ -203,10 +203,10 @@ const GoalComponent: React.FC = () => {
   };
 
   return (
-    <div className="dashboardContainer" style={{display: "flex", gap: "10px"}}>
-      <NavBarDashboard activeItem={active} onSelect={setActive}/>
-      <div className="gridContainer" style={{width: "100%"}}>
-        <div className="gridContainer" style={{width: "100%"}}>
+    <div className="dashboardContainer" style={{ display: "flex", gap: "10px" }}>
+      <NavBarDashboard activeItem={active} onSelect={setActive} />
+      <div className="gridContainer" style={{ width: "100%" }}>
+        <div className="gridContainer" style={{ width: "100%" }}>
 
           {/* Criar / Atualizar Meta */}
           <div className="card">
@@ -352,10 +352,50 @@ const GoalComponent: React.FC = () => {
               </p>
             )}
             <div className="horizontal-line"></div>
+
+
+            <div className='card'>
+              <div className='cardTitle'>
+                <View size={20} color="#667eea" />
+                <p>Especificações no OBS</p>
+              </div>
+
+              <table className='specsTable'>
+                <thead>
+                  <tr>
+                    <th>Propriedade</th>
+                    <th>Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Width</strong></td>
+                    <td>720px</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Height</strong></td>
+                    <td>100px</td>
+                  </tr>
+                  <tr>
+                    <td><strong>FPS</strong></td>
+                    <td>30</td>
+                  </tr>
+                  <tr>
+                    <td><strong>CSS</strong></td>
+                    <td>Fundo transparente</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Shutdown source when not visible</strong></td>
+                    <td>❎</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Refresh browser when scene becomes active</strong></td>
+                    <td>❎</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-
-          
-
         </div>
       </div>
     </div>

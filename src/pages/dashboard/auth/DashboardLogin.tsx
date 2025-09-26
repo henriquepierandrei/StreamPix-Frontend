@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { apiPublic } from "../../api/ApiConfig";
+import { apiPublic } from "../../../api/ApiConfig";
 import { useNavigate } from "react-router-dom";
-import Alert from "../../components/Alert";
-import ThemeButton from "../../components/buttons/ThemeButton";
-import logoDark from "../../assets/logo.png"
-import logoLight from "../../assets/logo-dark.png"
+import Alert from "../../../components/Alert";
+import ThemeButton from "../../../components/buttons/ThemeButton";
+import logoDark from "../../../assets/logo.png"
+import { Lock, User } from "lucide-react";
+
 
 
 function DashboardLogin() {
@@ -31,6 +32,8 @@ function DashboardLogin() {
       setPassword(savedPassword);
     }
   }, [remember]);
+
+
 
   // Atualiza o "remember_check" no localStorage quando checkbox muda
   useEffect(() => {
@@ -85,55 +88,46 @@ function DashboardLogin() {
   };
 
 
-  function Logo() {
-    const [logo, setLogo] = useState(
-      document.body.classList.contains("dark") ? logoDark : logoLight
-    );
-
-    useEffect(() => {
-      const body = document.body;
-
-      // observa mudanças nos atributos do body
-      const observer = new MutationObserver(() => {
-        setLogo(body.classList.contains("dark") ? logoDark : logoLight);
-      });
-
-      observer.observe(body, { attributes: true, attributeFilter: ["class"] });
-
-      return () => observer.disconnect(); // limpa o observer quando o componente desmonta
-    }, []);
-
-    return <img src={logo} alt="Logo" />;
-  }
+  const inputContainerStyle = {
+    position: "relative" as const,
+    marginBottom: "16px",
+  };
 
 
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }} className="donation-container">
       <ThemeButton />
       <div className="login-container">
-        <Logo />
+        <img src={logoDark} alt="" style={{ background: "rgb(17, 18, 19)", padding: "12px", borderRadius: "50%" }} />
         <h2>Login do Dashboard</h2>
         {error && <Alert error={error} duration={5} onClose={() => setError(null)} />}
 
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Digite seu e-mail"
-          style={{ width: "100%", padding: "10px", borderRadius: "8px", marginBottom: "10px" }}
-        />
+        <div style={inputContainerStyle}>
+          <User size={20} className='icon-style' />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Digite seu e-mail"
+            className='input-dashboard-style'
+          />
+        </div>
 
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Digite sua senha"
-          style={{ width: "100%", padding: "10px", borderRadius: "8px", marginBottom: "10px" }}
-        />
+        <div style={inputContainerStyle}>
+        <Lock size={20} className='icon-style' />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Digite sua senha"
+            className='input-dashboard-style'
+          />
+        </div>
+
 
         <button
           onClick={handleLogin}
-          style={{ width: "100%", padding: "10px", borderRadius: "8px", background: "#007bff", color: "#fff", border: "none", cursor: "pointer" }}
+          style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "none", cursor: "pointer" }}
         >
           Entrar
         </button>
@@ -142,7 +136,14 @@ function DashboardLogin() {
           <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
           <p>Lembrar Login</p>
         </div>
+        <div style={{ textAlign: "center", marginTop: "20px", fontSize: "14px" }}>
+          Não tem uma conta?{" "}
+          <a href="/streamer/dashboard/register" style={{padding: "2px 10px", borderRadius: "5px", textDecoration: "none", fontWeight: "500" }} className="a-dashboard">
+            Fazer registro
+          </a>
+        </div>
       </div>
+
     </div>
   );
 }

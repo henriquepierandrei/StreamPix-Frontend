@@ -6,7 +6,7 @@ import logo from "./../assets/logo-qrcode-to-request.png";
 import "./style/streamerQrStyle.css";
 interface StreamerData {
     qr_code_url: string;
-    streamerName: string;
+    nickname: string;
 }
 
 interface QrCodeTheme {
@@ -15,7 +15,7 @@ interface QrCodeTheme {
 }
 
 function StreamerQrPage() {
-    const { streamerName } = useParams<{ streamerName: string }>();
+    const { nickname } = useParams<{ nickname: string }>();
     const [streamerData, setStreamerData] = useState<StreamerData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -33,7 +33,7 @@ function StreamerQrPage() {
         async function fetchStreamerByName() {
             try {
                 const api = ApiConfig.getInstance();
-                const response = await api.get(`/${streamerName}`); // endpoint público
+                const response = await api.get(`/${nickname}`); // endpoint público
                 setStreamerData(response.data);
             } catch (err: any) {
                 setError(err.message);
@@ -42,13 +42,13 @@ function StreamerQrPage() {
             }
         }
         fetchStreamerByName();
-    }, [streamerName]);
+    }, [nickname]);
 
     useEffect(() => {
         async function fetchQrCodeTheme() {
             try {
                 const api = ApiConfig.getPublicInstance();
-                const response = await api.get(`/streamer/qrcode?streamerName=${streamerName}`);
+                const response = await api.get(`/streamer/qrcode?nickname=${nickname}`);
                 const data = response.data;
 
                 setQrCodeTheme({
@@ -60,7 +60,7 @@ function StreamerQrPage() {
             }
         }
         fetchQrCodeTheme();
-    }, [streamerName]);
+    }, [nickname]);
 
 
 
@@ -85,7 +85,7 @@ function StreamerQrPage() {
             <div className="title-qrcode">
                 <h2 style={{
                     color: qrCodeTheme?.qr_code_is_dark_theme ? "#ffffff" : "#21272b",
-                }}>{ApiConfig.getBaseFrontendURL().replace("https://", "")}/{streamerName}</h2>
+                }}>{ApiConfig.getBaseFrontendURL().replace("https://", "")}/{nickname}</h2>
             </div>
 
             {streamerData && (

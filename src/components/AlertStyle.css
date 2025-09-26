@@ -14,7 +14,7 @@
 }
 
 body.dark .alert-container {
-    background: linear-gradient(90deg, rgb(27, 29, 31), rgb(34, 39, 44));
+    background: linear-gradient(90deg, rgb(19, 20, 20), rgb(19, 20, 22));
     border-color: #525252;
 }
 
@@ -34,7 +34,7 @@ body.dark .alert-container {
 .alert-close {
     background: transparent !important;
     border: none !important;
-    color: #af0000ff;
+    color: #af0000ff !important;
     font-weight: bold;
     width: max-content;
     height: max-content;

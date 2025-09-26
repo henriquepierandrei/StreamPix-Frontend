@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { QrCode, Copy, Save, RefreshCcw } from 'lucide-react'
+import { QrCode, Copy, Save, RefreshCcw, View } from 'lucide-react'
 import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
 import NavBarDashboard from '../../components/navbar/NavBarDashboard';
@@ -9,7 +9,7 @@ function AnalyticsPage() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     interface StreamerData {
-        streamer_name: string;
+        nickname: string;
         streamer_balance: number;
         is_auto_play: boolean;
         min_amount: number;
@@ -25,7 +25,7 @@ function AnalyticsPage() {
     }
 
     const [streamerData, setStreamerData] = useState<StreamerData>({
-        streamer_name: "Carregando...",
+        nickname: "Carregando...",
         streamer_balance: 0,
         is_auto_play: false,
         min_amount: 0,
@@ -85,13 +85,13 @@ function AnalyticsPage() {
     }, []);
 
     return (
-        <div className="dashboardContainer" style={{display: "flex", gap: "10px"}}>
+        <div className="dashboardContainer" style={{ display: "flex", gap: "10px" }}>
             <NavBarDashboard activeItem={active} onSelect={setActive} />
-            <div className='gridContainer' style={{ width: "100%", borderRadius: "10px"}}>
+            <div className='gridContainer' style={{ width: "100%" }}>
                 <div className='card'>
                     <div className="cardTitle">
                         <QrCode size={20} color="#667eea" />
-                        <p>URL QrCode {streamerData.streamer_name}</p>
+                        <p>URL QrCode {streamerData.nickname}</p>
                     </div><br />
                     <div className="formGroup">
                         <div className='custom-checkbox-label'>
@@ -116,7 +116,7 @@ function AnalyticsPage() {
                         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                             <input
                                 type="text"
-                                value={ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/" + streamerData.streamer_name}
+                                value={ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/" + streamerData.nickname}
                                 readOnly
                                 className="input"
                                 style={{ flex: 1 }}
@@ -126,7 +126,7 @@ function AnalyticsPage() {
                                 style={{ width: '40px', height: '40px', background: 'transparent', color: "#636363ff" }}
                                 onClick={async () => {
                                     try {
-                                        await navigator.clipboard.writeText(ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/" + streamerData.streamer_name);
+                                        await navigator.clipboard.writeText(ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/" + streamerData.nickname);
                                         const feedback = document.getElementById('copyFeedback');
                                         if (feedback) {
                                             feedback.style.opacity = '1';
@@ -167,11 +167,56 @@ function AnalyticsPage() {
                         <Save size={20} />
                         {isLoading ? 'Salvando...' : 'Salvar Alterações'}
                     </button><br />
+                    <br />
                     <button className='reload-page-button'><RefreshCcw size={18} onClick={() => window.location.reload()} /></button>
-                    <iframe src={ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/" + streamerData.streamer_name} className='iframe-qrcode' ></iframe>
+                    <iframe src={ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/" + streamerData.nickname} className='iframe-qrcode' ></iframe>
+                </div>
+
+                <div className='card'>
+                    <div className='card'>
+                        <div className='cardTitle'>
+                            <View size={20} color="#667eea" />
+                            <p>Especificações no OBS</p>
+                        </div>
+
+                        <table className='specsTable'>
+                            <thead>
+                                <tr>
+                                    <th>Propriedade</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Width</strong></td>
+                                    <td>350px</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Height</strong></td>
+                                    <td>350px</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>FPS</strong></td>
+                                    <td>60</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CSS</strong></td>
+                                    <td>Fundo transparente</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Shutdown source when not visible</strong></td>
+                                    <td>✅</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Refresh browser when scene becomes active</strong></td>
+                                    <td>✅</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

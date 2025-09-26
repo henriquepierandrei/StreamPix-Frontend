@@ -56,7 +56,6 @@ input[type="checkbox"] {
   /* tira o estilo nativo */
   -webkit-appearance: none;
   -moz-appearance: none;
-
   width: 20px;
   height: 20px;
   border: 2px solid #CCC;
@@ -74,15 +73,15 @@ body.dark input[type="checkbox"] {
 }
 
 input[type="checkbox"]:checked {
-  background-color: rgb(190, 192, 194);
+  background-color: rgb(56, 59, 61);
   border-color: white;
   color: white;
 
 }
 
 body.dark input[type="checkbox"]:checked {
-  background-color: rgb(118, 122, 128);
-  color: white;
+  background-color: rgb(223, 227, 233);
+  color: rgb(22, 24, 26);
 }
 
 input[type="checkbox"]:checked::after {

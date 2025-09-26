@@ -109,13 +109,22 @@ export class ApiConfig {
   }
 
 
+  // public static getBaseBackendURL(): string {
+  //   return "https://streampix.fun";
+  // }
+
+  
+  // public static getBaseFrontendURL(): string {
+  //   return "https://streampix.vercel.app";
+  // }
+
   public static getBaseBackendURL(): string {
-    return "https://streampix.fun";
+    return "http://localhost:8080";
   }
 
   
   public static getBaseFrontendURL(): string {
-    return "https://streampix.vercel.app";
+    return "http://localhost:5173";
   }
 }
 

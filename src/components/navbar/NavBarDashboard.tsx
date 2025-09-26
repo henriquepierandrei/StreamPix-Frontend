@@ -13,6 +13,7 @@ import {
   DoorOpen,
   Sun,
   Moon,
+  User,
 } from "lucide-react";
 import "./Navbar.css";
 
@@ -123,7 +124,7 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
 
       {/* Overlay para mobile */}
       {isMenuOpen && (
-        <div 
+        <div
           className="mobile-overlay"
           onClick={() => setIsMenuOpen(false)}
         />
@@ -133,10 +134,10 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
       <nav className="navbar">
         <div className="navbar-container">
           <div className="navbar-content">
-            <img 
-              src={isDarkMode ? logo : logodark} 
-              alt="Logo" 
-              className="logo-dashboard-img" 
+            <img
+              src={isDarkMode ? logo : logodark}
+              alt="Logo"
+              className="logo-dashboard-img"
             />
 
             {/* Menu Desktop */}
@@ -181,6 +182,14 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
                 <span>Mensagens</span>
               </button>
 
+              <button
+                onClick={() => handleNavigation("/streamer/dashboard/account", "Conta")}
+                className={`nav-item ${activeItem === "Conta" ? "nav-item-active" : ""}`}
+              >
+                <User size={18} />
+                <span>Conta</span>
+              </button>
+
               <div className="nav-separator" />
 
               {/* Botão Dark/Light */}
@@ -205,10 +214,10 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
       {isMenuOpen && (
         <aside ref={menuRef} className="mobile-menu">
           <div className="mobile-menu-header">
-            <img 
-              src={isDarkMode ? logo : logodark} 
-              alt="Logo" 
-              className="logo-dashboard-img" 
+            <img
+              src={isDarkMode ? logo : logodark}
+              alt="Logo"
+              className="logo-dashboard-img"
             />
             <button
               className="mobile-menu-close"
@@ -258,6 +267,14 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
             >
               <MessageSquare size={18} />
               <span>Mensagens</span>
+            </button>
+
+            <button
+              onClick={() => handleNavigation("/streamer/dashboard/account", "Conta")}
+              className={`mobile-nav-item ${activeItem === "QrCode" ? "mobile-nav-item-active" : ""}`}
+            >
+              <User size={18} />
+              <span>Conta</span>
             </button>
 
             <div className="nav-separator" />

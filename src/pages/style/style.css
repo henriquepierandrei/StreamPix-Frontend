@@ -19,7 +19,7 @@ body {
     /* Fundo base (preto → roxo) */
     /* Efeitos de glow (esfumaçados) */
     background-image:
-        url('https://res.cloudinary.com/dvadwwvub/image/upload/v1757963203/banner-light_i8lkus.jpg');
+        url('https://res.cloudinary.com/dvadwwvub/image/upload/v1758655312/banner-light_i8lkus.png');
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -458,7 +458,7 @@ body.dark .form-card {
 
 body.dark .input,
 body.dark .select {
-    background: #292c31;
+    background: #1a1a1b;
     border: 1px solid #4d4d4d;
     color: #d3d3d3;
 }
