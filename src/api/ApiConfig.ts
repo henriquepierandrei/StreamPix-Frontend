@@ -1,7 +1,5 @@
 import axios from "axios";
 
-
-
 export class ApiConfig {
   private static instance: any;
   private static publicInstance: any;

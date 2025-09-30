@@ -4,7 +4,7 @@ import { User, Mail, Lock, CreditCard, Eye, EyeOff, UserSquare } from 'lucide-re
 import ThemeButton from '../../../components/buttons/ThemeButton';
 import logoDark from "../../../assets/logo.png"
 import { ApiConfig } from '../../../api/ApiConfig';
-import Alert from '../../../components/Alert';
+import Alert from '../../../components/alerts/Alert';
 
 
 function DashboardRegister() {

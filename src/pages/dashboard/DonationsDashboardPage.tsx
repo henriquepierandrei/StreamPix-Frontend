@@ -1,7 +1,7 @@
 import { CalendarArrowDown, Clapperboard, DollarSign, Filter, MessageSquareMore, Settings, SquarePlayIcon } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { ApiConfig } from "./../../api/ApiConfig";
-import { getStreamerData } from "./../../api/GetStreamerData"; // ajuste o path se necessário
+import { ApiConfig } from "../../api/ApiConfig";
+import { getStreamerData } from "../../api/GetStreamerData"; // ajuste o path se necessário
 import { Clock, UserStarIcon } from 'lucide-react'
 import PlayButtonAudio from '../../components/buttons/PlayButtonAudio'
 import ReplayButtonDonation from '../../components/buttons/ReplayButtonDonation'

@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import PaymentQrCode from './pages/PaymentQrCode';
-import StreamPixDonation from './pages/StreamPixDonation';
-import StreamerQrPage from './pages/StreamerQrPage';
+import PaymentQrCode from './pages/client/PaymentQrCodePage.tsx';
+import StreamPixDonation from './pages/client/StreamPixDonationPage.tsx';
+import StreamerQrPage from './pages/client/StreamerQrPage.tsx';
 import NotFoundPage from './pages/Notfound/NotFoundPage';
-import DonationsPage from './pages/dashboard/DonationsPage';
-import GoalComponent from './pages/dashboard/GoalComponent';
-import StreamerSettings from './pages/dashboard/StreamerSettings';
-import QrCodeSettings from './pages/dashboard/QrCodeSettings';
-import MessagesPage from './pages/dashboard/MessagesPage';
+import DonationsPage from './pages/dashboard/DonationsDashboardPage.tsx';
+import GoalComponent from './pages/dashboard/GoalDashboardPage.tsx';
+import StreamerSettings from './pages/dashboard/StreamerSettingsDashboardPage.tsx';
+import QrCodeSettings from './pages/dashboard/QrSettingsDashboardPage.tsx';
+import MessagesPage from './pages/dashboard/MessagesDashboardPage.tsx';
 import DashboardLogin from './pages/dashboard/auth/DashboardLogin';
 import PrivateRoute from './api/PrivateRoute';
 import { GoalComponentToShow } from './components/goal/GoalComponentToShow'
@@ -15,7 +15,7 @@ import HomePage from './pages/home/HomePage';
 import { MessageComponentToShow } from "./components/message/MessageComponentToShow";
 import DashboardRegister from './pages/dashboard/auth/DashboardRegister';
 import EmailVerification from './pages/dashboard/auth/DashboardVerifyEmail.tsx';
-import AccountPage from './pages/dashboard/AccountPage.tsx';
+import AccountPage from './pages/dashboard/AccountDashboardPage.tsx';
 
 
 
@@ -45,10 +45,10 @@ function App() {
         <Route path="/streamer/dashboard/register" element={<DashboardRegister />} />
 
         {/* Rota de Validação do código do dashboard */}
-        <Route path="/streamer/dashboard/verify/email" element={<EmailVerification />} />
+        <Route path="/email-auth/validate-email" element={<EmailVerification />} />
 
         {/* Rota do componente de meta para exibição */}
-        <Route path="/streamer/dashboard/goal/to-show/:id" element={<GoalComponentToShow />} />
+        <Route path="/streamer/dashboard/goal/to-show" element={<GoalComponentToShow />} />
 
         {/* Rota do componente de mensagens para exibição */}
         <Route path="/streamer/dashboard/messages/to-show/:id" element={<MessageComponentToShow />} />

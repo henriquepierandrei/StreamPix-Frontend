@@ -17,7 +17,7 @@ interface GoalData {
 }
 
 interface StreamerData {
-  id: number;
+  id: string;
   streamer_name: string;
   streamer_balance: number;
   is_auto_play: boolean;
@@ -50,7 +50,7 @@ const GoalComponent: React.FC = () => {
 
 
   const [streamerData, setStreamerData] = useState<StreamerData>({
-    id: 0,
+    id: "Carregando...",
     streamer_name: "Carregando...",
     streamer_balance: 0,
     is_auto_play: false,

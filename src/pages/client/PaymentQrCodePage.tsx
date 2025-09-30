@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Copy, CheckCircle, XCircle, Clock, ArrowLeft } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { QRCodeCanvas } from 'qrcode.react';
-import { getDonation } from '../api/GetDonation';
-import { usePaymentWebSocket } from '../api/usePaymentStatus';
-import logo from '../assets/logo.png';
-import logoQrCode from '../assets/logo-qrcode.png';
-import './style/style.css';
-import Loading from '../components/Loading';
+import { getDonation } from '../../api/GetDonation';
+import { usePaymentWebSocket } from '../../api/usePaymentStatus';
+import logo from "../../assets/image.png";
+import '../style/style.css';
+import Loading from '../../components/Loading';
 
 interface PaymentQrCodeProps { }
 
@@ -112,11 +111,6 @@ const PaymentQrCode: React.FC<PaymentQrCodeProps> = () => {
 
                         <div style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
                             <QRCodeCanvas value={paymentInfo?.qrcode || ''} size={256} level="H" includeMargin={true} />
-                            <img
-                                src={logoQrCode}
-                                alt="Logo"
-                                style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 50, height: 50, borderRadius: 30 }}
-                            />
                         </div>
 
                         <div className="timer">

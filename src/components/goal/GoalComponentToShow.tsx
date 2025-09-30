@@ -1,9 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useGoalWebSocket } from "./GoalWebSocket";
+import { useSearchParams } from "react-router-dom";
 
 export const GoalComponentToShow: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
   if (!id) return <p>Streamer não definido</p>;
 
   const goal = useGoalWebSocket(id);

@@ -237,6 +237,119 @@ body.dark .filter-button.primary:hover {
   justify-content: center;
   gap: 5px;
   color: rgb(19, 19, 20);
+}body.dark .default-button{
+  background-color: rgb(36, 36, 37);
+  color: rgb(214, 214, 214);
+}
+
+
+.card-title{
+  color: rgb(32, 32, 32);
+}body.dark .card-title{
+  color: rgb(255, 255, 255);
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: #8b8b8b !important;
+  margin: 0;
+}body.dark .card-subtitle{
+  color: #d6d6d6;
+}
+
+
+.fee-highlight {
+  background-color: #eceaea;
+  border: 2px solid #0ea5e9;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 20px;
+}body.dark .fee-highlight{
+  background-color: #121416;
+  border-color:#084c6b;
+}
+
+.main-fee {
+  font-size: 32px;
+  font-weight: bold;
+  color: #0ea5e9;
+  margin: 0;
+}
+
+.fee-description {
+  font-size: 14px;
+  color: #475569;
+  margin-top: 4px;
+  margin-bottom: 0;
+}body.dark .fee-description {
+  font-size: 14px;
+  color: #cccccc;
+
+}
+
+.fee-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fee-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.fee-item:last-child {
+  border-bottom: none;
+}
+
+.fee-label {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+}body.dark .fee-label {
+  font-size: 14px;
+  color: #cfcfcf;
+}
+
+.fee-value {
+  font-size: 14px;
+  font-weight: bold;
+  color: #059669;
+}
+
+.img-banner-security{
+  opacity: 0.1;
+}body.dark .img-banner-security{
+  opacity: 0.025;
+}
+
+.info-text {
+  font-size: 11px;
+  text-align: start;
+  max-width: 280px; /* Mínimo recomendado */
+  word-wrap: break-word;
+  hyphens: auto;
+  line-height: 1.4;
+  border-left: 4px solid #0ea5e9;
+  padding-left: 8px;
+}
+
+.percentage-icon {
+  display: inline-block;
+  background-color: #0ea5e9;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 8px;
 }
 
 /* Esconde só o ícone nativo */
@@ -990,6 +1103,12 @@ body.dark .cardTitle p {
   background: linear-gradient(45deg, #ababcf, rgb(77, 104, 155));
   -webkit-background-clip: text;
   background-clip: text;
+}
+
+.card p{
+  color: rgb(37, 38, 39);
+}body.dark .card p{
+  color: rgb(212, 212, 212);
 }
 
 .donateItem {

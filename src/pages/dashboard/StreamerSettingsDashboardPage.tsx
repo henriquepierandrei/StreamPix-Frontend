@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
 import NavBarDashboard from "../../components/navbar/NavBarDashboard";
-import { Eye, EyeClosed, LockOpenIcon, Save, Settings, User } from "lucide-react";
+import { Eye, EyeClosed, Save, Settings, User } from "lucide-react";
 
 interface StreamerData {
-  streamer_name: string;
+  nickname: string;
   streamer_balance: number;
   is_auto_play: boolean;
   min_amount: number;
@@ -25,7 +25,7 @@ function StreamerSettings() {
   const navigate = useNavigate();
   const [active, setActive] = useState("Streamer");
   const [streamerData, setStreamerData] = useState<StreamerData>({
-    streamer_name: "Carregando...",
+    nickname: "Carregando...",
     streamer_balance: 0,
     is_auto_play: false,
     min_amount: 0,
@@ -129,9 +129,9 @@ function StreamerSettings() {
             <label>Nome do Streamer</label>
             <input
               type="text"
-              value={streamerData.streamer_name}
+              value={streamerData.nickname}
               className='input'
-              onChange={(e) => updateField('streamer_name', e.target.value)}
+              onChange={(e) => updateField('nickname', e.target.value)}
             />
           </div>
 
@@ -146,19 +146,41 @@ function StreamerSettings() {
             </div>
           </div>
 
+          <div className="card">
+            <div className="card-header">
+              <h2 className="card-title">
+                <span className="percentage-icon">%</span>
+                Política de Taxas
+              </h2>
+              <p className="card-subtitle">Sobre o dinheiro movimentando na StreamPix</p>
+            </div>
 
-          <button
-            className="default-button"
-            onClick={handleSave}
-            disabled={isLoading}
-            style={{
-              opacity: isLoading ? 0.7 : 1,
-              cursor: isLoading ? 'not-allowed' : 'pointer'
-            }}
-          >
-            <LockOpenIcon size={20} /> Atualizar Senhar
-            
-          </button>
+            <div className="fee-highlight">
+              <p className="main-fee">2,9%</p>
+              <p className="fee-description">Taxa padrão por transação</p>
+            </div>
+
+            <ul className="fee-list">
+              <li className="fee-item">
+                <span className="fee-label">Período de Saque</span>
+                <span className="fee-value">1 a cada 3 dias</span>
+              </li>
+              <li className="fee-item">
+                <span className="fee-label">Saque máximo</span>
+                <span className="fee-value">R$2000,00</span>
+              </li>
+              <li className="fee-item">
+                <span className="fee-label">Taxa fixa adicional</span>
+                <span className="fee-value">R$ 0,39</span>
+              </li>
+              <li className="fee-item">
+                <span className="fee-label">Proteção contra fraude</span>
+                <span className="fee-value">100% seguro</span>
+              </li>
+            </ul>
+            <br />
+           
+          </div>
 
         </div>
 
@@ -214,6 +236,7 @@ function StreamerSettings() {
             <Save size={20} />
             {isLoading ? 'Salvando...' : 'Salvar Alterações'}
           </button>
+
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiPublic } from "../../../api/ApiConfig";
 import { useNavigate } from "react-router-dom";
-import Alert from "../../../components/Alert";
+import Alert from "../../../components/alerts/Alert";
 import ThemeButton from "../../../components/buttons/ThemeButton";
 import logoDark from "../../../assets/logo.png"
 import { Lock, User } from "lucide-react";

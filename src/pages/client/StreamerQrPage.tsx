@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { QRCode } from "react-qrcode-logo";
-import { ApiConfig } from "./../api/ApiConfig";
-import logo from "./../assets/logo-qrcode-to-request.png";
-import "./style/streamerQrStyle.css";
+import { ApiConfig } from "../../api/ApiConfig";
+import logo from "../../assets/logo.png";
+import logoDark from "../../assets/logo-dark.png";
+
+import "../style/streamerQrStyle.css";
 interface StreamerData {
     qr_code_url: string;
     nickname: string;
@@ -96,22 +98,16 @@ function StreamerQrPage() {
                             value={streamerData.qr_code_url}
                             size={200}
                             bgColor="transparent"
-                            fgColor={qrCodeTheme?.qr_code_is_dark_theme ? "#ffffffff" : "#21272bff"} // tema dark ou light
-                            qrStyle="fluid"      // deixa os quadradinhos arredondados
-                            eyeRadius={10}
-                        />
-                        <img
-                            src={logo}
-                            alt="logo"
-                            style={{
-                                position: "absolute",
-                                top: "50%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                width: "50px",
-                                height: "50px",
-                                borderRadius: "10px"
-                            }}
+                            fgColor={qrCodeTheme?.qr_code_is_dark_theme ? "#ffffffff" : "#21272bff"}
+                            qrStyle="fluid"
+                            eyeRadius={3}
+                            logoImage={qrCodeTheme?.qr_code_is_dark_theme ? logo : logoDark}
+                            logoWidth={50}
+                            logoHeight={50}
+                            logoOpacity={1}
+                            removeQrCodeBehindLogo={true}  // Remove os quadrados atrás da logo
+                            logoPadding={2}               // Espaçamento ao redor da logo
+                            logoPaddingStyle="circle"     // ou "square" para formato quadrado
                         />
 
                     </div>
