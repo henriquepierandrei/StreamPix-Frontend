@@ -18,8 +18,7 @@ body {
     align-items: center;
     /* Fundo base (preto → roxo) */
     /* Efeitos de glow (esfumaçados) */
-    background-image:
-        url('https://res.cloudinary.com/dvadwwvub/image/upload/v1758655312/banner-light_i8lkus.png');
+    background: linear-gradient(140deg, rgb(204, 219, 233), rgb(237, 237, 238));
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -27,8 +26,8 @@ body {
 
 
 body.dark .donation-container {
-    background-image:
-        url('https://res.cloudinary.com/dvadwwvub/image/upload/v1757964375/banner-dark_ytrsva.png');
+    background: linear-gradient(140deg, rgb(31, 31, 31), rgb(6, 6, 10));
+
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -768,7 +767,7 @@ body.dark .footer-brand span {
 
 body.dark .payment-container {
     background-image:
-        url('https://res.cloudinary.com/dvadwwvub/image/upload/v1757964375/banner-dark_ytrsva.png');
+        url('https://i.redd.it/7680-4320-gradient-blur-4k-wallapapers-v0-6u0dhbv51tbb1.png?width=7680&format=png&auto=webp&s=dd3e47bbdf3f8726432b5742748bef422fad10a8');
 }
 
 

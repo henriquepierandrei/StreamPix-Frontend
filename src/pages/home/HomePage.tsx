@@ -53,7 +53,7 @@ function HomePage() {
           <img src={MessagePerson} alt="Pessoa enviando mensagem" />
           <div className="info-text">
             <h2>Mensagens Monetizadas</h2>
-            <p>
+            <p style={{borderLeft: "4px solid rgb(103, 164, 192)", paddingLeft: "10px"}}>
               Receba mensagens via Pix ou Cartão de Crédito e exiba os alertas na sua transmissão em tempo real.
             </p>
             <button className='button-secondary' onClick={() => navigate("/streamer/dashboard/login")}>Saiba mais</button>

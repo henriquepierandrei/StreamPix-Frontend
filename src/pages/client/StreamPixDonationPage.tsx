@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, UserX, XIcon } from 'lucide-react';
 import streamerLogo from "../../assets/image.png";
-import logo from "../../assets/image.png";
+import logo from "../../assets/logo.png";
 import logoDark from '../../assets/logo-dark.png';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createDonationRequest, sendDonation, getStreamerData } from '../../api/DonationRequest';

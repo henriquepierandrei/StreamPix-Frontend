@@ -47,7 +47,7 @@ body.dark .navbar {
 }
 
 body.dark .navbar-home-root {
-  background: var(--navbar-bg-dark, rgba(29, 30, 31, 0.85));
+  background: var(--navbar-bg-dark, rgba(12, 13, 14, 0.85));
   border-color: #474747;
 
 }

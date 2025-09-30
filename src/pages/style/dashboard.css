@@ -334,7 +334,6 @@ body.dark .filter-button.primary:hover {
   word-wrap: break-word;
   hyphens: auto;
   line-height: 1.4;
-  border-left: 4px solid #0ea5e9;
   padding-left: 8px;
 }
 
@@ -825,7 +824,7 @@ body.dark .container-attempts-time {
 
 .login-container {
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
   text-align: center;
   border: 1px solid #dfdfdf;
   border-radius: 10px;

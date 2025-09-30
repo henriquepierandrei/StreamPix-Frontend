@@ -7,13 +7,13 @@
     align-items: center;
     min-height: 100vh;
     text-align: center;
-    background: linear-gradient(to bottom, rgb(243, 243, 243), rgb(220, 221, 231));
+    background: linear-gradient(to bottom, rgb(243, 243, 243), rgb(249, 249, 255));
     position: relative;
     padding: 20px;
 }
 
 body.dark .component-title-home {
-    background: linear-gradient(to bottom, rgb(21, 23, 24), rgb(38, 38, 44));
+    background: linear-gradient(to bottom, rgb(13, 13, 14), rgb(20, 20, 22));
 }
 
 .hero-content {
@@ -23,7 +23,7 @@ body.dark .component-title-home {
 }
 
 .component-title-home h1 {
-    color: rgb(124, 124, 173);
+    color: rgb(110, 110, 177);
     font-size: clamp(2rem, 5vw, 3.5rem);
     line-height: 1.2;
     margin-bottom: 1rem;

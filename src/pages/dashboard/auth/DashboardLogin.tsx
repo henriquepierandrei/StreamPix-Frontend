@@ -98,7 +98,7 @@ function DashboardLogin() {
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }} className="donation-container">
       <ThemeButton />
       <div className="login-container">
-        <img src={logoDark} alt="" style={{ background: "rgb(17, 18, 19)", padding: "12px", borderRadius: "50%" }} />
+        <img src={logoDark} alt="" style={{ backgroundImage: "url('https://messages-prod.27c852f3500f38c1e7786e2c9ff9e48f.r2.cloudflarestorage.com/bcbbcffd-e6d3-4c09-97ff-35dd10e77370/1759271457417-01999cbe-77bd-7a3b-b020-19dbfd47a644.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=c86e09ae0bc1d897b03dfaa30a8b51f3%2F20250930%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20250930T223058Z&X-Amz-Expires=3600&X-Amz-Signature=9b1038fb13e5b344496677d7180833f3efab08cd49fdf69fc14b352c349f400d&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject')", padding: "12px", borderRadius: "50%" }} />
         <h2>Login do Dashboard</h2>
         {error && <Alert error={error} duration={5} onClose={() => setError(null)} />}
 

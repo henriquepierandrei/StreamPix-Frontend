@@ -126,7 +126,7 @@ function StreamerSettings() {
           </div>
 
           <div className="formGroup">
-            <label>Nome do Streamer</label>
+            <label>Nickname do Streamer</label>
             <input
               type="text"
               value={streamerData.nickname}

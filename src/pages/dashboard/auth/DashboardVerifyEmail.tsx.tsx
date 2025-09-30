@@ -256,7 +256,7 @@ function DashboardVerifyEmail() {
                             )}
                             <button
                                 onClick={() => navigate('/streamer/dashboard/login')}
-                                className="verify-email-btn-secondary"
+                                className="verify-email-btn-primary"
                             >
                                 Ir para Login
                                 <ArrowRight size={18} style={{ marginLeft: '8px' }} />

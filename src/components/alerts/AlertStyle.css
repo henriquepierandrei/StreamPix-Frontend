@@ -1,6 +1,6 @@
 .alert-container {
     padding: 6px 12px;
-    background: linear-gradient(90deg, #ffffffff, rgb(236, 246, 255));
+    background: linear-gradient(140deg, rgb(255, 255, 255), rgb(255, 255, 255));
     width: 100%;
     border-radius: 10px;
     color: #af0000ff;
@@ -14,7 +14,7 @@
 }
 
 body.dark .alert-container {
-    background: linear-gradient(90deg, rgb(19, 20, 20), rgb(19, 20, 22));
+    background: linear-gradient(90deg, rgb(14, 14, 14), rgb(9, 10, 10));
     border-color: #525252;
 }
 
