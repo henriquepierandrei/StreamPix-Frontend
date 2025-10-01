@@ -53,7 +53,7 @@ function HomePage() {
           <img src={MessagePerson} alt="Pessoa enviando mensagem" />
           <div className="info-text">
             <h2>Mensagens Monetizadas</h2>
-            <p style={{borderLeft: "4px solid rgb(103, 164, 192)", paddingLeft: "10px"}}>
+            <p style={{ borderLeft: "4px solid rgb(105, 140, 255)", paddingLeft: "10px" }}>
               Receba mensagens via Pix ou Cartão de Crédito e exiba os alertas na sua transmissão em tempo real.
             </p>
             <button className='button-secondary' onClick={() => navigate("/streamer/dashboard/login")}>Saiba mais</button>
@@ -111,34 +111,17 @@ function HomePage() {
         <h2>Pronto para monetizar seu conteúdo?</h2>
         <p>Junte-se a milhares de criadores que já estão transformando sua paixão em receita</p>
         <div className="cta-buttons">
-          <button className="button-primary-large" onClick={() => navigate("/streamer/dashboard/login")}>Começar Agora</button>
-          <button className="button-outline-large" onClick={() => navigate("/streamer/dashboard/login")}>Ver Demonstração</button>
-        </div>
+        <button className="button-primary-large" onClick={() => navigate("/streamer/dashboard/login")}>Começar Agora</button>
+        <button className="button-primary-large" onClick={() => navigate("/streamer/dashboard/login")}>Ver Demonstração</button>
       </div>
+      </div>
+      
+      
 
+      <br />
       {/* Footer simples */}
-      <footer className="footer-home">
-        <div className="footer-content">
-          <div className="footer-section">
-            <h4>Suporte</h4>
-            <a href="#">Central de Ajuda</a>
-            <a href="#">Documentação</a>
-            <a href="#">Contato</a>
-          </div>
-          <div className="footer-section">
-            <h4>Empresa</h4>
-            <a href="#">Sobre</a>
-            <a href="#">Blog</a>
-          </div>
-          <div className="footer-section">
-            <h4>Legal</h4>
-            <a href="#">Termos</a>
-            <a href="#">Privacidade</a>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p>© 2025 StreamPix. Todos os direitos reservados.</p>
-        </div>
+      <footer className="footer-bottom">
+        <p>© 2025 StreamPix. Todos os direitos reservados.</p>
       </footer>
     </div>
   )

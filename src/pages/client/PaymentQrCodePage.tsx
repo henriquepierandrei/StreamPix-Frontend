@@ -3,9 +3,9 @@ import { Copy, CheckCircle, XCircle, Clock, ArrowLeft } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { QRCodeCanvas } from 'qrcode.react';
 import { getDonation } from '../../api/GetDonation';
-import { usePaymentWebSocket } from '../../api/usePaymentStatus';
+import { usePaymentWebSocket } from '../../hooks/usePaymentStatus';
 import logo from "../../assets/image.png";
-import '../style/style.css';
+import '../../styles/style.css';
 import Loading from '../../components/Loading';
 
 interface PaymentQrCodeProps { }

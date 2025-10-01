@@ -5,7 +5,7 @@ import { ApiConfig } from "../../api/ApiConfig";
 import logo from "../../assets/logo.png";
 import logoDark from "../../assets/logo-dark.png";
 
-import "../style/streamerQrStyle.css";
+import "../../styles/streamerQrStyle.css";
 interface StreamerData {
     qr_code_url: string;
     nickname: string;

@@ -284,7 +284,7 @@ function DashboardRegister() {
                 {error && <Alert error={error} duration={5} onClose={() => setError(null)} />}
 
                 <div style={{ textAlign: "center", marginBottom: "30px" }}>
-                    <img src={logoDark} alt="" style={{ background: "rgb(17, 18, 19)", padding: "15px", borderRadius: "50%" }} />
+                    <img src={logoDark} alt="" style={{ backgroundImage: "url('https://res.cloudinary.com/dvadwwvub/image/upload/v1759321086/wallpaper-4k_on1hrh.png')", padding: "15px", borderRadius: "50%" }} />
                     <h2 style={{ margin: "0 0 10px 0", fontSize: "28px", fontWeight: "700" }}>Cadastro</h2>
                     <p style={{ fontSize: "14px", margin: 0 }}>Crie sua conta para acessar o dashboard</p>
                 </div>

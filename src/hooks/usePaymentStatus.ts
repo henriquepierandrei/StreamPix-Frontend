@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
-import { ApiConfig } from "./ApiConfig";
+import { ApiConfig } from "../api/ApiConfig";
 
 interface PaymentUpdate {
   isDonated?: boolean;

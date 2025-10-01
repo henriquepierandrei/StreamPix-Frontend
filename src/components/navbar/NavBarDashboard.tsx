@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import logo from '../../assets/logo.png'
 import logodark from '../../assets/logo-dark.png'
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import {
   MessageSquareHeart,
   Menu,
@@ -25,7 +26,7 @@ interface NavBarDashboardProps {
 function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
+    Cookies.get("theme") === "dark"
   );
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
@@ -35,10 +36,10 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
   useEffect(() => {
     if (isDarkMode) {
       document.body.classList.add("dark");
-      localStorage.setItem("theme", "dark");
+      Cookies.set("theme", "dark", { expires: 365 });
     } else {
       document.body.classList.remove("dark");
-      localStorage.setItem("theme", "light");
+      Cookies.set("theme", "light", { expires: 365 });
     }
   }, [isDarkMode]);
 
@@ -91,10 +92,10 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("tokenExpireAt");
-    localStorage.removeItem("refreshTokenExpireAt");
+    Cookies.remove("token");
+    Cookies.remove("refreshToken");
+    Cookies.remove("tokenExpireAt");
+    Cookies.remove("refreshTokenExpireAt");
     window.location.reload();
   };
 

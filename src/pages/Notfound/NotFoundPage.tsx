@@ -1,6 +1,6 @@
 import './NotFoundStyle.css'; // Importe o arquivo CSS
 import logo from '../../assets/logo.png';
-import '../style/style.css'
+import '../../index.css'
 
 function NotFoundPage() {
     return (

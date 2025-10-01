@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export class ApiConfig {
   private static instance: any;
@@ -18,7 +19,7 @@ export class ApiConfig {
       // Interceptor global
       ApiConfig.instance.interceptors.request.use(
         (config: any) => {
-          const token = localStorage.getItem("token");
+          const token = Cookies.get("token");
           if (token) {
             if (!config.headers) config.headers = {};
             config.headers['Authorization'] = `Bearer ${token}`;
@@ -68,7 +69,7 @@ export class ApiConfig {
 
   private static async refreshToken(): Promise<string | null> {
     try {
-      const refreshToken = localStorage.getItem("refreshToken");
+      const refreshToken = Cookies.get("refreshToken");
       if (!refreshToken) return null;
 
       const response = await axios.post(`${this.getBaseBackendURL()}/auth/refresh`, { refreshToken });
@@ -83,15 +84,35 @@ export class ApiConfig {
       const data = response.data as RefreshResponse;
       const { token, refreshToken: newRefresh, tokenExpireAt, refreshTokenExpireAt } = data;
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("tokenExpireAt", tokenExpireAt);
+      // Calcula expires baseado no tokenExpireAt
+      const tokenExpires = new Date(tokenExpireAt);
+      Cookies.set("token", token, { 
+        expires: tokenExpires,
+        secure: true,
+        sameSite: 'strict'
+      });
+      Cookies.set("tokenExpireAt", tokenExpireAt, { 
+        expires: tokenExpires,
+        secure: true,
+        sameSite: 'strict'
+      });
 
       if (newRefresh) {
-        localStorage.setItem("refreshToken", newRefresh);
+        const refreshExpires = refreshTokenExpireAt ? new Date(refreshTokenExpireAt) : 30; // 30 dias default
+        Cookies.set("refreshToken", newRefresh, { 
+          expires: refreshExpires,
+          secure: true,
+          sameSite: 'strict'
+        });
       }
 
       if (refreshTokenExpireAt) {
-        localStorage.setItem("refreshTokenExpireAt", refreshTokenExpireAt);
+        const refreshExpires = new Date(refreshTokenExpireAt);
+        Cookies.set("refreshTokenExpireAt", refreshTokenExpireAt, { 
+          expires: refreshExpires,
+          secure: true,
+          sameSite: 'strict'
+        });
       }
 
       return token;
@@ -101,30 +122,55 @@ export class ApiConfig {
   }
 
   public static logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
+    Cookies.remove("token");
+    Cookies.remove("refreshToken");
+    Cookies.remove("tokenExpireAt");
+    Cookies.remove("refreshTokenExpireAt");
     window.location.href = "/login";
   }
 
+  // Helper para salvar tokens (use após login)
+  public static saveTokens(
+    token: string, 
+    refreshToken: string, 
+    tokenExpireAt: string, 
+    refreshTokenExpireAt: string
+  ) {
+    const tokenExpires = new Date(tokenExpireAt);
+    const refreshExpires = new Date(refreshTokenExpireAt);
 
-  // public static getBaseBackendURL(): string {
-  //   return "https://streampix.fun";
-  // }
-
-  
-  // public static getBaseFrontendURL(): string {
-  //   return "https://streampix.vercel.app";
-  // }
+    Cookies.set("token", token, { 
+      expires: tokenExpires,
+      secure: true,
+      sameSite: 'strict'
+    });
+    Cookies.set("tokenExpireAt", tokenExpireAt, { 
+      expires: tokenExpires,
+      secure: true,
+      sameSite: 'strict'
+    });
+    Cookies.set("refreshToken", refreshToken, { 
+      expires: refreshExpires,
+      secure: true,
+      sameSite: 'strict'
+    });
+    Cookies.set("refreshTokenExpireAt", refreshTokenExpireAt, { 
+      expires: refreshExpires,
+      secure: true,
+      sameSite: 'strict'
+    });
+  }
 
   public static getBaseBackendURL(): string {
     return "http://localhost:8080";
+    // return "https://streampix.fun";
   }
 
-  
   public static getBaseFrontendURL(): string {
     return "http://localhost:5173";
+    // return "https://streampix.vercel.app";
   }
 }
 
-export const api = ApiConfig.getInstance();      // usa quando precisa de token
-export const apiPublic = ApiConfig.getPublicInstance(); // usa quando não precisa
+export const api = ApiConfig.getInstance();
+export const apiPublic = ApiConfig.getPublicInstance();

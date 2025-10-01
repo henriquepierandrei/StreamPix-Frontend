@@ -4,7 +4,7 @@ import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
 import type { CreateGoalPayload, UpdateGoalPayload } from "../../api/GoalApi";
 import { useGoalApi } from "../../api/GoalApi";
-import '../../pages/style/dashboard.css'
+import '../../styles/dashboard.css'
 import NavBarDashboard from "../../components/navbar/NavBarDashboard";
 
 

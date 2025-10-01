@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, UserX, XIcon } from 'lucide-react';
-import streamerLogo from "../../assets/image.png";
 import logo from "../../assets/logo.png";
 import logoDark from '../../assets/logo-dark.png';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createDonationRequest, sendDonation, getStreamerData } from '../../api/DonationRequest';
-import '../style/style.css';
+import '../../styles/style.css';
 import Loading from '../../components/Loading';
 import Alert from '../../components/alerts/Alert';
 import ThemeButton from '../../components/buttons/ThemeButton';
 import AudioComponent from '../../components/audio/AudioComponent';
 import { TermsPopup } from '../../components/terms/TermsPopup';
+
 
 type PaymentStatus = 'pending' | 'success' | 'failed' | 'notfound' | 'error';
 
@@ -142,7 +142,7 @@ const StreamPixDonation: React.FC = () => {
         <div className="form-card">
 
           <div className='header-card'>
-            <img src={streamerLogo} alt="QR Code Logo" width={50} style={{ borderRadius: "10px 0px 0px 10px" }} />
+            <img src={logo} alt="QR Code Logo" width={40} style={{ borderRadius: "10px 0px 0px 10px", background: "#333333", padding: "5px" }} />
             <p>{streamerName}</p>
           </div>
 

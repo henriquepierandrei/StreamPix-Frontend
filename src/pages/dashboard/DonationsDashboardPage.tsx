@@ -1,7 +1,8 @@
 import { CalendarArrowDown, Clapperboard, DollarSign, Filter, MessageSquareMore, Settings, SquarePlayIcon } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import Cookies from 'js-cookie'
 import { ApiConfig } from "../../api/ApiConfig";
-import { getStreamerData } from "../../api/GetStreamerData"; // ajuste o path se necessário
+import { getStreamerData } from "../../api/GetStreamerData";
 import { Clock, UserStarIcon } from 'lucide-react'
 import PlayButtonAudio from '../../components/buttons/PlayButtonAudio'
 import ReplayButtonDonation from '../../components/buttons/ReplayButtonDonation'
@@ -49,8 +50,6 @@ function DonationsPage() {
     }
   });
 
-
-
   const updateField = (field: keyof StreamerData, value: any) => {
     setStreamerData(prev => ({
       ...prev,
@@ -62,7 +61,7 @@ function DonationsPage() {
     setIsLoading(true);
     try {
       const api = ApiConfig.getInstance();
-      const payload = data ?? streamerData; // se passar algo, usa, senão usa o atual
+      const payload = data ?? streamerData;
       const response = await api.put(`/streamer`, payload);
 
       setStreamerData(prev => ({
@@ -83,25 +82,15 @@ function DonationsPage() {
     }
   };
 
-
   const handleToggleAutoPlay = (checked: boolean) => {
-    updateField("is_auto_play", checked); // atualiza state
-    handleSave({ ...streamerData, is_auto_play: checked }); // já envia o valor novo
+    updateField("is_auto_play", checked);
+    handleSave({ ...streamerData, is_auto_play: checked });
   };
 
-
-
-
-  const getAuthHeaders = () => {
-    const token = localStorage.getItem("token");
-    return { Authorization: `Bearer ${token}` };
-  };
-
-  const fetchDonates = async (token?: string) => {
+  const fetchDonates = async () => {
     try {
       setIsLoading(true);
       const api = ApiConfig.getInstance();
-      const authHeaders = token ? { Authorization: `Bearer ${token}` } : getAuthHeaders();
 
       const params = new URLSearchParams({
         page: "0",
@@ -114,9 +103,8 @@ function DonationsPage() {
       if (startDate) params.append("startDate", startDate);
       if (endDate) params.append("endDate", endDate);
 
-      const response = await api.get(`/streamer/log/donations?${params.toString()}`, {
-        headers: authHeaders, // corrigido
-      });
+      // O interceptor do ApiConfig já adiciona o Authorization header automaticamente
+      const response = await api.get(`/streamer/log/donations?${params.toString()}`);
       setDonates(response.data.content);
     } catch (err) {
       console.error("Erro ao buscar donates:", err);
@@ -127,9 +115,9 @@ function DonationsPage() {
 
   useEffect(() => {
     const initialize = async () => {
-      const token = localStorage.getItem("token");
-      console.log("DonationsPage:" + localStorage.getItem('token')); // deve mostrar o token
-      if (token == null) {
+      const token = Cookies.get("token");
+      console.log("DonationsPage token:", token); // deve mostrar o token
+      if (!token) {
         navigate("/streamer/dashboard/login");
         return;
       }
@@ -138,14 +126,13 @@ function DonationsPage() {
         setIsLoading(true);
 
         // Busca dados do streamer
-        const data = await getStreamerData(); // não precisa passar token
+        const data = await getStreamerData();
         setStreamerData(data);
 
         // Busca donates
-        await fetchDonates(); // fetchDonates já pega token do localStorage
+        await fetchDonates();
       } catch (err: any) {
         console.error("Erro ao inicializar página:", err.message || err);
-        // localStorage.removeItem("token");
         navigate("/streamer/dashboard/login");
       } finally {
         setIsLoading(false);
@@ -155,8 +142,6 @@ function DonationsPage() {
     initialize();
   }, [navigate]);
 
-
-
   const clearDonates = () => {
     setDonates([]);
     setMinAmount(undefined);
@@ -164,7 +149,6 @@ function DonationsPage() {
     setStartDate(undefined);
     setEndDate(undefined);
   };
-
 
 
   return (
@@ -280,7 +264,7 @@ function DonationsPage() {
 
               {donations.map((donate) => (
                 <div key={donate.uuid} className="donateItem">
-                  
+
                   <p className='balance-donation'>
                     R${donate.amount}
                   </p>
@@ -297,7 +281,7 @@ function DonationsPage() {
                     fontSize: '12px', display: 'flex', alignItems: 'center', justifyContent: "space-between", width: "100%",
                     padding: "0px"
                   }}>
-                    <div style={{width: "max-content"}}><p style={{fontSize: "0.75rem", display: "flex", alignItems: "center", gap: "5px"}}> <Clock size={10} /> Data: {new Date(donate.donated_at).toLocaleString()}</p></div>
+                    <div style={{ width: "max-content" }}><p style={{ fontSize: "0.75rem", display: "flex", alignItems: "center", gap: "5px" }}> <Clock size={10} /> Data: {new Date(donate.donated_at).toLocaleString()}</p></div>
                     <div className='audio-container'>
                       <ReplayButtonDonation uuid={donate.uuid} />
                       {donate.audio_url && (<PlayButtonAudio src={donate.audio_url} />)}

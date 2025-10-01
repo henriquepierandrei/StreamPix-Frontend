@@ -5,7 +5,7 @@ import { getStreamerData } from "../../api/GetStreamerData";
 import NavBarDashboard from '../../components/navbar/NavBarDashboard';
 import { useNavigate } from "react-router-dom";
 
-import '../style/messageStyle.css';
+import '../../styles/messageStyle.css';
 
 function MessagesPage() {
     const navigate = useNavigate();

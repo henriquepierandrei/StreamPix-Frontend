@@ -1,4 +1,5 @@
 import { ApiConfig } from "./ApiConfig";
+import Cookies from "js-cookie";
 
 // Tipos para metas
 export interface GoalPayload {
@@ -25,37 +26,34 @@ export interface UpdateGoalPayload {
 export const useGoalApi = () => {
   const api = ApiConfig.getInstance();
 
-  const getAuthHeaders = () => {
-    const token = localStorage.getItem("token");
-    if (!token) throw new Error("Usuário não autenticado (token ausente).");
-    return { Authorization: `Bearer ${token}` };
+  const checkAuth = () => {
+    const token = Cookies.get("token");
+    if (!token) {
+      throw new Error("Usuário não autenticado (token ausente).");
+    }
   };
 
   const getGoal = async (): Promise<GoalPayload> => {
-    const response = await api.get(`/streamer/goal`, {
-      headers: getAuthHeaders(),
-    });
+    checkAuth();
+    const response = await api.get(`/streamer/goal`);
     return response.data;
   };
 
   const createGoal = async (payload: CreateGoalPayload): Promise<GoalPayload> => {
-    const response = await api.post(`/streamer/goal`, payload, {
-      headers: getAuthHeaders(),
-    });
+    checkAuth();
+    const response = await api.post(`/streamer/goal`, payload);
     return response.data;
   };
 
   const updateGoal = async (payload: UpdateGoalPayload): Promise<GoalPayload> => {
-    const response = await api.put(`/streamer/goal`, payload, {
-      headers: getAuthHeaders(),
-    });
+    checkAuth();
+    const response = await api.put(`/streamer/goal`, payload);
     return response.data;
   };
 
   const deleteGoal = async (): Promise<any> => {
-    const response = await api.delete(`/streamer/goal`, {
-      headers: getAuthHeaders(),
-    });
+    checkAuth();
+    const response = await api.delete(`/streamer/goal`);
     return response.data;
   };
 

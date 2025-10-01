@@ -38,7 +38,7 @@ body.dark .navbar {
   position: fixed;
   top: 0;
   width: 100%;
-  background: var( rgba(255, 255, 255, 0.425));
+  background: linear-gradient(to bottom, rgb(242, 252, 255), rgba(249, 249, 255, 0.514));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -47,8 +47,8 @@ body.dark .navbar {
 }
 
 body.dark .navbar-home-root {
-  background: var(--navbar-bg-dark, rgba(12, 13, 14, 0.85));
-  border-color: #474747;
+  background: linear-gradient(to bottom, rgb(0, 0, 0), rgba(11, 11, 14, 0.507));
+  border-color: #313131;
 
 }
 
