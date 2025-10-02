@@ -1,5 +1,4 @@
 import { ApiConfig } from "./ApiConfig";
-import Cookies from "js-cookie";
 
 // Tipos para metas
 export interface GoalPayload {
@@ -26,35 +25,44 @@ export interface UpdateGoalPayload {
 export const useGoalApi = () => {
   const api = ApiConfig.getInstance();
 
-  const checkAuth = () => {
-    const token = Cookies.get("token");
-    if (!token) {
-      throw new Error("Usuário não autenticado (token ausente).");
+  const getGoal = async (): Promise<GoalPayload> => {
+    try {
+      const response = await api.get<GoalPayload>(`/streamer/goal`);
+      return response.data;
+    } catch (error: any) {
+      console.error("Erro ao buscar meta:", error);
+      throw error;
     }
   };
 
-  const getGoal = async (): Promise<GoalPayload> => {
-    checkAuth();
-    const response = await api.get(`/streamer/goal`);
-    return response.data;
-  };
-
   const createGoal = async (payload: CreateGoalPayload): Promise<GoalPayload> => {
-    checkAuth();
-    const response = await api.post(`/streamer/goal`, payload);
-    return response.data;
+    try {
+      const response = await api.post<GoalPayload>(`/streamer/goal`, payload);
+      return response.data;
+    } catch (error: any) {
+      console.error("Erro ao criar meta:", error);
+      throw error;
+    }
   };
 
   const updateGoal = async (payload: UpdateGoalPayload): Promise<GoalPayload> => {
-    checkAuth();
-    const response = await api.put(`/streamer/goal`, payload);
-    return response.data;
+    try {
+      const response = await api.put<GoalPayload>(`/streamer/goal`, payload);
+      return response.data;
+    } catch (error: any) {
+      console.error("Erro ao atualizar meta:", error);
+      throw error;
+    }
   };
 
   const deleteGoal = async (): Promise<any> => {
-    checkAuth();
-    const response = await api.delete(`/streamer/goal`);
-    return response.data;
+    try {
+      const response = await api.delete(`/streamer/goal`);
+      return response.data;
+    } catch (error: any) {
+      console.error("Erro ao deletar meta:", error);
+      throw error;
+    }
   };
 
   return { getGoal, createGoal, updateGoal, deleteGoal };

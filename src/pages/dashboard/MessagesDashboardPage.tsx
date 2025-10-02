@@ -15,7 +15,7 @@ function MessagesPage() {
     const [copied, setCopied] = useState(false);
 
     interface StreamerData {
-        id: number;
+        id: string;
         streamer_name: string;
         streamer_balance: number;
         is_auto_play: boolean;
@@ -32,7 +32,7 @@ function MessagesPage() {
     }
 
     const [streamerData, setStreamerData] = useState<StreamerData>({
-        id: 0,
+        id: "Carregando...",
         streamer_name: "Carregando...",
         streamer_balance: 0,
         is_auto_play: false,
@@ -70,11 +70,12 @@ function MessagesPage() {
         setIsLoading(true);
         try {
             const api = ApiConfig.getInstance();
-            const response = await api.put(`/streamer`, streamerData);
+            const response = await api.put<StreamerData>(`/streamer`, streamerData);
             setStreamerData(prev => ({
                 ...prev,
                 http_response: response.data.http_response
             }));
+
         } catch (err) {
             console.error("Erro ao salvar streamer:", err);
             setStreamerData(prev => ({

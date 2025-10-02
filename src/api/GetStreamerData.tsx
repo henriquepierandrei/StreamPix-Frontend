@@ -1,22 +1,24 @@
 import { ApiConfig } from "./ApiConfig";
-import Cookies from "js-cookie";
 
-export const getStreamerData = async () => {
-  try {
-    const api = ApiConfig.getInstance();
-    const token = Cookies.get("token");
+export interface StreamerData {
+  id: string; // <--- adicione isso
+  nickname: string;
+  streamer_balance: number;
+  is_auto_play: boolean;
+  min_amount: number;
+  max_characters_name: number;
+  max_characters_message: number;
+  qr_code_is_dark_theme: boolean;
+  add_messages_bellow: boolean;
+  donate_is_dark_theme: boolean;
+  http_response: {
+    status: string;
+    message: string;
+  };
+}
 
-    if (!token) {
-      throw new Error("Usuário não autenticado (token ausente).");
-    }
-
-    // O interceptor do ApiConfig já adiciona o Bearer automaticamente
-    // Não precisa passar o header manualmente
-    const response = await api.get("/streamer");
-
-    return response.data;
-  } catch (error) {
-    console.error("Erro ao buscar dados do streamer:", error);
-    throw error;
-  }
-};
+export async function getStreamerData(): Promise<StreamerData> {
+  const api = ApiConfig.getInstance();
+  const response = await api.get<StreamerData>("/streamer");
+  return response.data;
+}

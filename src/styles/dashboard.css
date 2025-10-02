@@ -9,6 +9,13 @@ body.dark {
 }
 
 
+.email-p {
+  color: red;
+  font-weight: 600;
+  word-break: break-word; /* melhor para quebrar texto longo */
+  white-space: normal;    /* garante que vai quebrar */
+  max-width: 100%;
+}
 
 
 /* Container geral */
@@ -737,6 +744,12 @@ body.dark input {
 
 body.dark .icon-style {
   color: #dfe2e6
+}
+
+.eye-icon-email-style{
+  color: #3a3c46;
+}body.dark .eye-icon-email-style{
+  color: #f1f3ff;
 }
 
 

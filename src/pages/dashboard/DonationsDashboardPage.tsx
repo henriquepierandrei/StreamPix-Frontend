@@ -1,11 +1,11 @@
-import { CalendarArrowDown, Clapperboard, DollarSign, Filter, MessageSquareMore, Settings, SquarePlayIcon } from 'lucide-react'
-import { useState, useEffect } from 'react'
-import Cookies from 'js-cookie'
+import { CalendarArrowDown, Clapperboard, DollarSign, Filter, MessageSquareMore, Settings, SquarePlayIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
-import { Clock, UserStarIcon } from 'lucide-react'
-import PlayButtonAudio from '../../components/buttons/PlayButtonAudio'
-import ReplayButtonDonation from '../../components/buttons/ReplayButtonDonation'
+import { Clock, UserStarIcon } from 'lucide-react';
+import PlayButtonAudio from '../../components/buttons/PlayButtonAudio';
+import ReplayButtonDonation from '../../components/buttons/ReplayButtonDonation';
 import NavBarDashboard from '../../components/navbar/NavBarDashboard';
 import { useNavigate } from "react-router-dom";
 
@@ -25,9 +25,26 @@ interface StreamerData {
   };
 }
 
+interface DonationResponse {
+  uuid: string;
+  name: string;
+  amount: number;
+  message: string;
+  donated_at: string;
+  audio_url?: string;
+}
+
+interface PaginatedDonations {
+  content: DonationResponse[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+}
+
 function DonationsPage() {
   const navigate = useNavigate();
-  const [donates, setDonates] = useState<any[]>([]);
+  const [donates, setDonates] = useState<DonationResponse[]>([]);
   const [minAmount, setMinAmount] = useState<number | undefined>();
   const [maxAmount, setMaxAmount] = useState<number | undefined>();
   const [startDate, setStartDate] = useState<string | undefined>();
@@ -62,8 +79,8 @@ function DonationsPage() {
     try {
       const api = ApiConfig.getInstance();
       const payload = data ?? streamerData;
-      const response = await api.put(`/streamer`, payload);
 
+      const response = await api.put<StreamerData>(`/streamer`, payload);
       setStreamerData(prev => ({
         ...prev,
         http_response: response.data.http_response
@@ -73,7 +90,7 @@ function DonationsPage() {
       setStreamerData(prev => ({
         ...prev,
         http_response: {
-          status: "ERROR",
+          status: "CONFLICT",
           message: "Falha ao salvar alterações."
         }
       }));
@@ -103,8 +120,7 @@ function DonationsPage() {
       if (startDate) params.append("startDate", startDate);
       if (endDate) params.append("endDate", endDate);
 
-      // O interceptor do ApiConfig já adiciona o Authorization header automaticamente
-      const response = await api.get(`/streamer/log/donations?${params.toString()}`);
+      const response = await api.get<PaginatedDonations>(`/streamer/log/donations?${params.toString()}`);
       setDonates(response.data.content);
     } catch (err) {
       console.error("Erro ao buscar donates:", err);
@@ -116,7 +132,6 @@ function DonationsPage() {
   useEffect(() => {
     const initialize = async () => {
       const token = Cookies.get("token");
-      console.log("DonationsPage token:", token); // deve mostrar o token
       if (!token) {
         navigate("/streamer/dashboard/login");
         return;
@@ -124,12 +139,8 @@ function DonationsPage() {
 
       try {
         setIsLoading(true);
-
-        // Busca dados do streamer
         const data = await getStreamerData();
         setStreamerData(data);
-
-        // Busca donates
         await fetchDonates();
       } catch (err: any) {
         console.error("Erro ao inicializar página:", err.message || err);

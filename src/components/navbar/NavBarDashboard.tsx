@@ -92,12 +92,17 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
   }, []);
 
   const handleLogout = () => {
-    Cookies.remove("token");
-    Cookies.remove("refreshToken");
-    Cookies.remove("tokenExpireAt");
-    Cookies.remove("refreshTokenExpireAt");
-    window.location.reload();
+    let cookieOptions = { secure: true, sameSite: "Strict" as const, path: "/" };
+
+    Cookies.remove("token", cookieOptions);
+    Cookies.remove("refreshToken", cookieOptions);
+    Cookies.remove("tokenExpireAt", cookieOptions);
+    Cookies.remove("refreshTokenExpireAt", cookieOptions);
+
+    window.location.href = "/streamer/dashboard/login";
   };
+  
+  
 
   const handleNavigation = (path: string, label?: string) => {
     navigate(path);

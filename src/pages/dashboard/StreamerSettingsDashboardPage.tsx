@@ -71,7 +71,7 @@ function StreamerSettings() {
       setStreamerData(prev => ({
         ...prev,
         http_response: {
-          status: "ERROR",
+          status: "CONFLICT",
           message: "Falha ao salvar alterações."
         }
       }));

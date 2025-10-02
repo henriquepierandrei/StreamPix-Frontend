@@ -1,4 +1,4 @@
-import { QrCode, Settings, Wallet, Users, TrendingUp, Shield, Zap } from 'lucide-react';
+import { QrCode, Settings, Wallet, Users, TrendingUp, Shield, Zap, HandCoins } from 'lucide-react';
 import NavbarHome from '../../components/navbar/NavbarHome'
 import { useNavigate } from 'react-router-dom';
 import MessagePerson from './Typing-rafiki.svg'
@@ -74,6 +74,11 @@ function HomePage() {
             <TrendingUp className="feature-icon" />
             <h3>Crescimento Acelerado</h3>
             <p>Aumente sua receita e expanda seu alcance rapidamente</p>
+          </div>
+          <div className="feature-card">
+            <HandCoins className="feature-icon" />
+            <h3>Menor Taxa</h3>
+            <p>Saque com a menor taxa possível.</p>
           </div>
           <div className="feature-card">
             <Shield className="feature-icon" />

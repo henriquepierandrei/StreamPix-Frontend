@@ -148,13 +148,13 @@ function AccountSettings() {
             <label>Email</label>
             <div className="balance-display">
               <p
-                className="balance"
-                style={{ filter: emailBlurred ? "blur(8px)" : "none", transition: "filter 0.3s ease", fontSize: "1.3rem" }}
+                className="email-p"
+                style={{ filter: emailBlurred ? "blur(8px)" : "none", transition: "filter 0.3s ease" }}
               >
                 {streamerData.email} {/* Se tiver email real, substitua aqui */}
               </p>
               <div onClick={blurEmail} style={{ cursor: "pointer" }}>
-                {emailBlurred ? <EyeClosed size={32} /> : <Eye size={32} />}
+                {emailBlurred ? <EyeClosed size={32} className="eye-icon-email-style"/> : <Eye size={32} className="eye-icon-email-style"/>}
               </div>
             </div>
           </div>
@@ -166,6 +166,7 @@ function AccountSettings() {
               value={streamerData.info_streamer.full_name}
               className="input"
               onChange={(e) => updateInfoStreamerField("full_name", e.target.value)}
+              disabled
             />
           </div>
 
@@ -176,6 +177,7 @@ function AccountSettings() {
               value={streamerData.info_streamer.cpf}
               className="input"
               onChange={(e) => updateInfoStreamerField("cpf", e.target.value)}
+              disabled
             />
           </div>
 
@@ -221,7 +223,7 @@ function AccountSettings() {
                 R$ {streamerData.info_streamer.total_amount_received.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
               </p>
               <div onClick={blurTotalReceived} style={{ cursor: "pointer" }}>
-                {totalReceivedBlurred ? <EyeClosed size={22} /> : <Eye size={22} />}
+                {totalReceivedBlurred ? <EyeClosed size={22} className="eye-icon-email-style"/> : <Eye size={22} className="eye-icon-email-style"/>}
               </div>
             </div>
           </div>
@@ -241,7 +243,7 @@ function AccountSettings() {
                 {streamerData.info_streamer.total_donations_received.toLocaleString("pt-BR")} doações
               </p>
               <div onClick={blurTotalDonations} style={{ cursor: "pointer" }}>
-                {totalDonationsBlurred ? <EyeClosed size={22} /> : <Eye size={22} />}
+                {totalDonationsBlurred ? <EyeClosed size={22} className="eye-icon-email-style"/> : <Eye size={22} className="eye-icon-email-style"/>}
               </div>
             </div>
             <div className="horizontal-line"></div><br />

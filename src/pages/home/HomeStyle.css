@@ -604,11 +604,12 @@ body.dark .how-work-card p {
 /* Info Card Section */
 .card-info-home {
     padding: 100px 20px;
-    background: linear-gradient(to bottom, rgb(255, 255, 255), rgb(243, 243, 243));
+    background: linear-gradient(to bottom, #ffffff, rgb(255, 247, 247));
+
 }
 
 body.dark .card-info-home {
-    background: linear-gradient(to bottom, rgb(15, 17, 18), rgb(21, 23, 24));
+    background: linear-gradient(to bottom, #25252B, rgb(21, 23, 24));
 }
 
 .info-card-content {
@@ -625,10 +626,14 @@ body.dark .card-info-home {
     max-width: 500px;
     width: 100%;
     height: auto;
-    min-width: 300px;
+    
+    border: 1px solid rgb(197, 197, 197);
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    padding: 10px;
     transition: transform 0.3s ease;
+}body.dark .card-info-home img{
+    border-color: rgb(58, 58, 58);
 }
 
 .card-info-home img:hover {
@@ -766,13 +771,18 @@ body.dark .feature-icon {
 .feature-card h3 {
     font-size: 1.4rem;
     margin-bottom: 15px;
-    background-image: url('https://res.cloudinary.com/dvadwwvub/image/upload/v1759321086/wallpaper-4k_on1hrh.png');
+    background: linear-gradient(to right, rgb(54, 60, 77), rgb(29, 39, 44));
     background-size: cover;
     background-position: center;
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
     font-weight: 700;
+}body.dark .feature-card h3{
+    background: linear-gradient(to right, rgb(249, 251, 255), rgb(187, 215, 230));
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
 }
 
 .feature-card p {
@@ -1179,6 +1189,7 @@ body.dark .button-primary-large:nth-child(2):hover {
         padding: 18px 35px;
         font-size: 1.1rem;
     }
+
 }
 
 @media (max-width: 480px) {

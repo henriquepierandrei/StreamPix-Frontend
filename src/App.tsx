@@ -9,7 +9,7 @@ import StreamerSettings from './pages/dashboard/StreamerSettingsDashboardPage.ts
 import QrCodeSettings from './pages/dashboard/QrSettingsDashboardPage.tsx';
 import MessagesPage from './pages/dashboard/MessagesDashboardPage.tsx';
 import DashboardLogin from './pages/dashboard/auth/DashboardLogin';
-import PrivateRoute from './api/PrivateRoute';
+import PrivateRoute from './routes/PrivateRoute.tsx';
 import { GoalComponentToShow } from './components/goal/GoalComponentToShow'
 import HomePage from './pages/home/HomePage';
 import { MessageComponentToShow } from "./components/message/MessageComponentToShow";
@@ -17,13 +17,15 @@ import DashboardRegister from './pages/dashboard/auth/DashboardRegister';
 import EmailVerification from './pages/dashboard/auth/DashboardVerifyEmail.tsx';
 import AccountPage from './pages/dashboard/AccountDashboardPage.tsx';
 
+import { AuthProvider } from './routes/AuthContext.tsx';
 
 
 
 
 function App() {
   return (
-    <Router>
+    <AuthProvider>
+      <Router>
       <Routes>
         {/* ROTAS ESPECÍFICAS - DEVEM VIR PRIMEIRO */}
 
@@ -115,6 +117,7 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }
 
