@@ -461,7 +461,8 @@ body.dark .arc-shape-invert {
 }
 
 body.dark .how-work-container {
-    background: linear-gradient(to bottom, rgb(21, 23, 24), rgb(38, 38, 44));
+    background: linear-gradient(to top, #18181a, rgb(13, 13, 14));
+
 }
 
 .title-how-work {
@@ -609,7 +610,7 @@ body.dark .how-work-card p {
 }
 
 body.dark .card-info-home {
-    background: linear-gradient(to bottom, #25252B, rgb(21, 23, 24));
+    background: linear-gradient(to bottom, #18181a, rgb(13, 13, 14));
 }
 
 .info-card-content {

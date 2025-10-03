@@ -189,16 +189,15 @@ export class ApiConfig {
     tokenExpireAt: string, 
     refreshTokenExpireAt: string
   ) {
-    console.log("=== SALVANDO TOKENS ===");
-    console.log("Token:", token?.substring(0, 20) + "...");
-    console.log("tokenExpireAt:", tokenExpireAt);
-    console.log("refreshTokenExpireAt:", refreshTokenExpireAt);
+    // console.log("=== SALVANDO TOKENS ===");
+    // console.log("Token:", token?.substring(0, 20) + "...");
+    // console.log("tokenExpireAt:", tokenExpireAt);
+    // console.log("refreshTokenExpireAt:", refreshTokenExpireAt);
 
     const tokenExpires = new Date(Number(tokenExpireAt));
     const refreshExpires = new Date(Number(refreshTokenExpireAt));
 
-    console.log("Token expira em:", tokenExpires);
-    console.log("Refresh expira em:", refreshExpires);
+  
 
     const cookieOptions = {
       secure: window.location.protocol === 'https:',
@@ -212,8 +211,8 @@ export class ApiConfig {
     Cookies.set("refreshTokenExpireAt", refreshTokenExpireAt, { ...cookieOptions, expires: refreshExpires });
 
     // Verifica se salvou
-    console.log("Token salvo?", Cookies.get("token") ? "SIM" : "NÃO");
-    console.log("RefreshToken salvo?", Cookies.get("refreshToken") ? "SIM" : "NÃO");
+    // console.log("Token salvo?", Cookies.get("token") ? "SIM" : "NÃO");
+    // console.log("RefreshToken salvo?", Cookies.get("refreshToken") ? "SIM" : "NÃO");
   }
 
   public static getBaseBackendURL(): string {

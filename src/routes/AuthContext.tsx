@@ -5,12 +5,16 @@ import { ApiConfig } from '../api/ApiConfig';
 interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
+  setAuthenticated: (value: boolean) => void; // <-- adiciona isso
 }
+
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   isLoading: true,
+  setAuthenticated: () => { }, // <-- stub vazio
 });
+
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -29,12 +33,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (refreshToken) {
         try {
-          const newToken = await ApiConfig.refreshToken(); // usa a função do ApiConfig
-          if (newToken) {
-            setIsAuthenticated(true);
-          } else {
-            setIsAuthenticated(false);
-          }
+          const newToken = await ApiConfig.refreshToken();
+          if (newToken) setIsAuthenticated(true);
+          else setIsAuthenticated(false);
         } catch {
           setIsAuthenticated(false);
         } finally {
@@ -51,9 +52,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        isLoading,
+        setAuthenticated: setIsAuthenticated, // mapeia para o nome correto do useState
+      }}
+    >
       {children}
     </AuthContext.Provider>
+
   );
 };
 

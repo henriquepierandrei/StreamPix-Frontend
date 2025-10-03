@@ -10,7 +10,7 @@ import NavBarDashboard from '../../components/navbar/NavBarDashboard';
 import { useNavigate } from "react-router-dom";
 
 interface StreamerData {
-  streamer_name: string;
+  nickname: string;
   streamer_balance: number;
   is_auto_play: boolean;
   min_amount: number;
@@ -52,7 +52,7 @@ function DonationsPage() {
   const [, setIsLoading] = useState<boolean>(false);
   const [active, setActive] = useState("Doações");
   const [streamerData, setStreamerData] = useState<StreamerData>({
-    streamer_name: "Carregando...",
+    nickname: "Carregando...",
     streamer_balance: 0,
     is_auto_play: false,
     min_amount: 0,
@@ -131,12 +131,6 @@ function DonationsPage() {
 
   useEffect(() => {
     const initialize = async () => {
-      const token = Cookies.get("token");
-      if (!token) {
-        navigate("/streamer/dashboard/login");
-        return;
-      }
-
       try {
         setIsLoading(true);
         const data = await getStreamerData();
