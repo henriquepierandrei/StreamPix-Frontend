@@ -155,7 +155,7 @@ function HomePage() {
             </div>
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-3xl blur-3xl"></div>
-              <div className="relative bg-white dark:bg-zinc-950 p-0 rounded-3xl shadow-3xl">
+              <div className="relative bg-white dark:bg-zinc-900 p-0 rounded-3xl shadow-3xl border dark:border-zinc-800">
                 <div className="aspect-square flex items-center justify-center">
                   <img src="https://res.cloudinary.com/dvadwwvub/image/upload/v1759514467/banner-user-donate_ljjxvh.png" alt="Exemplo de mensagem monetizada na tela" className="rounded-3xl" />
                 </div>

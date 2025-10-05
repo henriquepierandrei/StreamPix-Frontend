@@ -4,11 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import type { Frame, IMessage } from "@stomp/stompjs";
 import { ApiConfig } from "../../api/ApiConfig";
-// Importações de CSS customizado removidas
-import logo from "./logo.png";
-import logoDark from "./../../assets/logo-dark.png"
 import { useParams } from "react-router-dom";
-
+import { DollarSign } from 'lucide-react';
 
 export interface Donation {
     id: string; // chave única
@@ -30,11 +27,10 @@ export const MessageComponentToShow: React.FC = () => {
     const stompClient = useRef<Client | null>(null);
     const toastQueueRef = useRef<Donation[]>([]);
 
-    // URL do som padrão (mantido)
     const DEFAULT_SOUND = "https://res.cloudinary.com/dvadwwvub/video/upload/v1757880720/new-notification-021-370045_fogkxi.mp3";
     const MAX_QUEUE_SIZE = 10;
-
-    // ────────────── QUEUE LOGIC ──────────────
+    const ANIMATION_DURATION = 500;
+    const VISIBLE_DURATION = 5000;
 
     const queueToast = (donation: Donation) => {
         console.log(donation);
@@ -65,13 +61,10 @@ export const MessageComponentToShow: React.FC = () => {
         await playAudio(notificationUrl);
         if (messageUrl) await playAudio(messageUrl);
     };
-
-    // ────────────── PROCESS QUEUE ──────────────
-
+    
+    // Processamento da Fila de Toasts
     useEffect(() => {
         let active = true;
-        const ANIMATION_DURATION = 500; // Tempo em ms para a animação de saída (deve coincidir com a classe `duration-500`)
-        const VISIBLE_DURATION = 5000; // Tempo em ms que o toast fica visível
 
         const runQueue = async () => {
             while (active) {
@@ -84,32 +77,33 @@ export const MessageComponentToShow: React.FC = () => {
                 toastQueueRef.current = toastQueueRef.current.slice(1);
                 setToastQueue([...toastQueueRef.current]);
 
-                // 1. Adiciona toast com estado inicial (invisível e fora da tela)
+                // 1. Adiciona o Toast (Estado inicial: fora da tela)
                 setToasts(prev => [...prev, { ...next, entering: false, exiting: false }]);
 
-                // 2. Força a animação de entrada (transition-transform/opacity) após um pequeno delay
+                // 2. Inicia a animação de entrada
                 setTimeout(() => {
                     setToasts(prev =>
                         prev.map(t =>
                             t.id === next.id ? { ...t, entering: true } : t
                         )
                     );
-                }, 10);
+                }, 10); // Pequeno delay para garantir a transição inicial
 
+                // 3. Toca o áudio
                 await playNotificationAndMessage(DEFAULT_SOUND, next.playSoundUrl);
-
-                // 3. Espera o tempo visível
+                
+                // 4. Espera a duração de visibilidade
                 await new Promise(res => setTimeout(res, VISIBLE_DURATION));
 
-                // 4. Inicia animação de saída (define exiting: true)
+                // 5. Inicia a animação de saída
                 setToasts(prev =>
                     prev.map(t => t.id === next.id ? { ...t, exiting: true } : t)
                 );
 
-                // 5. Espera a animação de saída terminar
+                // 6. Espera a animação de saída terminar
                 await new Promise(res => setTimeout(res, ANIMATION_DURATION));
 
-                // 6. Remove o toast
+                // 7. Remove o toast da lista
                 setToasts(prev => prev.filter(t => t.id !== next.id));
             }
         };
@@ -119,8 +113,7 @@ export const MessageComponentToShow: React.FC = () => {
         return () => { active = false; };
     }, []);
 
-    // ────────────── WEBSOCKET ──────────────
-
+    // Conexão STOMP
     useEffect(() => {
         let mounted = true;
 
@@ -143,12 +136,11 @@ export const MessageComponentToShow: React.FC = () => {
                         const { payload, audioUrl, donateIsDarkTheme, qrCodeIsDarkTheme } = donationData;
                         if (!payload) return;
 
-                        // Tratamento para garantir que amount seja um número (se vier como string de novo)
                         const amountValue = parseFloat(String(payload.amount).replace(',', '.')) || 0;
 
 
                         queueToast({
-                            id: payload.transactionId || crypto.randomUUID(), // chave única
+                            id: payload.transactionId || crypto.randomUUID(),
                             name: payload.name || "Anônimo",
                             amount: amountValue,
                             message: payload.message || "",
@@ -175,75 +167,100 @@ export const MessageComponentToShow: React.FC = () => {
             if (stompClient.current?.active) stompClient.current.deactivate();
             if (currentAudio.current) currentAudio.current.pause();
         };
-    }, [id]); // Adicione 'id' como dependência
+    }, [id]);
 
-    // ────────────── COMPONENT JSX com Tailwind ──────────────
-
+    
+    // -------------------------------------------------------------
+    // JSX MELHORADO: Design de Card de Alerta com Destaque
+    // -------------------------------------------------------------
     return (
-        // Container principal: define a área de exibição (canto inferior direito, por exemplo)
-        // Você pode ajustar as classes 'fixed', 'bottom-4', 'right-4' conforme o posicionamento desejado no OBS
-        <div 
-            id="toasts" 
+        <div
+            id="toasts"
+            // Mantém a posição inferior direita, com espaçamento maior entre cards
             className="fixed bottom-4 right-4 z-50 flex flex-col items-end space-y-3 p-4 pointer-events-none"
         >
             {toasts.map(donation => {
                 const isDark = donation.donateIsDarkTheme;
                 
-                // Estilos de transição: aplicados sempre
+                // --- ESTILOS DO CARD ---
+                
+                // Estilos de base: Card com largura FIXA (w-96 = 384px)
                 const baseClasses = `
-                    w-80 max-w-sm p-4 rounded-xl shadow-2xl flex items-start gap-4 
-                    transition-all duration-500 ease-in-out transform pointer-events-auto
+                    flex flex-col rounded-xl shadow-2xl w-96 
+                    transition-all duration-500 ease-out transform pointer-events-auto
+                    overflow-hidden
                 `;
                 
-                // Estilos de tema: dinâmicos
+                // Estilos de tema: Foco no contraste e profundidade
                 const themeClasses = isDark
-                    ? 'bg-gray-900 text-white border border-gray-700' // Tema Escuro
-                    : 'bg-white text-gray-900 border border-gray-100'; // Tema Claro
+                    ? 'bg-gray-900/90 text-white border border-purple-600/50 shadow-purple-900/70'
+                    : 'bg-white/95 text-gray-900 border border-gray-300 shadow-xl';
 
-                // Estilos de estado de animação
+                // Estilos de animação: Entrada/Saída Vertical
                 let animationClasses = '';
-                
                 if (donation.exiting) {
-                    // Estado de saída: move para a direita (fora da tela) e diminui opacidade
-                    animationClasses = 'opacity-0 translate-x-full';
+                    // Saída: Move para baixo e some
+                    animationClasses = 'opacity-0 translate-y-full scale-95'; 
                 } else if (donation.entering) {
-                    // Estado de entrada: posição final (dentro da tela)
-                    animationClasses = 'opacity-100 translate-x-0';
+                    // Entrada: Posição final (visível)
+                    animationClasses = 'opacity-100 translate-y-0 scale-100';
                 } else {
-                    // Estado inicial: fora da tela e invisível (preparando para a transição)
-                    animationClasses = 'opacity-0 translate-x-full';
+                    // Estado inicial (fora de vista)
+                    animationClasses = 'opacity-0 translate-y-full scale-95'; 
                 }
+                
+                // --- CONTEÚDO ---
+                const messagePresent = donation.message && donation.message.trim().length > 0;
 
                 return (
                     <div
                         key={donation.id}
                         className={`${baseClasses} ${themeClasses} ${animationClasses}`}
                     >
-                        {/* Logo */}
-                        <img
-                            // Use classes Tailwind para o fundo da imagem
-                            className={`w-10 h-10 rounded-full flex-shrink-0 p-1 ${isDark ? 'bg-white' : 'bg-black'}`}
-                            src={isDark ? logoDark : logo}
-                            alt="logo"
-                        />
-
-                        {/* Conteúdo */}
-                        <div className="flex flex-col">
-                            <div className="text-sm font-semibold leading-tight">
-                                {/* Nome e Valor */}
-                                <span className="font-bold text-lg text-purple-500">{donation.name}</span> enviou{" "}
-                                <strong className="text-xl">R$ {donation.amount.toFixed(2).replace('.', ',')}</strong>
+                        {/* 1. HEADER / BARRA DE DESTAQUE (Foco no Valor) */}
+                        <div 
+                            className={`
+                                flex items-center justify-between p-3 
+                                ${isDark ? 'bg-purple-700/80' : 'bg-green-600/90'}
+                                text-white font-bold
+                            `}
+                        >
+                            {/* Ícone e Nome do Doador */}
+                            <div className="flex items-center space-x-2">
+                                <DollarSign className="w-5 h-5 flex-shrink-0" />
+                                <span className="text-sm font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px]">
+                                    {donation.name} doou:
+                                </span>
                             </div>
                             
-                            {/* Mensagem */}
-                            {donation.message && (
-                                <div className="mt-1 text-sm italic opacity-80 break-words">
-                                    "{donation.message.length > 60 // Aumentei o limite para 60 para melhor legibilidade no toast
-                                        ? donation.message.substring(0, 60) + "..."
-                                        : donation.message}"
-                                </div>
-                            )}
+                            {/* Valor - MÁXIMO DE DESTAQUE */}
+                            <strong 
+                                className="text-2xl font-black whitespace-nowrap tracking-tight"
+                            >
+                                R$ {donation.amount.toFixed(2).replace('.', ',')}
+                            </strong>
                         </div>
+
+                        {/* 2. CORPO DA MENSAGEM (Opcional) */}
+                        {messagePresent && (
+                            <div className="p-3 pt-2">
+                                {/* Citação visualmente distinta */}
+                                <blockquote 
+                                    className={`
+                                        text-sm italic border-l-4 pl-3 py-1 
+                                        ${isDark ? 'border-purple-400 text-gray-200' : 'border-green-600 text-gray-700'}
+                                        max-h-24 overflow-hidden
+                                    `}
+                                >
+                                    {donation.message}
+                                </blockquote>
+                            </div>
+                        )}
+                        
+                        {/* 3. FOOTER SUTIL (Se não houver mensagem, adiciona um pequeno padding) */}
+                        {!messagePresent && (
+                            <div className="p-1"></div>
+                        )}
                     </div>
                 );
             })}

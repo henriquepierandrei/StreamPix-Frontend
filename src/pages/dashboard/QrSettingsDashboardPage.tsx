@@ -267,11 +267,11 @@ function QrCodePage() { // Renomeei para QrCodePage, já que AnalyticsPage não 
                                 <tbody>
                                     <tr className="border-b border-gray-100 dark:border-gray-700/50">
                                         <td className="py-2.5 font-medium text-gray-900 dark:text-white">Width</td>
-                                        <td className="py-2.5 font-mono text-sm">250px</td>
+                                        <td className="py-2.5 font-mono text-sm">320px</td>
                                     </tr>
                                     <tr className="border-b border-gray-100 dark:border-gray-700/50">
                                         <td className="py-2.5 font-medium text-gray-900 dark:text-white">Height</td>
-                                        <td className="py-2.5 font-mono text-sm">250px</td>
+                                        <td className="py-2.5 font-mono text-sm">320px</td>
                                     </tr>
                                     <tr className="border-b border-gray-100 dark:border-gray-700/50">
                                         <td className="py-2.5 font-medium text-gray-900 dark:text-white">FPS</td>

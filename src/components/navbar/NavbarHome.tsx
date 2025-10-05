@@ -109,7 +109,7 @@ function NavbarHome() {
           <div className="fixed top-16 right-4 w-72 bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-200 dark:border-zinc-800 z-40 lg:hidden overflow-hidden">
             <div className="p-4 space-y-1">
               {/* Estes links continuam sendo âncoras para rolagem, não navegação */}
-              {["Recursos", "Preços", "Suporte"].map((item) => (
+              {["Contato", "Linkedin"].map((item) => (
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
