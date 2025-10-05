@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Save, Replace, Trash, Goal, GoalIcon, Copy, AlertCircle, View } from "lucide-react";
+import { Save, Replace, Trash, Goal, GoalIcon, Copy, AlertCircle, View, Loader2 } from "lucide-react";
 import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
 import type { CreateGoalPayload, UpdateGoalPayload } from "../../api/GoalApi";
 import { useGoalApi } from "../../api/GoalApi";
-import '../../styles/dashboard.css'
+// import '../../styles/dashboard.css' // REMOVA ESTA LINHA
 import NavBarDashboard from "../../components/navbar/NavBarDashboard";
 
 
+// [Interfaces permanecem as mesmas]
 interface GoalData {
   uuid?: string;
   balance_to_achieve: number;
@@ -15,10 +16,9 @@ interface GoalData {
   reason: string;
   end_at_in_days: number;
 }
-
 interface StreamerData {
   id: string;
-  streamer_name: string;
+  nickname: string;
   streamer_balance: number;
   is_auto_play: boolean;
   min_amount: number;
@@ -33,7 +33,9 @@ interface StreamerData {
   };
 }
 
+
 const GoalComponent: React.FC = () => {
+  // [Lógica e Hooks permanecem inalterados]
   const { getGoal, createGoal, updateGoal, deleteGoal } = useGoalApi();
   const [goal, setGoal] = useState<GoalData | null>(null);
   const [createGoalData, setCreateGoalData] = useState<GoalData>({
@@ -47,11 +49,9 @@ const GoalComponent: React.FC = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [active, setActive] = useState("Metas");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
-
   const [streamerData, setStreamerData] = useState<StreamerData>({
     id: "Carregando...",
-    streamer_name: "Carregando...",
+    nickname: "Carregando...",
     streamer_balance: 0,
     is_auto_play: false,
     min_amount: 0,
@@ -66,7 +66,10 @@ const GoalComponent: React.FC = () => {
     }
   });
 
-  // Buscar dados do streamer
+  // ... (useEffect e Handlers permanecem inalterados) ...
+  // [Seus useEffects e Handlers (handleCreate, handleUpdate, etc.) devem ser mantidos]
+
+  // ... (Seus handlers de lógica ficam aqui) ...
   useEffect(() => {
     (async () => {
       try {
@@ -81,7 +84,6 @@ const GoalComponent: React.FC = () => {
     })();
   }, []);
 
-  // Buscar meta existente
   useEffect(() => {
     (async () => {
       try {
@@ -193,7 +195,7 @@ const GoalComponent: React.FC = () => {
 
   const handleCopyURL = async () => {
     try {
-      await navigator.clipboard.writeText(ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/goal/to-show?id=" + streamerData.id);
+      await navigator.clipboard.writeText(ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/goal/to-show?streamerId=" + streamerData.id);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -202,202 +204,299 @@ const GoalComponent: React.FC = () => {
     }
   };
 
+
+  const formatCurrency = (value: number | undefined) => {
+    return (value ?? 0).toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  };
+
+  const progress = Math.min(((goal?.current_balance ?? 0) / (goal?.balance_to_achieve || 1)) * 100, 100);
+
+
   return (
-    <div className="dashboardContainer" style={{ display: "flex", gap: "10px" }}>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 lg:pl-64">
       <NavBarDashboard activeItem={active} onSelect={setActive} />
-      <div className="gridContainer" style={{ width: "100%" }}>
-        <div className="gridContainer" style={{ width: "100%" }}>
 
-          {/* Criar / Atualizar Meta */}
-          <div className="card">
-            <div className="cardTitle">
-              <GoalIcon size={20} color="#667eea" />
-              <p>{updateGoalData ? "Atualizar Meta" : "Criar Meta"}</p>
-            </div>
-            <br />
-            <div className="formGroup">
-              <label>Valor para alcançar</label>
-              <input
-                type="number"
-                placeholder="Valor a alcançar"
-                min="0.01"
-                step="0.01"
-                value={updateGoalData?.balance_to_achieve ?? createGoalData.balance_to_achieve}
-                onChange={(e) => handleChange("balance_to_achieve", Number(e.target.value), updateGoalData ? "update" : "create")}
-              />
-            </div>
-            <div className="formGroup">
-              <label>Motivo para alcançar</label>
-              <input
-                type="text"
-                placeholder="Ex: Novo setup, viagem, etc."
-                value={updateGoalData?.reason ?? createGoalData.reason}
-                onChange={(e) => handleChange("reason", e.target.value, updateGoalData ? "update" : "create")}
-              />
-            </div>
-            <div className="formGroup">
-              <label>Dias de duração</label>
-              <input
-                type="number"
-                placeholder="Dias"
-                min="1"
-                value={updateGoalData?.end_at_in_days ?? createGoalData.end_at_in_days}
-                onChange={(e) => handleChange("end_at_in_days", Number(e.target.value), updateGoalData ? "update" : "create")}
-              />
+      <main className="p-4 sm:p-6 lg:p-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <Goal size={32} className="text-blue-500" />
+            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">
+              Gerenciar Metas
+            </h1>
+          </div>
+          <p className="text-gray-600 dark:text-gray-400">
+            Crie e visualize suas metas de arrecadação para motivar seus espectadores.
+          </p>
+        </div>
+
+        {/* Grid de Conteúdo */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+          {/* COLUNA 1: Criar / Atualizar Meta */}
+          <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 md:p-8 h-fit">
+
+            {/* Título do Card */}
+            <div className="flex items-center gap-3 border-b pb-4 mb-6 border-gray-100 dark:border-gray-700">
+              <GoalIcon size={24} className="text-blue-500" />
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                {updateGoalData ? "Atualizar Meta" : "Criar Nova Meta"}
+              </h2>
             </div>
 
-            <div style={{ display: "flex", gap: 10, flexDirection: "column" }}>
+            {/* Formulário */}
+            <div className="space-y-6">
+              {/* Valor para alcançar */}
+              <div className="formGroup">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Valor para alcançar (R$)</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">R$</span>
+                  <input
+                    type="number"
+                    placeholder="Valor a alcançar"
+                    min="0.01"
+                    step="0.01"
+                    value={updateGoalData?.balance_to_achieve ?? createGoalData.balance_to_achieve}
+                    onChange={(e) => handleChange("balance_to_achieve", Number(e.target.value), updateGoalData ? "update" : "create")}
+                    className="w-full pl-9 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
+                  />
+                </div>
+              </div>
+
+              {/* Motivo para alcançar */}
+              <div className="formGroup">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Motivo para alcançar</label>
+                <input
+                  type="text"
+                  placeholder="Ex: Novo setup, viagem, etc."
+                  value={updateGoalData?.reason ?? createGoalData.reason}
+                  onChange={(e) => handleChange("reason", e.target.value, updateGoalData ? "update" : "create")}
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
+                />
+              </div>
+
+              {/* Dias de duração */}
+              <div className="formGroup">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Dias de duração</label>
+                <input
+                  type="number"
+                  placeholder="Dias"
+                  min="1"
+                  value={updateGoalData?.end_at_in_days ?? createGoalData.end_at_in_days}
+                  onChange={(e) => handleChange("end_at_in_days", Number(e.target.value), updateGoalData ? "update" : "create")}
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
+                />
+              </div>
+            </div>
+
+            {/* Botões de Ação */}
+            <div className="mt-8">
               {!updateGoalData ? (
                 <button
-                  className="saveButton"
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:scale-[1.01] disabled:transform-none"
                   onClick={handleCreate}
                   disabled={isLoading}
                 >
-                  <Save size={20} /> {isLoading ? "Criando..." : "Criar Meta"}
+                  {isLoading ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
+                  {isLoading ? "Criando..." : "Criar Meta"}
                 </button>
               ) : (
                 <button
-                  className="updateButton"
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-semibold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:scale-[1.01] disabled:transform-none"
                   onClick={handleUpdate}
                   disabled={isLoading}
                 >
-                  <Replace size={20} /> {isLoading ? "Atualizando..." : "Atualizar Meta"}
+                  {isLoading ? <Loader2 size={20} className="animate-spin" /> : <Replace size={20} />}
+                  {isLoading ? "Atualizando..." : "Atualizar Meta"}
                 </button>
               )}
             </div>
 
+            {/* Observação */}
             {updateGoalData && (
-              <p style={{ color: "#b1aeae", fontSize: "0.8rem", display: "flex", gap: 5, alignItems: "center", marginTop: 10 }}>
-                <AlertCircle size={12} /> Você pode atualizar somente o motivo e o dia de duração.
+              <p className="text-gray-500 dark:text-gray-400 text-xs flex items-center gap-1 mt-4">
+                <AlertCircle size={12} className="flex-shrink-0" /> Você pode atualizar somente o motivo e o dia de duração.
               </p>
             )}
           </div>
 
-          {/* Visualização da Meta */}
-          <div className="card">
-            <div className="cardTitle">
-              <Goal size={20} color="#667eea" />
-              <p>Visualização da Meta</p>
-            </div>
-            <br />
+          {/* COLUNA 2: Visualização da Meta, URL e Especificações OBS */}
+          <div className="space-y-8">
 
-            {goal ? (
-              <>
-                <div className="formGroup">
-                  <div className="progress-bar-goal">
-                    <p>{goal.reason || "Meta sem descrição"}</p>
-                    <div className="bar-goal"
-                      style={{
-                        width: `${Math.min(((goal.current_balance ?? 0) / (goal.balance_to_achieve || 1)) * 100, 100)}%`,
-                      }}
-                    />
-                    <p>
-                      R$ {goal.current_balance ?? 0} / R$ {goal.balance_to_achieve ?? 0}
+            {/* Card: Visualização da Meta */}
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 md:p-8">
+              <div className="flex items-center gap-3 border-b pb-4 mb-6 border-gray-100 dark:border-gray-700">
+                <Goal size={24} className="text-blue-500" />
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Acompanhamento da Meta
+                </h2>
+              </div>
+
+              {goal ? (
+                <>
+                  {/* Barra de Progresso Moderna */}
+                  <div className="mb-6 space-y-2">
+                    <p className="text-lg font-semibold text-gray-900 dark:text-white">{goal.reason || "Meta sem descrição"}</p>
+
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                      <div
+                        className="bg-blue-500 h-3 rounded-full transition-all duration-500 ease-out"
+                        style={{ width: `${progress}%` }}
+                      />
+                    </div>
+
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 pt-1">
+                      **{formatCurrency(goal.current_balance)}** / **{formatCurrency(goal.balance_to_achieve)}** (R$)
                     </p>
                   </div>
-                </div>
 
-                <div style={{ display: "flex", gap: 10, flexDirection: "column", marginTop: 10 }}>
-                  <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                    <input
-                      type="text"
-                      value={ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/goal/to-show?id=" + streamerData.id}
-                      readOnly
-                      className="input"
-                      style={{ flex: 1 }}
-                    />
-                    <button className="iconButton" style={{ width: 40, height: 40 }} onClick={handleCopyURL}>
-                      <Copy size={20} />
+                  {/* URL e Botões de Ação */}
+                  <div className="flex flex-col gap-4">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">URL para Browser Source (OBS/Streamlabs)</label>
+
+                    <div className="flex gap-2">
+                      {/* Campo de Input (Somente Leitura) */}
+                      <div className="relative flex-grow">
+                        <input
+                          type="text"
+                          value={ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/goal/to-show?streamerId=" + streamerData.id}
+                          readOnly
+                          className="w-full px-4 py-3 pr-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-sm text-gray-900 dark:text-white truncate focus:outline-none"
+                        />
+                      </div>
+
+                      {/* NOVO BOTÃO 1: VISUALIZAR (Olho) */}
+                      <a
+                        href={ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/goal/to-show?streamerId=" + streamerData.id}
+                        target="_blank" // ABRIR EM NOVA ABA
+                        rel="noopener noreferrer"
+                        className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-blue-100 dark:bg-blue-900/40 hover:bg-blue-200 dark:hover:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-xl transition duration-150"
+                        title="Visualizar Meta (Abre em nova aba)"
+                      >
+                        <View size={20} />
+                      </a>
+
+                      {/* Botão 2: COPIAR */}
+                      <button
+                        className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl transition duration-150"
+                        onClick={handleCopyURL}
+                        title="Copiar URL"
+                      >
+                        <Copy size={20} />
+                      </button>
+                    </div>
+
+                    {copied && <span className="text-green-500 text-xs mt-[-10px]">URL copiada com sucesso!</span>}
+
+                    {/* Botão Deletar */}
+                    <button
+                      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white font-semibold rounded-xl shadow-md transition duration-200 ease-in-out mt-2"
+                      onClick={handleDelete}
+                      disabled={isLoading}
+                    >
+                      <Trash size={20} /> {isLoading ? "Deletando..." : "Deletar Meta"}
                     </button>
                   </div>
-                  {copied && <span style={{ color: "#9398a1", fontSize: "0.8rem", marginTop: -5 }}>URL copiada com sucesso!</span>}
-                  {showDeleteConfirm && (
-                    <div className="delete-alert">
-                      <p>Tem certeza que deseja deletar?</p>
-                      <div className="buttons">
-                        <button className="confirm" onClick={confirmDelete}>Sim</button>
-                        <button className="cancel" onClick={cancelDelete}>Não</button>
-                      </div>
-                    </div>
-                  )}
-
-
-                  <button
-                    className="logoutButton"
-                    onClick={handleDelete}
-                    disabled={isLoading}
-                    style={{ width: "100%", marginTop: 10 }}
-                  >
-                    <Trash size={20} /> {isLoading ? "Deletando..." : "Deletar Meta"}
-                  </button>
+                </>
+              ) : (
+                <div className="text-center p-6 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                  <Goal size={48} className="mx-auto text-gray-400 mb-2" />
+                  <p className="text-gray-700 dark:text-gray-300 font-semibold">Nenhuma meta criada ainda.</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Use o painel ao lado para criar sua primeira meta.</p>
                 </div>
-              </>
-            ) : (
-              <div style={{ textAlign: "center", padding: "20px", color: "#666" }}>
-                <p>Nenhuma meta criada ainda.</p>
-                <p style={{ fontSize: "0.8rem" }}>Crie uma meta para começar a acompanhar seu progresso!</p>
-              </div>
-            )}
-
-            {alertMessage && (
-              <p style={{
-                color: alertMessage.includes("Erro") ? "red" : "green",
-                fontSize: "0.8rem",
-                marginTop: 10,
-                padding: "8px",
-                borderRadius: "4px",
-              }}
-                className="alert-message">
-                {alertMessage}
-              </p>
-            )}
-            <div className="horizontal-line"></div>
-
-
-            <div className='card'>
-              <div className='cardTitle'>
-                <View size={20} color="#667eea" />
-                <p>Especificações no OBS</p>
-              </div>
-
-              <table className='specsTable'>
-                <thead>
-                  <tr>
-                    <th>Propriedade</th>
-                    <th>Valor</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><strong>Width</strong></td>
-                    <td>720px</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Height</strong></td>
-                    <td>100px</td>
-                  </tr>
-                  <tr>
-                    <td><strong>FPS</strong></td>
-                    <td>30</td>
-                  </tr>
-                  <tr>
-                    <td><strong>CSS</strong></td>
-                    <td>Fundo transparente</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Shutdown source when not visible</strong></td>
-                    <td>❎</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Refresh browser when scene becomes active</strong></td>
-                    <td>❎</td>
-                  </tr>
-                </tbody>
-              </table>
+              )}
             </div>
+
+            {/* Card: Confirmação de Exclusão (Modal/Alerta) */}
+            {showDeleteConfirm && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 w-full max-w-sm">
+                  <p className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tem certeza que deseja deletar?</p>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6">Esta ação é irreversível.</p>
+                  <div className="flex justify-end gap-3">
+                    <button
+                      className="px-4 py-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                      onClick={cancelDelete}
+                    >
+                      Não
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition"
+                      onClick={confirmDelete}
+                    >
+                      Sim, Deletar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Card: Especificações no OBS */}
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 md:p-8">
+              <div className="flex items-center gap-3 border-b pb-4 mb-6 border-gray-100 dark:border-gray-700">
+                <View size={24} className="text-blue-500" />
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Especificações de Fonte no OBS/Streamlabs
+                </h2>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-gray-600 dark:text-gray-400">
+                  <thead>
+                    <tr className="border-b border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-800 dark:text-gray-300">
+                      <th className="py-2 pr-4">Propriedade</th>
+                      <th className="py-2">Valor Recomendado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
+                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">Width</td>
+                      <td className="py-2.5 font-mono text-sm">520px</td>
+                    </tr>
+                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
+                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">Height</td>
+                      <td className="py-2.5 font-mono text-sm">60px</td>
+                    </tr>
+                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
+                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">FPS</td>
+                      <td className="py-2.5 font-mono text-sm">30</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">CSS Personalizado</td>
+                      <td className="py-2.5">Fundo transparente</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">Shutdown source when not visible</td>
+                      <td className="py-2.5 text-red-500 font-semibold">Desmarcado (❎)</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">Refresh browser when scene becomes active</td>
+                      <td className="py-2.5 text-red-500 font-semibold">Desmarcado (❎)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
           </div>
         </div>
-      </div>
+
+        {/* Mensagem de Alerta (Global) */}
+        {alertMessage && (
+          <div className={`fixed bottom-4 right-4 p-4 rounded-xl shadow-2xl transition-opacity duration-300 z-50 ${alertMessage.includes("sucesso")
+              ? 'bg-green-500 text-white'
+              : 'bg-red-500 text-white'
+            }`}>
+            <p className="flex items-center gap-2 text-sm font-semibold">
+              {alertMessage.includes("sucesso") ? <Save size={16} /> : <AlertCircle size={16} />}
+              {alertMessage}
+            </p>
+          </div>
+        )}
+      </main>
     </div>
   );
 };

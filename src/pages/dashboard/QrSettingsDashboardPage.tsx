@@ -1,44 +1,80 @@
 import { useEffect, useState } from 'react'
-import { QrCode, Copy, Save, RefreshCcw, View } from 'lucide-react'
+import { QrCode, Copy, Save, RefreshCcw, View, Loader2, AlertCircle } from 'lucide-react'
 import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
 import NavBarDashboard from '../../components/navbar/NavBarDashboard';
 
-function AnalyticsPage() {
+// Interface padronizada (mantida)
+interface StreamerData {
+    nickname: string;
+    streamer_balance: number;
+    is_auto_play: boolean;
+    min_amount: number;
+    max_characters_name: number;
+    max_characters_message: number;
+    qr_code_is_dark_theme: boolean;
+    add_messages_bellow: boolean;
+    donate_is_dark_theme: boolean;
+    http_response: {
+        status: string;
+        message: string;
+    };
+}
+
+// Estado inicial padronizado
+const initialStreamerData: StreamerData = {
+    nickname: "Carregando...",
+    streamer_balance: 0,
+    is_auto_play: false,
+    min_amount: 0,
+    max_characters_name: 0,
+    max_characters_message: 0,
+    qr_code_is_dark_theme: false,
+    add_messages_bellow: false,
+    donate_is_dark_theme: false,
+    http_response: {
+        status: "WAIT",
+        message: "Carregando dados..."
+    }
+};
+
+function QrCodePage() { // Renomeei para QrCodePage, já que AnalyticsPage não faz sentido aqui
     const [active, setActive] = useState("QrCode");
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isSaving, setIsSaving] = useState<boolean>(false); // Novo estado para diferenciar loading de saving
+    const [copied, setCopied] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
 
-    interface StreamerData {
-        nickname: string;
-        streamer_balance: number;
-        is_auto_play: boolean;
-        min_amount: number;
-        max_characters_name: number;
-        max_characters_message: number;
-        qr_code_is_dark_theme: boolean;
-        add_messages_bellow: boolean;
-        donate_is_dark_theme: boolean;
-        http_response: {
-            status: string;
-            message: string;
-        };
-    }
+    const [streamerData, setStreamerData] = useState<StreamerData>(initialStreamerData);
 
-    const [streamerData, setStreamerData] = useState<StreamerData>({
-        nickname: "Carregando...",
-        streamer_balance: 0,
-        is_auto_play: false,
-        min_amount: 0,
-        max_characters_name: 0,
-        max_characters_message: 0,
-        qr_code_is_dark_theme: false,
-        add_messages_bellow: false,
-        donate_is_dark_theme: false,
-        http_response: {
-            status: "WAIT",
-            message: "Carregando dados..."
+    // Efeito para carregar dados
+    useEffect(() => {
+        (async () => {
+            try {
+                setIsLoading(true);
+                const data = await getStreamerData();
+                setStreamerData(data as StreamerData);
+            } catch (err) {
+                console.error("Erro ao buscar streamer:", err);
+                setAlertMessage("Erro ao carregar dados. Tente recarregar a página.");
+            } finally {
+                setIsLoading(false);
+            }
+        })();
+    }, []);
+
+    // Efeito para exibir mensagens de sucesso/erro da API
+    useEffect(() => {
+        if (streamerData.http_response.status === "SUCCESS") {
+            setAlertMessage("Configurações salvas com sucesso! 🎉");
+            const timer = setTimeout(() => setAlertMessage(""), 3000);
+            return () => clearTimeout(timer);
+        } else if (streamerData.http_response.status === "CONFLICT" || streamerData.http_response.status === "ERROR") {
+            setAlertMessage(`Erro: ${streamerData.http_response.message || "Falha ao salvar."} 🚨`);
+            const timer = setTimeout(() => setAlertMessage(""), 5000);
+            return () => clearTimeout(timer);
         }
-    });
+    }, [streamerData.http_response]);
 
     const updateField = (field: keyof StreamerData, value: any) => {
         setStreamerData(prev => ({
@@ -48,15 +84,15 @@ function AnalyticsPage() {
     };
 
     const handleSave = async () => {
-        setIsLoading(true);
+        setIsSaving(true);
         try {
             const api = ApiConfig.getInstance();
-            // tipagem explícita da resposta
             const response = await api.put<{ http_response: { status: string; message: string } }>(
                 `/streamer`,
                 streamerData
             );
 
+            // Atualiza apenas a resposta, mantendo os dados de configuração localmente
             setStreamerData(prev => ({
                 ...prev,
                 http_response: response.data.http_response
@@ -67,164 +103,214 @@ function AnalyticsPage() {
             setStreamerData(prev => ({
                 ...prev,
                 http_response: {
-                    status: "CONFLICT",
-                    message: "Falha ao salvar alterações."
+                    status: "ERROR",
+                    message: "Falha na comunicação com o servidor."
                 }
             }));
         } finally {
-            setIsLoading(false);
+            setIsSaving(false);
         }
     };
 
-    useEffect(() => {
-        (async () => {
-            try {
-                setIsLoading(true);
-                const data = await getStreamerData();
-                // garante que o TS saiba que `data` é StreamerData
-                setStreamerData(data as StreamerData);
-            } catch (err) {
-                console.error("Erro ao buscar streamer:", err);
-            } finally {
-                setIsLoading(false);
-            }
-        })();
-    }, []);
+    const handleCopyURL = async () => {
+        try {
+            const url = ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/" + streamerData.nickname;
+            await navigator.clipboard.writeText(url);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Failed to copy:', err);
+        }
+    };
+
+    const qrcodeUrl = ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/" + streamerData.nickname;
 
     return (
-        <div className="dashboardContainer" style={{ display: "flex", gap: "10px" }}>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 lg:pl-64">
             <NavBarDashboard activeItem={active} onSelect={setActive} />
-            <div className='gridContainer' style={{ width: "100%" }}>
-                <div className='card'>
-                    <div className="cardTitle">
-                        <QrCode size={20} color="#667eea" />
-                        <p>URL QrCode {streamerData.nickname}</p>
-                    </div><br />
-                    <div className="formGroup">
-                        <div className='custom-checkbox-label'>
-                            <input
-                                type="checkbox"
-                                checked={streamerData.qr_code_is_dark_theme}
-                                onChange={(e) => updateField('qr_code_is_dark_theme', e.target.checked)}
-                            />
-                            <p>Tema Escuro</p>
-                        </div>
-                        <div className='custom-checkbox-label'>
-                            <input
-                                type="checkbox"
-                                checked={streamerData.add_messages_bellow}
-                                onChange={(e) => updateField('add_messages_bellow', e.target.checked)}
-                            />
-                            <p>Mensagens de Incentivo</p>
-                        </div>
-                    </div>
 
-                    <div style={{ display: 'flex', gap: '10px', flexDirection: 'column', marginTop: '10px' }}>
-                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                            <input
-                                type="text"
-                                value={ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/" + streamerData.nickname}
-                                readOnly
-                                className="input"
-                                style={{ flex: 1 }}
-                            />
+            <main className="p-4 sm:p-6 lg:p-8">
+                {/* Título Principal */}
+                <div className="mb-8">
+                    <div className="flex items-center gap-3 mb-2">
+                        <QrCode size={32} className="text-purple-600" />
+                        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">
+                            Configurações de QR Code
+                        </h1>
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-400">
+                        Gerencie a aparência e o link do seu QR Code para doações.
+                    </p>
+                </div>
+
+                {/* Grid Principal */}
+                <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
+                    
+                    {/* COLUNA 1: Configurações e Preview do QR Code */}
+                    <div className='bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 md:p-8 space-y-8'>
+                        
+                        {/* Header do Card */}
+                        <div className="flex items-center gap-3 border-b pb-4 mb-2 border-gray-100 dark:border-gray-700">
+                            <QrCode size={24} className="text-purple-600" />
+                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                                Opções de Aparência
+                            </h2>
+                        </div>
+                        
+                        {/* Opções de Checkbox */}
+                        <div className='space-y-4'>
+                            {/* Checkbox: Tema Escuro */}
+                            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600">
+                                <label htmlFor="darkTheme" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                    Tema Escuro para o QR Code
+                                </label>
+                                <input
+                                    id="darkTheme"
+                                    type="checkbox"
+                                    checked={streamerData.qr_code_is_dark_theme}
+                                    onChange={(e) => updateField('qr_code_is_dark_theme', e.target.checked)}
+                                    className="h-5 w-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500 dark:bg-gray-800 dark:border-gray-600 dark:checked:bg-purple-600"
+                                />
+                            </div>
+
+                            {/* Checkbox: Mensagens de Incentivo */}
+                            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600">
+                                <label htmlFor="addMessagesBellow" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                    Exibir mensagens de incentivo
+                                </label>
+                                <input
+                                    id="addMessagesBellow"
+                                    type="checkbox"
+                                    checked={streamerData.add_messages_bellow}
+                                    onChange={(e) => updateField('add_messages_bellow', e.target.checked)}
+                                    className="h-5 w-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500 dark:bg-gray-800 dark:border-gray-600 dark:checked:bg-purple-600"
+                                />
+                            </div>
+                        </div>
+
+                        {/* URL e Botão de Cópia */}
+                        <div className='pt-4'>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">URL do QR Code</label>
+                            <div className='flex gap-2'>
+                                <input
+                                    type="text"
+                                    value={qrcodeUrl}
+                                    readOnly
+                                    className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-sm text-gray-900 dark:text-white truncate focus:outline-none"
+                                />
+                                <button
+                                    className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl transition duration-150"
+                                    onClick={handleCopyURL}
+                                    title="Copiar URL"
+                                >
+                                    <Copy size={20} />
+                                </button>
+                            </div>
+                            {copied && (
+                                <span className="text-green-500 text-xs mt-1 block">
+                                    URL copiada com sucesso!
+                                </span>
+                            )}
+                        </div>
+
+                        {/* Botão Salvar */}
+                        <div className="pt-4">
                             <button
-                                className="iconButton"
-                                style={{ width: '40px', height: '40px', background: 'transparent', color: "#636363ff" }}
-                                onClick={async () => {
-                                    try {
-                                        await navigator.clipboard.writeText(ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/" + streamerData.nickname);
-                                        const feedback = document.getElementById('copyFeedback');
-                                        if (feedback) {
-                                            feedback.style.opacity = '1';
-                                            setTimeout(() => {
-                                                feedback.style.opacity = '0';
-                                            }, 2000);
-                                        }
-                                    } catch (err) {
-                                        console.error('Failed to copy:', err);
-                                    }
-                                }}
+                                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-semibold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:scale-[1.01] disabled:transform-none"
+                                onClick={handleSave}
+                                disabled={isSaving || isLoading}
                             >
-                                <Copy size={20} />
+                                {isSaving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
+                                {isSaving ? "Salvando..." : "Salvar Configurações"}
                             </button>
                         </div>
-                        <span
-                            id="copyFeedback"
-                            style={{
-                                color: '#9398a1ff',
-                                fontSize: '0.8rem',
-                                opacity: 0,
-                                transition: 'opacity 0.3s',
-                                marginTop: '-5px'
-                            }}
-                        >
-                            URL copiada com sucesso!
-                        </span>
-                    </div>
-                    <button
-                        className="saveButton"
-                        onClick={handleSave}
-                        disabled={isLoading}
-                        style={{
-                            opacity: isLoading ? 0.7 : 1,
-                            cursor: isLoading ? 'not-allowed' : 'pointer'
-                        }}
-                    >
-                        <Save size={20} />
-                        {isLoading ? 'Salvando...' : 'Salvar Alterações'}
-                    </button><br />
-                    <br />
-                    <button className='reload-page-button'><RefreshCcw size={18} onClick={() => window.location.reload()} /></button>
-                    <iframe src={ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/" + streamerData.nickname} className='iframe-qrcode' ></iframe>
-                </div>
 
-                <div className='card'>
-                    <div className='card'>
-                        <div className='cardTitle'>
-                            <View size={20} color="#667eea" />
-                            <p>Especificações no OBS</p>
+                        {/* Preview do QR Code (Iframe) */}
+                        <div className='pt-4 flex flex-col items-center border-t border-gray-100 dark:border-gray-700'>
+                            <div className='flex items-center justify-between w-full mb-3'>
+                                <h3 className='text-lg font-semibold text-gray-900 dark:text-white'>Preview</h3>
+                                <button 
+                                    className='p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition' 
+                                    onClick={() => window.location.reload()}
+                                    title="Recarregar Preview"
+                                >
+                                    <RefreshCcw size={18} />
+                                </button>
+                            </div>
+                            <div className='w-full max-w-sm h-72 border border-gray-300 dark:border-gray-600 rounded-xl overflow-hidden shadow-lg'>
+                                <iframe 
+                                    src={qrcodeUrl} 
+                                    title="QR Code Preview"
+                                    className='w-full h-full border-none'
+                                ></iframe>
+                            </div>
                         </div>
+                    </div>
 
-                        <table className='specsTable'>
-                            <thead>
-                                <tr>
-                                    <th>Propriedade</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Width</strong></td>
-                                    <td>350px</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Height</strong></td>
-                                    <td>350px</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>FPS</strong></td>
-                                    <td>60</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>CSS</strong></td>
-                                    <td>Fundo transparente</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Shutdown source when not visible</strong></td>
-                                    <td>✅</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Refresh browser when scene becomes active</strong></td>
-                                    <td>✅</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    {/* COLUNA 2: Especificações OBS */}
+                    <div className='bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 md:p-8 h-fit'>
+                        <div className="flex items-center gap-3 border-b pb-4 mb-6 border-gray-100 dark:border-gray-700">
+                            <View size={24} className="text-purple-600" />
+                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                                Especificações de Fonte no OBS/Streamlabs
+                            </h2>
+                        </div>
+                        
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-gray-600 dark:text-gray-400 border-collapse">
+                                <thead>
+                                    <tr className="border-b border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-800 dark:text-gray-300">
+                                        <th className="py-2 pr-4">Propriedade</th>
+                                        <th className="py-2">Valor Recomendado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
+                                        <td className="py-2.5 font-medium text-gray-900 dark:text-white">Width</td>
+                                        <td className="py-2.5 font-mono text-sm">250px</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
+                                        <td className="py-2.5 font-medium text-gray-900 dark:text-white">Height</td>
+                                        <td className="py-2.5 font-mono text-sm">250px</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
+                                        <td className="py-2.5 font-medium text-gray-900 dark:text-white">FPS</td>
+                                        <td className="py-2.5 font-mono text-sm">60</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
+                                        <td className="py-2.5 font-medium text-gray-900 dark:text-white">CSS Personalizado</td>
+                                        <td className="py-2.5">Fundo transparente</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
+                                        <td className="py-2.5 font-medium text-gray-900 dark:text-white">Shutdown source when not visible</td>
+                                        <td className="py-2.5 text-green-500 font-semibold">Marcado (✅)</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-2.5 font-medium text-gray-900 dark:text-white">Refresh browser when scene becomes active</td>
+                                        <td className="py-2.5 text-green-500 font-semibold">Marcado (✅)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                {/* Mensagem de Alerta (Global) */}
+                {alertMessage && (
+                    <div className={`fixed bottom-4 right-4 p-4 rounded-xl shadow-2xl transition-opacity duration-300 z-50 ${
+                        alertMessage.includes("sucesso") 
+                            ? 'bg-green-500 text-white' 
+                            : 'bg-red-500 text-white'
+                    }`}>
+                        <p className="flex items-center gap-2 text-sm font-semibold">
+                            {alertMessage.includes("sucesso") ? <Save size={16} /> : <AlertCircle size={16} />}
+                            {alertMessage}
+                        </p>
+                    </div>
+                )}
+            </main>
         </div >
     )
 }
 
-export default AnalyticsPage
+export default QrCodePage;

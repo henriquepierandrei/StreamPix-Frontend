@@ -1,6 +1,5 @@
 import { CheckCircle } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import './SuccessAlertStyle.css';
 
 interface SuccessAlertProps {
     success?: {

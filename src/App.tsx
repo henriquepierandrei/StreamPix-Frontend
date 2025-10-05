@@ -18,6 +18,7 @@ import EmailVerification from './pages/dashboard/auth/DashboardVerifyEmail.tsx';
 import AccountPage from './pages/dashboard/AccountDashboardPage.tsx';
 
 import { AuthProvider } from './routes/AuthContext.tsx';
+import { ThemeProvider } from './hooks/ThemeContextType.tsx';
 
 
 
@@ -25,98 +26,100 @@ import { AuthProvider } from './routes/AuthContext.tsx';
 function App() {
   return (
     <AuthProvider>
-      <Router>
-      <Routes>
-        {/* ROTAS ESPECÍFICAS - DEVEM VIR PRIMEIRO */}
+      <ThemeProvider>
+        <Router>
+          <Routes>
+            {/* ROTAS ESPECÍFICAS - DEVEM VIR PRIMEIRO */}
 
-        {/* Página raiz */}
-        <Route path="/" element={<HomePage />} />
+            {/* Página raiz */}
+            <Route path="/" element={<HomePage />} />
 
-        {/* Rotas de pagamento e transações */}
-        <Route path="/donation/:transactionId" element={<PaymentQrCode />} />
+            {/* Rotas de pagamento e transações */}
+            <Route path="/donation/:transactionId" element={<PaymentQrCode />} />
 
-        {/* Rotas do streamer - QR Code */}
-        <Route path="/streamer/qrcode/:nickname" element={<StreamerQrPage />} />
+            {/* Rotas do streamer - QR Code */}
+            <Route path="/streamer/qrcode/:nickname" element={<StreamerQrPage />} />
 
 
 
-        {/* Rota de login do dashboard */}
-        <Route path="/streamer/dashboard/login" element={<DashboardLogin />} />
+            {/* Rota de login do dashboard */}
+            <Route path="/streamer/dashboard/login" element={<DashboardLogin />} />
 
-        {/* Rota de Registro do dashboard */}
-        <Route path="/streamer/dashboard/register" element={<DashboardRegister />} />
+            {/* Rota de Registro do dashboard */}
+            <Route path="/streamer/dashboard/register" element={<DashboardRegister />} />
 
-        {/* Rota de Validação do código do dashboard */}
-        <Route path="/email-auth/validate-email" element={<EmailVerification />} />
+            {/* Rota de Validação do código do dashboard */}
+            <Route path="/email-auth/validate-email" element={<EmailVerification />} />
 
-        {/* Rota do componente de meta para exibição */}
-        <Route path="/streamer/dashboard/goal/to-show" element={<GoalComponentToShow />} />
+            {/* Rota do componente de meta para exibição */}
+            <Route path="/streamer/dashboard/goal/to-show" element={<GoalComponentToShow />} />
 
-        {/* Rota do componente de mensagens para exibição */}
-        <Route path="/streamer/dashboard/messages/to-show/:id" element={<MessageComponentToShow />} />
+            {/* Rota do componente de mensagens para exibição */}
+            <Route path="/streamer/dashboard/messages/to-show/:id" element={<MessageComponentToShow />} />
 
-        {/* ROTAS PRIVADAS DO DASHBOARD */}
-        <Route
-          path="/streamer/dashboard/messages"
-          element={
-            <PrivateRoute>
-              <MessagesPage />
-            </PrivateRoute>
-          }
-        />
+            {/* ROTAS PRIVADAS DO DASHBOARD */}
+            <Route
+              path="/streamer/dashboard/messages"
+              element={
+                <PrivateRoute>
+                  <MessagesPage />
+                </PrivateRoute>
+              }
+            />
 
-        <Route
-          path="/streamer/dashboard/goals"
-          element={
-            <PrivateRoute>
-              <GoalComponent />
-            </PrivateRoute>
-          }
-        />
+            <Route
+              path="/streamer/dashboard/goals"
+              element={
+                <PrivateRoute>
+                  <GoalComponent />
+                </PrivateRoute>
+              }
+            />
 
-        <Route
-          path="/streamer/dashboard/donations"
-          element={
-            <PrivateRoute>
-              <DonationsPage />
-            </PrivateRoute>
-          }
-        />
+            <Route
+              path="/streamer/dashboard/donations"
+              element={
+                <PrivateRoute>
+                  <DonationsPage />
+                </PrivateRoute>
+              }
+            />
 
-        <Route
-          path="/streamer/dashboard/profile"
-          element={
-            <PrivateRoute>
-              <StreamerSettings />
-            </PrivateRoute>
-          }
-        />
+            <Route
+              path="/streamer/dashboard/profile"
+              element={
+                <PrivateRoute>
+                  <StreamerSettings />
+                </PrivateRoute>
+              }
+            />
 
-        <Route
-          path="/streamer/dashboard/qrcode/settings"
-          element={
-            <PrivateRoute>
-              <QrCodeSettings />
-            </PrivateRoute>
-          }
-        />
+            <Route
+              path="/streamer/dashboard/qrcode/settings"
+              element={
+                <PrivateRoute>
+                  <QrCodeSettings />
+                </PrivateRoute>
+              }
+            />
 
-        <Route
-          path="/streamer/dashboard/account"
-          element={
-            <PrivateRoute>
-              <AccountPage />
-            </PrivateRoute>
-          }
-        />
+            <Route
+              path="/streamer/dashboard/account"
+              element={
+                <PrivateRoute>
+                  <AccountPage />
+                </PrivateRoute>
+              }
+            />
 
-        {/* ROTA GENÉRICA - DEVE VIR APÓS AS ESPECÍFICAS */}
-        <Route path="/:streamerName" element={<StreamPixDonation />} />
+            {/* ROTA GENÉRICA - DEVE VIR APÓS AS ESPECÍFICAS */}
+            <Route path="/:streamerName" element={<StreamPixDonation />} />
 
-        {/* ROTA 404 - SEMPRE POR ÚLTIMO */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </Router>
+            {/* ROTA 404 - SEMPRE POR ÚLTIMO */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Router>
+      </ThemeProvider>
     </AuthProvider>
   );
 }

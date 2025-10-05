@@ -1,15 +1,32 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Lock, CreditCard, Eye, EyeOff, UserSquare } from 'lucide-react';
-import ThemeButton from '../../../components/buttons/ThemeButton';
-import logoDark from "../../../assets/logo.png"
-import { ApiConfig } from '../../../api/ApiConfig';
+import { User, Mail, Lock, CreditCard, Eye, EyeOff, UserSquare, Moon, Sun } from 'lucide-react';
+import logoDark from "../../../assets/logo.png";
+import { api, ApiConfig } from '../../../api/ApiConfig';
 import Alert from '../../../components/alerts/Alert';
+import { useTheme } from '../../../hooks/ThemeContextType';
 
+interface RegisterResponse {
+    sessionToken: string;
+    email?: string;
+    password?: string;
+    message?: string;
+}
+
+interface SessionDataResponse {
+    email?: string;
+    password?: string;
+}
+
+interface ErrorResponse {
+    message?: string;
+}
 
 function DashboardRegister() {
     const [, setSessionData] = useState<any | null>(null);
     const navigate = useNavigate();
+    const { isDarkMode, toggleTheme } = useTheme();
+    
     const [fullName, setFullName] = useState("");
     const [nickname, setNickname] = useState("");
     const [cpf, setCpf] = useState("");
@@ -19,15 +36,11 @@ function DashboardRegister() {
     const [error, setError] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-
-    // Substitua a função handleSubmit existente por esta nova implementação
-
     const handleRegister = async () => {
         setIsLoading(true);
         setError(null);
 
         try {
-            // Remover formatação do CPF para enviar apenas números
             const cleanCPF = cpf.replace(/\D/g, '');
 
             const registerData = {
@@ -38,36 +51,27 @@ function DashboardRegister() {
                 fullName: fullName.trim()
             };
 
-            const api = ApiConfig.getInstance(); // pega a instância do axios
-
-            // Com axios, você passa os dados diretamente como segundo parâmetro
-            const response = await api.post('/auth/register', registerData);
-
-            // Com axios, os dados da resposta ficam em response.data
+            const apiInstance = ApiConfig.getInstance();
+            const response = await apiInstance.post<RegisterResponse>('/auth/register', registerData);
             const data = response.data;
 
-            // Verificar se a resposta contém os campos esperados
             if (!data.sessionToken) {
                 setError("Resposta inválida do servidor. Tente novamente.");
                 return;
             }
 
-            // Salvar sessionToken no localStorage para usar na verificação
             localStorage.setItem('verificationToken', data.sessionToken);
             localStorage.setItem('userEmail', email);
 
-            // Redirecionar para página de verificação de código
             navigate('/streamer/dashboard/verify/email');
 
         } catch (err: any) {
             console.error("Erro na requisição:", err);
 
-            // Com axios, os erros de resposta ficam em err.response
             if (err.response) {
-                // Tratamento de diferentes códigos de erro
+                const errorData = err.response.data as ErrorResponse;
                 switch (err.response.status) {
                     case 400:
-                        const errorData = err.response.data;
                         setError({
                             timestamp: new Date().toISOString(),
                             status: 400,
@@ -85,35 +89,8 @@ function DashboardRegister() {
                             path: "/streamer/dashboard/register",
                         });
                         break;
-                    case 429:
-                        setError({
-                            timestamp: new Date().toISOString(),
-                            status: 400,
-                            error: "Too Many Request",
-                            message: errorData.message || "Muitas tentativas. Tente novamente mais tarde.",
-                            path: "/streamer/dashboard/register",
-                        });
-                        break;
-                    case 500:
-                        setError({
-                            timestamp: new Date().toISOString(),
-                            status: 500,
-                            error: "Too Many Request",
-                            message: errorData.message || "Erro interno do servidor. Tente novamente em alguns minutos.",
-                            path: "/streamer/dashboard/register",
-                        });
-                        break;
-                    default:
-                        setError({
-                            timestamp: new Date().toISOString(),
-                            status: 500,
-                            error: "Too Many Request",
-                            message: errorData.message || "Erro inesperado. Tente novamente.",
-                            path: "/streamer/dashboard/register",
-                        });
                 }
             } else if (err.request) {
-                // Erro de rede/conexão
                 setError("Erro de conexão. Verifique sua internet e tente novamente.");
             } else {
                 setError("Erro ao realizar cadastro. Tente novamente.");
@@ -129,18 +106,18 @@ function DashboardRegister() {
                 const sessionToken = localStorage.getItem("verificationToken");
                 if (!sessionToken) return;
 
-                const api = ApiConfig.getPublicInstance();
-                const response = await api.get("/email/auth/session-data", {
+                const response = await api.get<SessionDataResponse>("/email/auth/session-data", {
                     headers: {
                         "Session-Token": sessionToken,
                     },
                 });
 
-                setSessionData(response.data);
+                const sessionData = response.data;
+                setSessionData(sessionData);
 
-                // Se quiser preencher campos automaticamente
-                if (response.data.email) setEmail(response.data.email);
-                if (response.data.password) setPassword(response.data.password);
+                if (sessionData.email) setEmail(sessionData.email);
+                if (sessionData.password) setPassword(sessionData.password);
+
             } catch (err) {
                 console.error("Erro ao buscar session data:", err);
             }
@@ -152,7 +129,6 @@ function DashboardRegister() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validações
         if (!nickname.trim()) {
             setError({
                 timestamp: new Date().toISOString(),
@@ -161,11 +137,9 @@ function DashboardRegister() {
                 message: "Nickname é obrigatório",
                 path: "/streamer/dashboard/register",
             });
-
             return;
         }
 
-        
         if (!fullName.trim()) {
             setError({
                 timestamp: new Date().toISOString(),
@@ -174,7 +148,6 @@ function DashboardRegister() {
                 message: "Nome Completo é obrigatório",
                 path: "/streamer/dashboard/register",
             });
-
             return;
         }
 
@@ -214,8 +187,7 @@ function DashboardRegister() {
         await handleRegister();
     };
 
-
-    // Função para formatar CPF
+    
     const formatCPF = (value: string) => {
         const cleanValue = value.replace(/\D/g, '');
 
@@ -232,7 +204,6 @@ function DashboardRegister() {
             .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
     };
 
-    // Função para validar CPF
     const isValidCPF = (cpf: string) => {
         const cleanCPF = cpf.replace(/\D/g, '');
 
@@ -256,13 +227,11 @@ function DashboardRegister() {
         return parseInt(cleanCPF[9]) === digit1 && parseInt(cleanCPF[10]) === digit2;
     };
 
-    // Função para validar email
     const isValidEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     };
 
-    // Função para validar senha (mínimo 6 caracteres)
     const isValidPassword = (password: string) => {
         return password.length >= 6;
     };
@@ -272,144 +241,155 @@ function DashboardRegister() {
         setCpf(formattedCPF);
     };
 
-    const inputContainerStyle = {
-        position: "relative" as const,
-        marginBottom: "16px",
+    const getInputBorderColor = (isValid: boolean, hasValue: boolean) => {
+        if (!hasValue) return 'border-zinc-200 dark:border-zinc-700';
+        return isValid ? 'border-green-500 dark:border-green-600' : 'border-red-500 dark:border-red-600';
     };
 
     return (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh" }} className='donation-container'>
-            <ThemeButton />
-            <div className="login-container" style={{ maxWidth: "520px", width: "100%", padding: "40px 30px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.1)" }}>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 transition-colors duration-300 py-12 px-4">
+            {/* Theme Toggle Button */}
+            <button
+                onClick={toggleTheme}
+                className="fixed top-6 right-6 z-50 w-12 h-12 flex items-center justify-center rounded-xl bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"
+                aria-label="Alternar tema"
+            >
+                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+
+            {/* Alert Container */}
+            <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4">
                 {error && <Alert error={error} duration={5} onClose={() => setError(null)} />}
+            </div>
 
-                <div style={{ textAlign: "center", marginBottom: "30px" }}>
-                    <img src={logoDark} alt="" style={{ backgroundImage: "url('https://res.cloudinary.com/dvadwwvub/image/upload/v1759321086/wallpaper-4k_on1hrh.png')", padding: "15px", borderRadius: "50%" }} />
-                    <h2 style={{ margin: "0 0 10px 0", fontSize: "28px", fontWeight: "700" }}>Cadastro</h2>
-                    <p style={{ fontSize: "14px", margin: 0 }}>Crie sua conta para acessar o dashboard</p>
-                </div>
-
-
-
-                <form onSubmit={handleSubmit}>
-                    <div style={inputContainerStyle}>
-                        <User size={20} className='icon-style' />
-                        <input
-                            type="text"
-                            value={nickname}
-                            onChange={(e) => setNickname(e.target.value)}
-                            placeholder="Nickname"
-                            style={{
-                                borderColor: nickname.trim() ? "#4CAF50" : "#e0e0e0"
-                            }}
-                            className='input-dashboard-style'
-                            required
-                        />
+            {/* Register Card */}
+            <div className="w-full max-w-lg">
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl p-8 space-y-6 border border-zinc-200 dark:border-zinc-800 transition-colors duration-300">
+                    {/* Logo */}
+                    <div className="flex justify-center">
+                        <div className="relative">
+                            <img
+                                src={logoDark}
+                                alt="Logo"
+                                className="w-20 h-20 rounded-full p-3 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 shadow-lg"
+                            />
+                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-zinc-900 animate-pulse"></div>
+                        </div>
                     </div>
 
-                    <div style={inputContainerStyle}>
-                        <UserSquare size={20} className='icon-style' />
-                        <input
-                            type="text"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                            placeholder="Nome Completo"
-                            style={{
-                                borderColor: fullName.trim() ? "#4CAF50" : "#e0e0e0"
-                            }}
-                            className='input-dashboard-style'
-                            required
-                        />
+                    {/* Title */}
+                    <div className="text-center">
+                        <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-2">
+                            Cadastro
+                        </h2>
+                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                            Crie sua conta para acessar o dashboard
+                        </p>
                     </div>
 
-                    <div style={inputContainerStyle}>
-                        <CreditCard size={20} className='icon-style' />
-                        <input
-                            type="text"
-                            value={cpf}
-                            onChange={handleCPFChange}
-                            placeholder="CPF (000.000.000-00)"
-                            maxLength={14}
-                            className='input-dashboard-style'
-                            style={{
-                                borderColor: isValidCPF(cpf) ? "#4CAF50" : cpf ? "#f44336" : "#e0e0e0"
-                            }}
-                            required
-                        />
-                    </div>
+                    {/* Form */}
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        {/* Nickname */}
+                        <div className="relative">
+                            <User size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
+                            <input
+                                type="text"
+                                value={nickname}
+                                onChange={(e) => setNickname(e.target.value)}
+                                placeholder="Nickname"
+                                className={`w-full pl-12 pr-4 py-3 bg-zinc-50 dark:bg-zinc-800 border ${getInputBorderColor(!!nickname.trim(), !!nickname)} rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 transition-all duration-200`}
+                                required
+                            />
+                        </div>
 
-                    <div style={inputContainerStyle}>
-                        <Mail size={20} className='icon-style' />
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="seu@email.com"
-                            style={{
-                                borderColor: isValidEmail(email) ? "#4CAF50" : email ? "#f44336" : "#e0e0e0"
-                            }}
-                            className='input-dashboard-style'
-                            required
-                        />
-                    </div>
+                        {/* Full Name */}
+                        <div className="relative">
+                            <UserSquare size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
+                            <input
+                                type="text"
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
+                                placeholder="Nome Completo"
+                                className={`w-full pl-12 pr-4 py-3 bg-zinc-50 dark:bg-zinc-800 border ${getInputBorderColor(!!fullName.trim(), !!fullName)} rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 transition-all duration-200`}
+                                required
+                            />
+                        </div>
 
-                    <div style={inputContainerStyle}>
-                        <Lock size={20} className='icon-style' />
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Senha (mín. 6 caracteres)"
-                            style={{
-                                paddingRight: "48px",
-                                borderColor: isValidPassword(password) ? "#4CAF50" : password ? "#f44336" : "#e0e0e0"
-                            }}
-                            className='input-dashboard-style'
-                            required
-                        />
+                        {/* CPF */}
+                        <div className="relative">
+                            <CreditCard size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
+                            <input
+                                type="text"
+                                value={cpf}
+                                onChange={handleCPFChange}
+                                placeholder="CPF (000.000.000-00)"
+                                maxLength={14}
+                                className={`w-full pl-12 pr-4 py-3 bg-zinc-50 dark:bg-zinc-800 border ${getInputBorderColor(isValidCPF(cpf), !!cpf)} rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 transition-all duration-200`}
+                                required
+                            />
+                        </div>
+
+                        {/* Email */}
+                        <div className="relative">
+                            <Mail size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="seu@email.com"
+                                className={`w-full pl-12 pr-4 py-3 bg-zinc-50 dark:bg-zinc-800 border ${getInputBorderColor(isValidEmail(email), !!email)} rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 transition-all duration-200`}
+                                required
+                            />
+                        </div>
+
+                        {/* Password */}
+                        <div className="relative">
+                            <Lock size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Senha (mín. 6 caracteres)"
+                                className={`w-full pl-12 pr-12 py-3 bg-zinc-50 dark:bg-zinc-800 border ${getInputBorderColor(isValidPassword(password), !!password)} rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 transition-all duration-200`}
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors w-1"
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+                        </div>
+
+                        {/* Submit Button */}
                         <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            style={{
-                                background: "none",
-                                border: "none",
-                                padding: 0,
-                            }}
-                            className='eye-icon-style'
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-zinc-400 disabled:to-zinc-500 disabled:cursor-not-allowed text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100"
                         >
-                            {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+                            {isLoading ? "Cadastrando..." : "Criar Conta"}
                         </button>
+                    </form>
+
+                    {/* Login Link */}
+                    <div className="text-center pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                            Já tem uma conta?{" "}
+                            <a
+                                href="/streamer/dashboard/login"
+                                className="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                            >
+                                Fazer login
+                            </a>
+                        </p>
                     </div>
-
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className='button'
-                        onMouseEnter={(e) => {
-                            if (!isLoading) {
-                                e.currentTarget.style.transform = "translateY(-2px)";
-                                e.currentTarget.style.boxShadow = "0 6px 20px rgba(0,0,0,0.3)";
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            if (!isLoading) {
-                                e.currentTarget.style.transform = "translateY(0)";
-                                e.currentTarget.style.boxShadow = "0 4px 15px rgba(0,0,0,0.2)";
-                            }
-                        }}
-
-                        style={{ border: "none" }}
-                    >
-                        {isLoading ? "Cadastrando..." : "Criar Conta"}
-                    </button>
-                </form>
-
-                <div style={{ textAlign: "center", marginTop: "20px", fontSize: "14px"}}>
-                    Já tem uma conta?{" "}
-                    <a href="/streamer/dashboard/login" style={{padding: "2px 10px", borderRadius: "5px", textDecoration: "none", fontWeight: "500" }} className='a-dashboard'>
-                        Fazer login
-                    </a>
                 </div>
+
+                {/* Footer Text */}
+                <p className="text-center text-xs text-zinc-500 dark:text-zinc-600 mt-6">
+                    Ao continuar, você concorda com nossos Termos de Serviço e Política de Privacidade
+                </p>
             </div>
         </div>
     );

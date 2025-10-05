@@ -27,7 +27,7 @@ export function useGoalWebSocket(id: string) {
     async function loadInitialGoal(id: string) {
       try {
         const res = await fetch(
-          ApiConfig.getBaseBackendURL() + `/streamer/goal/to-show?id=` + id 
+          ApiConfig.getBaseBackendURL() + `/streamer/goal/to-show?streamerId=` + id 
         );
         if (!res.ok) throw new Error("Erro ao carregar meta inicial");
         const data: Goal = await res.json();

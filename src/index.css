@@ -1,26 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Seu arquivo CSS principal (ex: index.css ou global.css) */
+@layer utilities {
+  .text-glow {
+    /* Simula a textura e o brilho do texto Lovable */
+    text-shadow: 
+      0 0 10px rgba(255, 255, 255, 0.2), /* Brilho interno sutil */
+      0 0 40px rgba(124, 58, 237, 0.4); /* Brilho de cor externa */
+    
+    /* Adiciona uma pequena profundidade para parecer mais moderno */
+    transform: translateY(-1px);
+    
+    /* Para dar um "grit" ou textura, você pode usar uma imagem de fundo sutil: */
+    /* background-image: url('/path/to/subtle-noise.png'), linear-gradient(to right, ...); */
+    
+    /* Garante que o gradiente seja visível */
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+}
+
 * {
   font-family: "Saira", sans-serif;
 }
 
 body {
   min-height: 100vh;
-  background: transparent;
-  background-size: 400% 400%;
-  animation: gradientMove 8s ease infinite;
-  position: relative;
-  overflow: hidden;
-  background-color: rgb(238, 238, 238);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* REMOVA: background-color: rgb(238, 238, 238); */
 }
 
-body.dark {
+/* REMOVA toda a seção body.dark inicial */
+/* body.dark {
   background-color: rgb(38, 40, 44);
-}
+} */
 
-/* ===================== */
-/* 🎨 Tema Light (padrão) */
-/* ===================== */
+/* Mantenha apenas estas variáveis CSS se você usa em outros lugares */
 :root {
   --bg-color: #f9f9f9;
   --text-color: #1e1e1e;
@@ -29,33 +49,23 @@ body.dark {
   --nav-item-hover-bg: #e6e6e6;
   --nav-item-active-bg: #dbeafe;
   --nav-item-active-color: #1d4ed8;
-
   --border-color: #ddd;
 }
 
-/* ===================== */
-/* 🌙 Tema Dark */
-/* ===================== */
 body.dark {
   --bg-color: #121212;
   --text-color: #cfcfcf;
   --navbar-bg: #1f1f1f;
   --nav-item-color: #9ca3af;
-  /* cinza claro */
   --nav-item-hover-bg: #2c2c2c;
   --nav-item-active-bg: rgba(59, 130, 246, 0.15);
-  /* azul transparente */
   --nav-item-active-color: #3b82f6;
-  /* azul vivo */
   --border-color: #464545;
 }
 
-
+/* Resto do CSS permanece igual */
 input[type="checkbox"] {
   appearance: none;
-  /* tira o estilo nativo */
-  -webkit-appearance: none;
-  -moz-appearance: none;
   width: 20px;
   height: 20px;
   border: 2px solid #CCC;
@@ -76,7 +86,6 @@ input[type="checkbox"]:checked {
   background-color: rgb(56, 59, 61);
   border-color: white;
   color: white;
-
 }
 
 body.dark input[type="checkbox"]:checked {

@@ -7,22 +7,45 @@
 /* Container principal */
 .not-found-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #3d3aff, #3730ff);
+  background: linear-gradient(135deg, #ffffff, #f5f9ff);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 10px 5px;
   position: relative;
   overflow: hidden;
   transition: background 0.3s ease;
 }
 
+.button-notfound-back {
+  transition: 1s;
+  background: linear-gradient(135deg, #71a5ff, #1A3592);
+  box-shadow: 2px 2px 30px #5392ff;
+  color: white;
+  width: max-content;
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  border-radius: 50%;
+  border: 1px solid #1a60c2;
+}
+
+.button-notfound-back:hover {
+  transform: scale(1.05);
+  rotate: 360deg;
+}
+
+.img-notfound {
+  width: 50%;
+}
+
+
 .background-code,
 .background-code-2 {
   color: transparent;
   font-size: 10rem;
-  background: linear-gradient(90deg, #ffffff, #3730ff);
+  background: linear-gradient(45deg, rgb(89, 89, 255) 0%, #1F70E3 100%);
   -webkit-background-clip: text;
   background-clip: text;
   font-weight: 900;
@@ -42,4 +65,19 @@
   left: 30px;
   width: 50px;
   height: 50px;
+}
+
+
+@media (max-width: 728px) {
+  .img-notfound {
+    width: 100%;
+  }
+
+
+  .background-code-2 {
+    font-size: 2rem;
+    text-align: center;
+    width: 100%;
+  }
+
 }
