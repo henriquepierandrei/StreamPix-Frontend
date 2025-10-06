@@ -43,6 +43,8 @@ body {
 /* Mantenha apenas estas variáveis CSS se você usa em outros lugares */
 :root {
   --bg-color: #f9f9f9;
+  --bg-color-dark: #121212;
+
   --text-color: #1e1e1e;
   --navbar-bg: #ffffff;
   --nav-item-color: #444;
@@ -52,16 +54,6 @@ body {
   --border-color: #ddd;
 }
 
-body.dark {
-  --bg-color: #121212;
-  --text-color: #cfcfcf;
-  --navbar-bg: #1f1f1f;
-  --nav-item-color: #9ca3af;
-  --nav-item-hover-bg: #2c2c2c;
-  --nav-item-active-bg: rgba(59, 130, 246, 0.15);
-  --nav-item-active-color: #3b82f6;
-  --border-color: #464545;
-}
 
 /* Resto do CSS permanece igual */
 input[type="checkbox"] {

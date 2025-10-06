@@ -159,7 +159,7 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
                 className="
                     fixed top-0 left-0 w-full z-40
                     bg-white dark:bg-gray-900
-                    shadow-md dark:shadow-lg dark:shadow-gray-800/50
+                    shadow-md dark:shadow-lg dark:shadow-gray-900/50
                     lg:w-64 lg:h-screen lg:flex lg:flex-col lg:shadow-xl
                 "
             >

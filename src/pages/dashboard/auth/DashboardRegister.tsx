@@ -32,7 +32,12 @@ function DashboardRegister() {
     const [cpf, setCpf] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState(""); 
+    
+    // ESTADOS SEPARADOS PARA VISIBILIDADE DE SENHA
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false); // NOVO ESTADO
+    
     const [error, setError] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -129,6 +134,7 @@ function DashboardRegister() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // VALIDAÇÕES DE CAMPOS OBRIGATÓRIOS E FORMATO
         if (!nickname.trim()) {
             setError({
                 timestamp: new Date().toISOString(),
@@ -184,6 +190,18 @@ function DashboardRegister() {
             return;
         }
 
+        // VALIDAÇÃO: CONFIRMAÇÃO DE SENHA
+        if (password !== confirmPassword) {
+            setError({
+                timestamp: new Date().toISOString(),
+                status: 400,
+                error: "Bad Request",
+                message: "As senhas não coincidem. Por favor, verifique a confirmação.",
+                path: "/streamer/dashboard/register",
+            });
+            return;
+        }
+        
         await handleRegister();
     };
 
@@ -235,6 +253,9 @@ function DashboardRegister() {
     const isValidPassword = (password: string) => {
         return password.length >= 6;
     };
+    
+    // Variável auxiliar para estilização da confirmação
+    const isConfirmMatch = password === confirmPassword && !!confirmPassword;
 
     const handleCPFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const formattedCPF = formatCPF(e.target.value);
@@ -272,6 +293,7 @@ function DashboardRegister() {
                                 src={logoDark}
                                 alt="Logo"
                                 className="w-20 h-20 rounded-full p-3 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 shadow-lg"
+                                onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/80x80/1e40af/ffffff?text=Logo'; }} // Fallback
                             />
                             <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-zinc-900 animate-pulse"></div>
                         </div>
@@ -353,12 +375,36 @@ function DashboardRegister() {
                                 className={`w-full pl-12 pr-12 py-3 bg-zinc-50 dark:bg-zinc-800 border ${getInputBorderColor(isValidPassword(password), !!password)} rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 transition-all duration-200`}
                                 required
                             />
+                            {/* Toggle para a Senha Normal */}
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors w-1"
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors w-6 h-6 flex items-center justify-center"
+                                aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                             >
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+                        </div>
+
+                        {/* Confirm Password - AGORA COM SEU PRÓPRIO TOGGLE */}
+                        <div className="relative">
+                            <Lock size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
+                            <input
+                                type={showConfirmPassword ? "text" : "password"} // Usa o novo estado
+                                value={confirmPassword} 
+                                onChange={(e) => setConfirmPassword(e.target.value)} 
+                                placeholder="Confirme a Senha"
+                                className={`w-full pl-12 pr-12 py-3 bg-zinc-50 dark:bg-zinc-800 border ${getInputBorderColor(isConfirmMatch, !!confirmPassword)} rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 transition-all duration-200`}
+                                required
+                            />
+                            {/* Toggle para a Confirmação de Senha */}
+                            <button
+                                type="button"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)} // Toggla o novo estado
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors w-6 h-6 flex items-center justify-center"
+                                aria-label={showConfirmPassword ? "Ocultar confirmação de senha" : "Mostrar confirmação de senha"}
+                            >
+                                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>
                         </div>
 

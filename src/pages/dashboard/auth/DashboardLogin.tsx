@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+// Importar apiPublic e ApiConfig para buscar token e fazer a requisição de validação
 import { apiPublic, ApiConfig } from "../../../api/ApiConfig";
 import { useNavigate } from "react-router-dom";
 import Alert from "../../../components/alerts/Alert";
@@ -7,6 +8,7 @@ import { Lock, User, Moon, Sun } from "lucide-react";
 import { useAuth } from "../../../routes/AuthContext";
 import { useTheme } from "../../../hooks/ThemeContextType";
 
+// --- Novas Interfaces ---
 interface LoginResponse {
   token: string;
   refreshToken: string;
@@ -14,18 +16,76 @@ interface LoginResponse {
   refreshTokenExpireAt: string;
 }
 
+interface ValidationResponse {
+  username: string;
+  valid: boolean;
+}
+// --- Fim das Novas Interfaces ---
+
 function DashboardLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<any | null>(null);
+  // Adiciona um estado para indicar se o componente está carregando (validando o token)
+  const [isLoading, setIsLoading] = useState(true); 
 
   const { setAuthenticated } = useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
-  const rememberCheck = (): boolean => localStorage.getItem("remember_check") === "true";
+  const rememberCheck = (): boolean =>
+    localStorage.getItem("remember_check") === "true";
   const [remember, setRemember] = useState<boolean>(rememberCheck());
 
+  // ====================================================================
+  // 🚀 Lógica de Validação do Token na Montagem do Componente (Auto-Login) 
+  // ====================================================================
+  useEffect(() => {
+    const validateAndRedirect = async () => {
+      // 1. Obter o Token
+      // Assumindo que 'ApiConfig.getToken()' busca o token do armazenamento
+      const token = ApiConfig.getToken(); 
+
+      if (token) {
+        try {
+          // 2. Chamar o Endpoint de Validação
+          const response = await apiPublic.get<ValidationResponse>(
+            "/auth/validate",
+            {
+              // O token deve ser enviado no header 'Authorization'
+              headers: {
+                Authorization: `Bearer ${token}`, // Formato padrão para JWT
+              },
+            }
+          );
+
+          // 3. Redirecionamento se for Válido
+          if (response.data.valid) {
+            // Se o token for válido, define o estado de autenticação e redireciona
+            setAuthenticated(true);
+            navigate("/streamer/dashboard/donations", { replace: true });
+            return; // Interrompe a execução para evitar renderização da tela de login
+          }
+          // Se for inválido, o código continua para a tela de login
+        } catch (err: any) {
+          // Em caso de erro na requisição (ex: token expirado/inválido),
+          // o usuário é mantido na tela de login.
+          console.error("Erro na validação do token:", err);
+          // O token e refresh token podem ser removidos aqui se o erro for 401/403
+          // ApiConfig.clearTokens(); 
+        }
+      }
+      
+      // Finaliza o estado de carregamento, permitindo a exibição do formulário de login
+      setIsLoading(false); 
+    };
+
+    validateAndRedirect();
+  }, [navigate, setAuthenticated]); // Dependências do useEffect
+  // ====================================================================
+  
+  // Efeitos colaterais e funções existentes...
+  
   useEffect(() => {
     if (remember) {
       const savedEmail = localStorage.getItem("email_remember") || "";
@@ -57,10 +117,19 @@ function DashboardLogin() {
     }
 
     try {
-      const response = await apiPublic.post<LoginResponse>("/auth/login", { email, password });
-      const { token, refreshToken, tokenExpireAt, refreshTokenExpireAt } = response.data;
+      const response = await apiPublic.post<LoginResponse>("/auth/login", {
+        email,
+        password,
+      });
+      const { token, refreshToken, tokenExpireAt, refreshTokenExpireAt } =
+        response.data;
 
-      ApiConfig.saveTokens(token, refreshToken, tokenExpireAt, refreshTokenExpireAt);
+      ApiConfig.saveTokens(
+        token,
+        refreshToken,
+        tokenExpireAt,
+        refreshTokenExpireAt
+      );
       setAuthenticated(true);
 
       if (remember) rememberLogin(email, password);
@@ -81,6 +150,21 @@ function DashboardLogin() {
     }
   };
 
+  // Se estiver carregando (validando o token), mostre uma tela de carregamento ou null
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center dark:bg-zinc-900">
+        <div className="flex items-center space-x-2">
+          <div className="w-4 h-4 rounded-full animate-pulse bg-blue-600"></div>
+          <div className="w-4 h-4 rounded-full animate-pulse bg-purple-600 delay-75"></div>
+          <div className="w-4 h-4 rounded-full animate-pulse bg-pink-500 delay-150"></div>
+          <p className="text-zinc-600 dark:text-zinc-400 ml-3">Validando sessão...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Se a validação falhar ou não houver token, exibe a tela de login
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 transition-colors duration-300">
       {/* Theme Toggle Button */}
@@ -94,7 +178,9 @@ function DashboardLogin() {
 
       {/* Alert Container */}
       <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4">
-        {error && <Alert error={error} duration={5} onClose={() => setError(null)} />}
+        {error && (
+          <Alert error={error} duration={5} onClose={() => setError(null)} />
+        )}
       </div>
 
       {/* Login Card */}
@@ -126,7 +212,10 @@ function DashboardLogin() {
           <div className="space-y-4">
             {/* Email Input */}
             <div className="relative">
-              <User size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
+              <User
+                size={20}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500"
+              />
               <input
                 type="email"
                 value={email}
@@ -138,7 +227,10 @@ function DashboardLogin() {
 
             {/* Password Input */}
             <div className="relative">
-              <Lock size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
+              <Lock
+                size={20}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500"
+              />
               <input
                 type="password"
                 value={password}
@@ -157,7 +249,10 @@ function DashboardLogin() {
                 onChange={(e) => setRemember(e.target.checked)}
                 className="w-4 h-4 text-blue-600 bg-zinc-100 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
               />
-              <label htmlFor="remember" className="text-sm text-zinc-700 dark:text-zinc-300 cursor-pointer select-none">
+              <label
+                htmlFor="remember"
+                className="text-sm text-zinc-700 dark:text-zinc-300 cursor-pointer select-none"
+              >
                 Lembrar Login
               </label>
             </div>
@@ -187,7 +282,8 @@ function DashboardLogin() {
 
         {/* Footer Text */}
         <p className="text-center text-xs text-zinc-500 dark:text-zinc-600 mt-6">
-          Ao continuar, você concorda com nossos Termos de Serviço e Política de Privacidade
+          Ao continuar, você concorda com nossos Termos de Serviço e Política de
+          Privacidade
         </p>
       </div>
     </div>

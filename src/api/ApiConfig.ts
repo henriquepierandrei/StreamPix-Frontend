@@ -38,6 +38,10 @@ export class ApiConfig {
     return expirationTime - currentTime < 30000;
   }
 
+  public static getToken(){
+    return Cookies.get("token");
+  }
+
   public static getInstance(): AxiosInstance {
     if (!ApiConfig.instance) {
       ApiConfig.instance = axios.create({
