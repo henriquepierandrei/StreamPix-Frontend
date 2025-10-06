@@ -2,17 +2,19 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, CreditCard, Eye, EyeOff, UserSquare, Moon, Sun } from 'lucide-react';
 import logoDark from "../../../assets/logo.png";
-import { api, ApiConfig } from '../../../api/ApiConfig';
+import { ApiConfig } from '../../../api/ApiConfig';
 import Alert from '../../../components/alerts/Alert';
 import { useTheme } from '../../../hooks/ThemeContextType';
+import SuccessAlert from '../../../components/alerts/SuccessAlert';
 
+// Interface de resposta de registro atualizada (removido sessionToken)
 interface RegisterResponse {
-    sessionToken: string;
     email?: string;
     password?: string;
     message?: string;
 }
 
+// SessionDataResponse não é mais usada, mas mantida por clareza se for usada em outro lugar
 interface SessionDataResponse {
     email?: string;
     password?: string;
@@ -22,28 +24,77 @@ interface ErrorResponse {
     message?: string;
 }
 
+// Interface de erro mais limpa para o state
+interface AppError {
+    timestamp: string;
+    status: number;
+    error: string;
+    message: string;
+    path: string;
+}
+
 function DashboardRegister() {
-    const [, setSessionData] = useState<any | null>(null);
-    const navigate = useNavigate();
+    // setSessionData removido, pois não é mais usado
     const { isDarkMode, toggleTheme } = useTheme();
-    
+
+    // --- LÓGICA DE ESTADO DO ALERTA CORRIGIDA ---
+    const [alertState, setAlertState] = useState<any>(null); // State para Sucesso
+    const [error, setError] = useState<AppError | null>(null); // State para Erro
+
     const [fullName, setFullName] = useState("");
     const [nickname, setNickname] = useState("");
     const [cpf, setCpf] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState(""); 
-    
-    // ESTADOS SEPARADOS PARA VISIBILIDADE DE SENHA
+    const [confirmPassword, setConfirmPassword] = useState("");
+
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false); // NOVO ESTADO
-    
-    const [error, setError] = useState<any | null>(null);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+
+    // --- FUNÇÕES DE ALERTA E REDIRECIONAMENTO ---
+
+    /**
+     * Limpa o erro e exibe a mensagem de sucesso, forçando o timestamp para reiniciar a animação.
+     */
+    const showSuccess = (message: string, path?: string) => {
+        // CRUCIAL: Limpa o estado de erro antes de mostrar o sucesso.
+        setError(null);
+        setAlertState({
+            message: message,
+            path: path,
+            timestamp: Date.now().toString(),
+        });
+    };
+
+    /**
+     * Limpa o sucesso e exibe o erro.
+     */
+    const handleError = (errorDetails: any) => {
+        // CRUCIAL: Limpa o estado de sucesso antes de mostrar o erro.
+        setAlertState(null);
+        setError(errorDetails);
+    };
+
+    /**
+     * Função para fechar o alerta de sucesso (chamada pelo SuccessAlert).
+     */
+    const hideAlert = () => {
+        setAlertState(null);
+    };
+
+    /**
+     * Função de redirecionamento (usa o hook useNavigate).
+     */
+    const handleRedirect = (path: string) => {
+        navigate(path);
+    };
+
+    // --- LÓGICA DE REGISTRO E CHAMADA DE API ---
 
     const handleRegister = async () => {
         setIsLoading(true);
-        setError(null);
 
         try {
             const cleanCPF = cpf.replace(/\D/g, '');
@@ -57,86 +108,78 @@ function DashboardRegister() {
             };
 
             const apiInstance = ApiConfig.getInstance();
-            const response = await apiInstance.post<RegisterResponse>('/auth/register', registerData);
-            const data = response.data;
+            // A API é chamada e, se for bem-sucedida (status 2xx), continua
+            await apiInstance.post<RegisterResponse>('/auth/register', registerData);
 
-            if (!data.sessionToken) {
-                setError("Resposta inválida do servidor. Tente novamente.");
-                return;
-            }
-
-            localStorage.setItem('verificationToken', data.sessionToken);
-            localStorage.setItem('userEmail', email);
-
-            navigate('/streamer/dashboard/verify/email');
+            // Se o await acima não lançou erro, a requisição foi bem-sucedida.
+            // O successAlert será exibido e o redirecionamento será iniciado.
+            showSuccess("Verifique seu email! Redirecionando para o login.", "/streamer/dashboard/login")
 
         } catch (err: any) {
             console.error("Erro na requisição:", err);
 
             if (err.response) {
                 const errorData = err.response.data as ErrorResponse;
+                let errorMessage: string = "Ocorreu um erro desconhecido.";
+                let errorStatus: number = err.response.status;
+                let errorTitle: string = "Erro";
+
                 switch (err.response.status) {
                     case 400:
-                        setError({
-                            timestamp: new Date().toISOString(),
-                            status: 400,
-                            error: "Bad Request",
-                            message: errorData.message || "Dados inválidos. Verifique as informações fornecidas.",
-                            path: "/streamer/dashboard/register",
-                        });
+                        errorTitle = "Bad Request";
+                        errorMessage = errorData.message || "Dados inválidos. Verifique as informações fornecidas.";
                         break;
                     case 409:
-                        setError({
-                            timestamp: new Date().toISOString(),
-                            status: 409,
-                            error: "Conflict",
-                            message: errorData.message || "Este e-mail ou CPF já está cadastrado.",
-                            path: "/streamer/dashboard/register",
-                        });
+                        errorTitle = "Conflict";
+                        errorMessage = errorData.message || "Este e-mail ou CPF já está cadastrado.";
+                        break;
+                    default:
+                        errorTitle = "Server Error";
+                        errorMessage = errorData.message || "Erro no servidor. Tente novamente mais tarde.";
                         break;
                 }
+
+                handleError({
+                    timestamp: new Date().toISOString(),
+                    status: errorStatus,
+                    error: errorTitle,
+                    message: errorMessage,
+                    path: "/streamer/dashboard/register",
+                });
             } else if (err.request) {
-                setError("Erro de conexão. Verifique sua internet e tente novamente.");
+                handleError({
+                    timestamp: new Date().toISOString(),
+                    status: 0,
+                    error: "Network Error",
+                    message: "Erro de conexão. Verifique sua internet e tente novamente.",
+                    path: "/streamer/dashboard/register",
+                });
             } else {
-                setError("Erro ao realizar cadastro. Tente novamente.");
+                // Simplificação para erros de setup do request
+                handleError({
+                    timestamp: new Date().toISOString(),
+                    status: 500,
+                    error: "Internal Error",
+                    message: "Erro ao realizar cadastro. Tente novamente.",
+                    path: "/streamer/dashboard/register",
+                });
             }
         } finally {
             setIsLoading(false);
         }
     };
 
-    useEffect(() => {
-        const fetchSessionData = async () => {
-            try {
-                const sessionToken = localStorage.getItem("verificationToken");
-                if (!sessionToken) return;
+    // --- CÓDIGO RESTANTE (mantido) ---
 
-                const response = await api.get<SessionDataResponse>("/email/auth/session-data", {
-                    headers: {
-                        "Session-Token": sessionToken,
-                    },
-                });
-
-                const sessionData = response.data;
-                setSessionData(sessionData);
-
-                if (sessionData.email) setEmail(sessionData.email);
-                if (sessionData.password) setPassword(sessionData.password);
-
-            } catch (err) {
-                console.error("Erro ao buscar session data:", err);
-            }
-        };
-
-        fetchSessionData();
-    }, []);
+    // useEffect vazio removido, pois não há mais fetchSessionData
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // VALIDAÇÕES DE CAMPOS OBRIGATÓRIOS E FORMATO
+        // VALIDAÇÕES DE CAMPOS OBRIGATÓRIOS E FORMATO (Agora usando handleError)
+
         if (!nickname.trim()) {
-            setError({
+            handleError({
                 timestamp: new Date().toISOString(),
                 status: 400,
                 error: "Bad Request",
@@ -147,7 +190,7 @@ function DashboardRegister() {
         }
 
         if (!fullName.trim()) {
-            setError({
+            handleError({
                 timestamp: new Date().toISOString(),
                 status: 400,
                 error: "Bad Request",
@@ -158,7 +201,7 @@ function DashboardRegister() {
         }
 
         if (!isValidCPF(cpf)) {
-            setError({
+            handleError({
                 timestamp: new Date().toISOString(),
                 status: 400,
                 error: "Bad Request",
@@ -169,7 +212,7 @@ function DashboardRegister() {
         }
 
         if (!isValidEmail(email)) {
-            setError({
+            handleError({
                 timestamp: new Date().toISOString(),
                 status: 400,
                 error: "Bad Request",
@@ -180,7 +223,7 @@ function DashboardRegister() {
         }
 
         if (!isValidPassword(password)) {
-            setError({
+            handleError({
                 timestamp: new Date().toISOString(),
                 status: 400,
                 error: "Bad Request",
@@ -192,7 +235,7 @@ function DashboardRegister() {
 
         // VALIDAÇÃO: CONFIRMAÇÃO DE SENHA
         if (password !== confirmPassword) {
-            setError({
+            handleError({
                 timestamp: new Date().toISOString(),
                 status: 400,
                 error: "Bad Request",
@@ -201,11 +244,11 @@ function DashboardRegister() {
             });
             return;
         }
-        
+
         await handleRegister();
     };
 
-    
+
     const formatCPF = (value: string) => {
         const cleanValue = value.replace(/\D/g, '');
 
@@ -253,7 +296,7 @@ function DashboardRegister() {
     const isValidPassword = (password: string) => {
         return password.length >= 6;
     };
-    
+
     // Variável auxiliar para estilização da confirmação
     const isConfirmMatch = password === confirmPassword && !!confirmPassword;
 
@@ -269,6 +312,12 @@ function DashboardRegister() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 transition-colors duration-300 py-12 px-4">
+
+            {/* 1. SuccessAlert Fica no canto inferior direito (padrão) */}
+            <SuccessAlert
+                success={alertState}
+                onClose={hideAlert}        // Passa a função para remover o alerta do estado
+                onRedirect={handleRedirect}/>
             {/* Theme Toggle Button */}
             <button
                 onClick={toggleTheme}
@@ -278,7 +327,7 @@ function DashboardRegister() {
                 {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
-            {/* Alert Container */}
+            {/* 2. Error Alert Container Fica no topo central */}
             <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4">
                 {error && <Alert error={error} duration={5} onClose={() => setError(null)} />}
             </div>
@@ -391,8 +440,8 @@ function DashboardRegister() {
                             <Lock size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
                             <input
                                 type={showConfirmPassword ? "text" : "password"} // Usa o novo estado
-                                value={confirmPassword} 
-                                onChange={(e) => setConfirmPassword(e.target.value)} 
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                                 placeholder="Confirme a Senha"
                                 className={`w-full pl-12 pr-12 py-3 bg-zinc-50 dark:bg-zinc-800 border ${getInputBorderColor(isConfirmMatch, !!confirmPassword)} rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 transition-all duration-200`}
                                 required

@@ -137,41 +137,41 @@ function AccountSettings() {
   const loadingText = isLoading ? "..." : "";
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 lg:pl-64">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 lg:pl-64">
       <NavBarDashboard activeItem={active} />
 
       <main className="p-4 sm:p-6 lg:p-8">
-        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-6">
+        <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-white mb-6">
           Configurações da Conta {loadingText}
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* CARD 1: Informações da Conta */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 h-fit">
-            <div className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-700 pb-4 mb-4">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-xl p-6 h-fit">
+            <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4 mb-4">
               <User size={24} className="text-blue-500" />
-              <p className="text-xl font-semibold text-gray-900 dark:text-white">Detalhes do Usuário</p>
+              <p className="text-xl font-semibold text-zinc-900 dark:text-white">Detalhes do Usuário</p>
             </div>
 
             <div className="space-y-4">
               {/* Email */}
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Email</label>
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600">
-                  <p className={`text-base text-gray-800 dark:text-gray-200 truncate transition-all duration-300 ease-in-out ${emailBlurred ? blurClass : 'blur-none'}`}>
+                <label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Email</label>
+                <div className="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg border border-zinc-300 dark:border-zinc-700">
+                  <p className={`text-base text-zinc-800 dark:text-zinc-200 truncate transition-all duration-300 ease-in-out ${emailBlurred ? blurClass : 'blur-none'}`}>
                     {emailBlurred ? getBlurredEmail() : streamerData.email}
                   </p>
                   <button
                     onClick={blurEmail}
                     className="
-                                flex items-center justify-center
-                                w-10 h-10
-                                p-2
-                                rounded-full
-                                text-gray-500 dark:text-gray-400
-                                hover:bg-gray-200 dark:hover:bg-gray-600
-                                transition-colors
-                              "
+                      flex items-center justify-center
+                      w-10 h-10
+                      p-2
+                      rounded-full
+                      text-zinc-500 dark:text-zinc-400
+                      hover:bg-zinc-200 dark:hover:bg-zinc-700
+                      transition-colors
+                    "
                     aria-label={emailBlurred ? "Mostrar Email" : "Esconder Email"}
                   >
                     {emailBlurred ? <EyeOff size={22} /> : <Eye size={22} />}
@@ -182,11 +182,11 @@ function AccountSettings() {
 
               {/* Nome Completo */}
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Nome Completo</label>
+                <label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Nome Completo</label>
                 <input
                   type="text"
                   value={streamerData.info_streamer.full_name}
-                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-200 dark:bg-gray-900 text-gray-600 dark:text-gray-400 transition duration-150 cursor-not-allowed"
+                  className="w-full p-3 border border-zinc-300 dark:border-zinc-700 rounded-lg bg-zinc-200 dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 transition duration-150 cursor-not-allowed"
                   disabled
                   readOnly
                 />
@@ -194,11 +194,11 @@ function AccountSettings() {
 
               {/* CPF */}
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-600 dark:text-gray-400">CPF (apenas visualização)</label>
+                <label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">CPF (apenas visualização)</label>
                 <input
                   type="text"
                   value={streamerData.info_streamer.cpf}
-                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-200 dark:bg-gray-900 text-gray-600 dark:text-gray-400 transition duration-150 cursor-not-allowed"
+                  className="w-full p-3 border border-zinc-300 dark:border-zinc-700 rounded-lg bg-zinc-200 dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 transition duration-150 cursor-not-allowed"
                   disabled
                   readOnly
                 />
@@ -206,11 +206,11 @@ function AccountSettings() {
 
               {/* Data de Criação */}
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Data de Criação</label>
+                <label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Data de Criação</label>
                 <input
                   type="text"
                   value={streamerData.info_streamer.date_of_registration ? new Date(streamerData.info_streamer.date_of_registration).toLocaleDateString("pt-BR") : "N/A"}
-                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-200 dark:bg-gray-900 text-gray-600 dark:text-gray-400 transition duration-150 cursor-not-allowed"
+                  className="w-full p-3 border border-zinc-300 dark:border-zinc-700 rounded-lg bg-zinc-200 dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 transition duration-150 cursor-not-allowed"
                   disabled
                   readOnly
                 />
@@ -218,11 +218,11 @@ function AccountSettings() {
 
               {/* Último Login */}
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Último Login</label>
+                <label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Último Login</label>
                 <input
                   type="text"
                   value={streamerData.info_streamer.last_access ? new Date(streamerData.info_streamer.last_access).toLocaleString("pt-BR") : "N/A"}
-                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-200 dark:bg-gray-900 text-gray-600 dark:text-gray-400 transition duration-150 cursor-not-allowed"
+                  className="w-full p-3 border border-zinc-300 dark:border-zinc-700 rounded-lg bg-zinc-200 dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 transition duration-150 cursor-not-allowed"
                   disabled
                   readOnly
                 />
@@ -231,27 +231,27 @@ function AccountSettings() {
           </div>
 
           {/* CARD 2: Histórico Total e Segurança */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 h-fit flex flex-col justify-between">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-xl p-6 h-fit flex flex-col justify-between">
             <div>
-              <div className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-700 pb-4 mb-4">
+              <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4 mb-4">
                 <Clock size={24} className="text-blue-500" />
-                <p className="text-xl font-semibold text-gray-900 dark:text-white">Histórico Total</p>
+                <p className="text-xl font-semibold text-zinc-900 dark:text-white">Histórico Total</p>
               </div>
 
               {/* Valor Total Recebido */}
               <div className="space-y-1 mb-4">
-                <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Valor Total Recebido em Reais</label>
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600">
+                <label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Valor Total Recebido em Reais</label>
+                <div className="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg border border-zinc-300 dark:border-zinc-700">
                   <p className={`text-xl font-bold text-green-600 dark:text-green-400 transition-all duration-300 ease-in-out ${totalReceivedBlurred ? blurClass : 'blur-none'}`}>
                     R$ {streamerData.info_streamer.total_amount_received.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                   </p>
                   <button onClick={blurTotalReceived} className=" flex items-center justify-center
-                                w-10 h-10
-                                p-2
-                                rounded-full
-                                text-gray-500 dark:text-gray-400
-                                hover:bg-gray-200 dark:hover:bg-gray-600
-                                transition-colors" aria-label={totalReceivedBlurred ? "Mostrar Valor" : "Esconder Valor"}>
+                      w-10 h-10
+                      p-2
+                      rounded-full
+                      text-zinc-500 dark:text-zinc-400
+                      hover:bg-zinc-200 dark:hover:bg-zinc-700
+                      transition-colors" aria-label={totalReceivedBlurred ? "Mostrar Valor" : "Esconder Valor"}>
                     {totalReceivedBlurred ? <EyeOff size={22} /> : <Eye size={22} />}
                   </button>
                 </div>
@@ -259,18 +259,18 @@ function AccountSettings() {
 
               {/* Total de Doações Recebidas */}
               <div className="space-y-1 mb-6">
-                <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Total de Doações Recebidas</label>
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600">
-                  <p className={`text-lg font-bold text-gray-800 dark:text-gray-200 transition-all duration-300 ease-in-out ${totalDonationsBlurred ? blurClass : 'blur-none'}`}>
+                <label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Total de Doações Recebidas</label>
+                <div className="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg border border-zinc-300 dark:border-zinc-700">
+                  <p className={`text-lg font-bold text-zinc-800 dark:text-zinc-200 transition-all duration-300 ease-in-out ${totalDonationsBlurred ? blurClass : 'blur-none'}`}>
                     {streamerData.info_streamer.total_donations_received.toLocaleString("pt-BR")} doações
                   </p>
                   <button onClick={blurTotalDonations} className=" flex items-center justify-center
-                                w-10 h-10
-                                p-2
-                                rounded-full
-                                text-gray-500 dark:text-gray-400
-                                hover:bg-gray-200 dark:hover:bg-gray-600
-                                transition-colors" aria-label={totalDonationsBlurred ? "Mostrar Doações" : "Esconder Doações"}>
+                      w-10 h-10
+                      p-2
+                      rounded-full
+                      text-zinc-500 dark:text-zinc-400
+                      hover:bg-zinc-200 dark:hover:bg-zinc-700
+                      transition-colors" aria-label={totalDonationsBlurred ? "Mostrar Doações" : "Esconder Doações"}>
                     {totalDonationsBlurred ? <EyeOff size={22} /> : <Eye size={22} />}
                   </button>
                 </div>
@@ -278,8 +278,8 @@ function AccountSettings() {
             </div>
 
             {/* Box de Atualização de Senha */}
-            <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg space-y-3">
-              <p className="text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
+            <div className="mt-4 p-4 bg-yellow-100 dark:bg-yellow-950 border border-yellow-300 dark:border-yellow-800 rounded-lg space-y-3">
+              <p className="text-sm text-zinc-800 dark:text-zinc-200 flex items-center gap-2">
                 <AlertOctagon size={16} className="text-yellow-500 flex-shrink-0" />
                 Se você deseja atualizar a sua senha, clique no botão logo abaixo e receba um código no email para validação:
               </p>
@@ -301,5 +301,6 @@ function AccountSettings() {
     </div>
   );
 }
+
 
 export default AccountSettings;

@@ -126,42 +126,45 @@ function QrCodePage() { // Renomeei para QrCodePage, já que AnalyticsPage não 
     const qrcodeUrl = ApiConfig.getBaseFrontendURL() + "/streamer/qrcode/" + streamerData.nickname;
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 lg:pl-64">
+        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 lg:pl-64">
             <NavBarDashboard activeItem={active} onSelect={setActive} />
 
             <main className="p-4 sm:p-6 lg:p-8">
                 {/* Título Principal */}
                 <div className="mb-8">
                     <div className="flex items-center gap-3 mb-2">
+                        {/* Alterado para text-purple-600 */}
                         <QrCode size={32} className="text-purple-600" />
-                        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">
+                        <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-white">
                             Configurações de QR Code
                         </h1>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-zinc-600 dark:text-zinc-400">
                         Gerencie a aparência e o link do seu QR Code para doações.
                     </p>
                 </div>
 
                 {/* Grid Principal */}
                 <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-                    
+
                     {/* COLUNA 1: Configurações e Preview do QR Code */}
-                    <div className='bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 md:p-8 space-y-8'>
-                        
+                    {/* Alterado para dark:bg-zinc-900 */}
+                    <div className='bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-6 md:p-8 space-y-8'>
+
                         {/* Header do Card */}
-                        <div className="flex items-center gap-3 border-b pb-4 mb-2 border-gray-100 dark:border-gray-700">
+                        <div className="flex items-center gap-3 border-b pb-4 mb-2 border-zinc-100 dark:border-zinc-800">
                             <QrCode size={24} className="text-purple-600" />
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                            <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
                                 Opções de Aparência
                             </h2>
                         </div>
-                        
+
                         {/* Opções de Checkbox */}
                         <div className='space-y-4'>
                             {/* Checkbox: Tema Escuro */}
-                            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600">
-                                <label htmlFor="darkTheme" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                            {/* Alterado para zinc-50 / dark:bg-zinc-800 e bordas zinc */}
+                            <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700">
+                                <label htmlFor="darkTheme" className="text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
                                     Tema Escuro para o QR Code
                                 </label>
                                 <input
@@ -169,13 +172,15 @@ function QrCodePage() { // Renomeei para QrCodePage, já que AnalyticsPage não 
                                     type="checkbox"
                                     checked={streamerData.qr_code_is_dark_theme}
                                     onChange={(e) => updateField('qr_code_is_dark_theme', e.target.checked)}
-                                    className="h-5 w-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500 dark:bg-gray-800 dark:border-gray-600 dark:checked:bg-purple-600"
+                                    
+                                    className="h-5 w-5 text-purple-600 border-zinc-300 rounded focus:ring-purple-500 dark:bg-zinc-700 dark:border-zinc-600 dark:checked:bg-purple-600"
                                 />
                             </div>
 
                             {/* Checkbox: Mensagens de Incentivo */}
-                            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600">
-                                <label htmlFor="addMessagesBellow" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                            {/* Alterado para zinc-50 / dark:bg-zinc-800 e bordas zinc */}
+                            <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700">
+                                <label htmlFor="addMessagesBellow" className="text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
                                     Exibir mensagens de incentivo
                                 </label>
                                 <input
@@ -183,23 +188,23 @@ function QrCodePage() { // Renomeei para QrCodePage, já que AnalyticsPage não 
                                     type="checkbox"
                                     checked={streamerData.add_messages_bellow}
                                     onChange={(e) => updateField('add_messages_bellow', e.target.checked)}
-                                    className="h-5 w-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500 dark:bg-gray-800 dark:border-gray-600 dark:checked:bg-purple-600"
+                                    className="h-5 w-5 text-purple-600 border-zinc-300 rounded focus:ring-purple-500 dark:bg-zinc-700 dark:border-zinc-600 dark:checked:bg-purple-600"
                                 />
                             </div>
                         </div>
 
                         {/* URL e Botão de Cópia */}
                         <div className='pt-4'>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">URL do QR Code</label>
+                            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">URL do QR Code</label>
                             <div className='flex gap-2'>
                                 <input
                                     type="text"
                                     value={qrcodeUrl}
                                     readOnly
-                                    className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-sm text-gray-900 dark:text-white truncate focus:outline-none"
+                                    className="flex-1 px-4 py-3 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-white truncate focus:outline-none"
                                 />
                                 <button
-                                    className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl transition duration-150"
+                                    className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-600 text-zinc-700 dark:text-zinc-300 rounded-xl transition duration-150"
                                     onClick={handleCopyURL}
                                     title="Copiar URL"
                                 >
@@ -216,6 +221,7 @@ function QrCodePage() { // Renomeei para QrCodePage, já que AnalyticsPage não 
                         {/* Botão Salvar */}
                         <div className="pt-4">
                             <button
+                                // Alterado para bg-purple-600, hover:bg-purple-700, disabled:bg-purple-400
                                 className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-semibold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:scale-[1.01] disabled:transform-none"
                                 onClick={handleSave}
                                 disabled={isSaving || isLoading}
@@ -226,20 +232,22 @@ function QrCodePage() { // Renomeei para QrCodePage, já que AnalyticsPage não 
                         </div>
 
                         {/* Preview do QR Code (Iframe) */}
-                        <div className='pt-4 flex flex-col items-center border-t border-gray-100 dark:border-gray-700'>
+                        <div className='pt-4 flex flex-col items-center border-t border-zinc-100 dark:border-zinc-800'>
                             <div className='flex items-center justify-between w-full mb-3'>
-                                <h3 className='text-lg font-semibold text-gray-900 dark:text-white'>Preview</h3>
-                                <button 
-                                    className='p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition' 
+                                <h3 className='text-lg font-semibold text-zinc-900 dark:text-white'>Preview</h3>
+                                <button
+                                    // Alterado para bg-zinc-100 / dark:bg-zinc-700 e hover:bg-zinc-200 / dark:hover:bg-zinc-600
+                                    className='p-2 rounded-full bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-600 text-zinc-700 dark:text-zinc-300 transition'
                                     onClick={() => window.location.reload()}
                                     title="Recarregar Preview"
                                 >
                                     <RefreshCcw size={18} />
                                 </button>
                             </div>
-                            <div className='w-full max-w-sm h-72 border border-gray-300 dark:border-gray-600 rounded-xl overflow-hidden shadow-lg'>
-                                <iframe 
-                                    src={qrcodeUrl} 
+                            {/* Alterado para border-zinc-300 / dark:border-zinc-600 */}
+                            <div className='w-full max-w-sm h-72 border border-zinc-300 dark:border-zinc-600 rounded-xl overflow-hidden shadow-lg'>
+                                <iframe
+                                    src={qrcodeUrl}
                                     title="QR Code Preview"
                                     className='w-full h-full border-none'
                                 ></iframe>
@@ -248,45 +256,49 @@ function QrCodePage() { // Renomeei para QrCodePage, já que AnalyticsPage não 
                     </div>
 
                     {/* COLUNA 2: Especificações OBS */}
-                    <div className='bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 md:p-8 h-fit'>
-                        <div className="flex items-center gap-3 border-b pb-4 mb-6 border-gray-100 dark:border-gray-700">
+                    {/* Alterado para dark:bg-zinc-900 */}
+                    <div className='bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-6 md:p-8 h-fit'>
+                        <div className="flex items-center gap-3 border-b pb-4 mb-6 border-zinc-100 dark:border-zinc-800">
                             <View size={24} className="text-purple-600" />
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                            <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
                                 Especificações de Fonte no OBS/Streamlabs
                             </h2>
                         </div>
-                        
+
                         <div className="overflow-x-auto">
-                            <table className="w-full text-left text-gray-600 dark:text-gray-400 border-collapse">
+                            {/* Alterado para text-zinc-600 dark:text-zinc-400 */}
+                            <table className="w-full text-left text-zinc-600 dark:text-zinc-400 border-collapse">
                                 <thead>
-                                    <tr className="border-b border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-800 dark:text-gray-300">
+                                    {/* Alterado para border-zinc-200 dark:border-zinc-700 e text-zinc-800 dark:text-zinc-300 */}
+                                    <tr className="border-b border-zinc-200 dark:border-zinc-700 text-sm font-semibold text-zinc-800 dark:text-zinc-300">
                                         <th className="py-2 pr-4">Propriedade</th>
                                         <th className="py-2">Valor Recomendado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
-                                        <td className="py-2.5 font-medium text-gray-900 dark:text-white">Width</td>
+                                    {/* Alterado para border-zinc-100 dark:border-zinc-700/50 e text-zinc-900 dark:text-white */}
+                                    <tr className="border-b border-zinc-100 dark:border-zinc-700/50">
+                                        <td className="py-2.5 font-medium text-zinc-900 dark:text-white">Width</td>
                                         <td className="py-2.5 font-mono text-sm">320px</td>
                                     </tr>
-                                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
-                                        <td className="py-2.5 font-medium text-gray-900 dark:text-white">Height</td>
+                                    <tr className="border-b border-zinc-100 dark:border-zinc-700/50">
+                                        <td className="py-2.5 font-medium text-zinc-900 dark:text-white">Height</td>
                                         <td className="py-2.5 font-mono text-sm">320px</td>
                                     </tr>
-                                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
-                                        <td className="py-2.5 font-medium text-gray-900 dark:text-white">FPS</td>
+                                    <tr className="border-b border-zinc-100 dark:border-zinc-700/50">
+                                        <td className="py-2.5 font-medium text-zinc-900 dark:text-white">FPS</td>
                                         <td className="py-2.5 font-mono text-sm">60</td>
                                     </tr>
-                                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
-                                        <td className="py-2.5 font-medium text-gray-900 dark:text-white">CSS Personalizado</td>
+                                    <tr className="border-b border-zinc-100 dark:border-zinc-700/50">
+                                        <td className="py-2.5 font-medium text-zinc-900 dark:text-white">CSS Personalizado</td>
                                         <td className="py-2.5">Fundo transparente</td>
                                     </tr>
-                                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
-                                        <td className="py-2.5 font-medium text-gray-900 dark:text-white">Shutdown source when not visible</td>
+                                    <tr className="border-b border-zinc-100 dark:border-zinc-700/50">
+                                        <td className="py-2.5 font-medium text-zinc-900 dark:text-white">Shutdown source when not visible</td>
                                         <td className="py-2.5 text-green-500 font-semibold">Marcado (✅)</td>
                                     </tr>
                                     <tr>
-                                        <td className="py-2.5 font-medium text-gray-900 dark:text-white">Refresh browser when scene becomes active</td>
+                                        <td className="py-2.5 font-medium text-zinc-900 dark:text-white">Refresh browser when scene becomes active</td>
                                         <td className="py-2.5 text-green-500 font-semibold">Marcado (✅)</td>
                                     </tr>
                                 </tbody>
@@ -297,11 +309,10 @@ function QrCodePage() { // Renomeei para QrCodePage, já que AnalyticsPage não 
 
                 {/* Mensagem de Alerta (Global) */}
                 {alertMessage && (
-                    <div className={`fixed bottom-4 right-4 p-4 rounded-xl shadow-2xl transition-opacity duration-300 z-50 ${
-                        alertMessage.includes("sucesso") 
-                            ? 'bg-green-500 text-white' 
-                            : 'bg-red-500 text-white'
-                    }`}>
+                    <div className={`fixed bottom-4 right-4 p-4 rounded-xl shadow-2xl transition-opacity duration-300 z-50 ${alertMessage.includes("sucesso")
+                        ? 'bg-green-500 text-white'
+                        : 'bg-red-500 text-white'
+                        }`}>
                         <p className="flex items-center gap-2 text-sm font-semibold">
                             {alertMessage.includes("sucesso") ? <Save size={16} /> : <AlertCircle size={16} />}
                             {alertMessage}

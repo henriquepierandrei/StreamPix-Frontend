@@ -158,8 +158,8 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
             <nav
                 className="
                     fixed top-0 left-0 w-full z-40
-                    bg-white dark:bg-gray-900
-                    shadow-md dark:shadow-lg dark:shadow-gray-900/50
+                    bg-white dark:bg-zinc-950
+                    shadow-md dark:shadow-xl dark:shadow-black/70
                     lg:w-64 lg:h-screen lg:flex lg:flex-col lg:shadow-xl
                 "
             >
@@ -181,8 +181,8 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
                         className="
                             lg:hidden
                             p-2 rounded-full
-                            text-gray-800 dark:text-gray-200
-                            hover:bg-gray-100 dark:hover:bg-gray-800
+                            text-gray-800 dark:text-zinc-200
+                            hover:bg-gray-100 dark:hover:bg-zinc-800
                             transition-colors
                             flex w-10 h-10 items-center justify-center
                         "
@@ -200,7 +200,7 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
                             <NavItem key={item.label} item={item} />
                         ))}
 
-                        <div className="h-px w-full bg-gray-200 dark:bg-gray-700 my-2" />
+                        <div className="h-px w-full bg-gray-200 dark:bg-zinc-800 my-2" />
 
                         <button
                             onClick={toggleTheme}
@@ -225,7 +225,7 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
                 <div
                     className="
                         fixed inset-0 z-30
-                        bg-black/50 dark:bg-black/70
+                        bg-black/50 dark:bg-black/80
                         lg:hidden
                     "
                     onClick={() => setIsMenuOpen(false)}
@@ -237,7 +237,7 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
                 ref={menuRef}
                 className={`
                     fixed top-0 left-0 h-full w-64 z-50
-                    bg-white dark:bg-gray-800
+                    bg-white dark:bg-zinc-950
                     shadow-xl
                     transform transition-transform duration-300 ease-in-out
                     lg:hidden
@@ -245,7 +245,7 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
                 `}
             >
                 <div className="flex flex-col h-full p-4">
-                    <div className="flex justify-between items-center mb-6 pb-2 border-b border-gray-100 dark:border-gray-700">
+                    <div className="flex justify-between items-center mb-6 pb-2 border-b border-gray-100 dark:border-zinc-800">
                         <img
                             src={isDarkMode ? logodark : logo}
                             alt="Logo"
@@ -262,7 +262,7 @@ function NavBarDashboard({ activeItem, onSelect }: NavBarDashboardProps) {
                             <NavItem key={item.label} item={item} isMobile={true} />
                         ))}
 
-                        <div className="h-px w-full bg-gray-200 dark:bg-gray-700 my-2" />
+                        <div className="h-px w-full bg-gray-200 dark:bg-zinc-800 my-2" />
 
                         <button
                             onClick={() => {

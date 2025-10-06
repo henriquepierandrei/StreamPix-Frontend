@@ -4,9 +4,7 @@ import { ApiConfig } from "../../api/ApiConfig";
 import { getStreamerData } from "../../api/GetStreamerData";
 import type { CreateGoalPayload, UpdateGoalPayload } from "../../api/GoalApi";
 import { useGoalApi } from "../../api/GoalApi";
-// import '../../styles/dashboard.css' // REMOVA ESTA LINHA
 import NavBarDashboard from "../../components/navbar/NavBarDashboard";
-
 
 // [Interfaces permanecem as mesmas]
 interface GoalData {
@@ -48,6 +46,7 @@ const GoalComponent: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [active, setActive] = useState("Metas");
+
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [streamerData, setStreamerData] = useState<StreamerData>({
     id: "Carregando...",
@@ -84,6 +83,8 @@ const GoalComponent: React.FC = () => {
     })();
   }, []);
 
+
+
   useEffect(() => {
     (async () => {
       try {
@@ -98,6 +99,8 @@ const GoalComponent: React.FC = () => {
       }
     })();
   }, []);
+
+
 
   const handleCreate = async () => {
     if (!createGoalData.reason.trim()) {
@@ -216,7 +219,7 @@ const GoalComponent: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 lg:pl-64">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 lg:pl-64">
       <NavBarDashboard activeItem={active} onSelect={setActive} />
 
       <main className="p-4 sm:p-6 lg:p-8">
@@ -224,11 +227,11 @@ const GoalComponent: React.FC = () => {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <Goal size={32} className="text-blue-500" />
-            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">
+            <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-white">
               Gerenciar Metas
             </h1>
           </div>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-zinc-600 dark:text-zinc-400">
             Crie e visualize suas metas de arrecadação para motivar seus espectadores.
           </p>
         </div>
@@ -237,12 +240,12 @@ const GoalComponent: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
           {/* COLUNA 1: Criar / Atualizar Meta */}
-          <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 md:p-8 h-fit">
+          <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-6 md:p-8 h-fit">
 
             {/* Título do Card */}
-            <div className="flex items-center gap-3 border-b pb-4 mb-6 border-gray-100 dark:border-gray-700">
+            <div className="flex items-center gap-3 border-b pb-4 mb-6 border-zinc-100 dark:border-zinc-800">
               <GoalIcon size={24} className="text-blue-500" />
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
                 {updateGoalData ? "Atualizar Meta" : "Criar Nova Meta"}
               </h2>
             </div>
@@ -251,43 +254,43 @@ const GoalComponent: React.FC = () => {
             <div className="space-y-6">
               {/* Valor para alcançar */}
               <div className="formGroup">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Valor para alcançar (R$)</label>
+                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Valor para alcançar (R$)</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">R$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">R$</span>
                   <input
                     type="number"
                     placeholder="Valor a alcançar"
-                    min="0.01"
+                    min="0"
                     step="0.01"
                     value={updateGoalData?.balance_to_achieve ?? createGoalData.balance_to_achieve}
                     onChange={(e) => handleChange("balance_to_achieve", Number(e.target.value), updateGoalData ? "update" : "create")}
-                    className="w-full pl-9 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
+                    className="w-full pl-9 pr-4 py-3 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
                   />
                 </div>
               </div>
 
               {/* Motivo para alcançar */}
               <div className="formGroup">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Motivo para alcançar</label>
+                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Motivo para alcançar</label>
                 <input
                   type="text"
                   placeholder="Ex: Novo setup, viagem, etc."
                   value={updateGoalData?.reason ?? createGoalData.reason}
                   onChange={(e) => handleChange("reason", e.target.value, updateGoalData ? "update" : "create")}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
+                  className="w-full px-4 py-3 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
                 />
               </div>
 
               {/* Dias de duração */}
               <div className="formGroup">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Dias de duração</label>
+                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Dias de duração</label>
                 <input
                   type="number"
                   placeholder="Dias"
                   min="1"
                   value={updateGoalData?.end_at_in_days ?? createGoalData.end_at_in_days}
                   onChange={(e) => handleChange("end_at_in_days", Number(e.target.value), updateGoalData ? "update" : "create")}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
+                  className="w-full px-4 py-3 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
                 />
               </div>
             </div>
@@ -317,7 +320,7 @@ const GoalComponent: React.FC = () => {
 
             {/* Observação */}
             {updateGoalData && (
-              <p className="text-gray-500 dark:text-gray-400 text-xs flex items-center gap-1 mt-4">
+              <p className="text-zinc-500 dark:text-zinc-400 text-xs flex items-center gap-1 mt-4">
                 <AlertCircle size={12} className="flex-shrink-0" /> Você pode atualizar somente o motivo e o dia de duração.
               </p>
             )}
@@ -327,10 +330,10 @@ const GoalComponent: React.FC = () => {
           <div className="space-y-8">
 
             {/* Card: Visualização da Meta */}
-            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 md:p-8">
-              <div className="flex items-center gap-3 border-b pb-4 mb-6 border-gray-100 dark:border-gray-700">
+            <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-6 md:p-8">
+              <div className="flex items-center gap-3 border-b pb-4 mb-6 border-zinc-100 dark:border-zinc-800">
                 <Goal size={24} className="text-blue-500" />
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
                   Acompanhamento da Meta
                 </h2>
               </div>
@@ -339,23 +342,23 @@ const GoalComponent: React.FC = () => {
                 <>
                   {/* Barra de Progresso Moderna */}
                   <div className="mb-6 space-y-2">
-                    <p className="text-lg font-semibold text-gray-900 dark:text-white">{goal.reason || "Meta sem descrição"}</p>
+                    <p className="text-lg font-semibold text-zinc-900 dark:text-white">{goal.reason || "Meta sem descrição"}</p>
 
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                    <div className="w-full bg-zinc-200 dark:bg-zinc-800 rounded-full h-3">
                       <div
                         className="bg-blue-500 h-3 rounded-full transition-all duration-500 ease-out"
                         style={{ width: `${progress}%` }}
                       />
                     </div>
 
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 pt-1">
+                    <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 pt-1">
                       **{formatCurrency(goal.current_balance)}** / **{formatCurrency(goal.balance_to_achieve)}** (R$)
                     </p>
                   </div>
 
                   {/* URL e Botões de Ação */}
                   <div className="flex flex-col gap-4">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">URL para Browser Source (OBS/Streamlabs)</label>
+                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">URL para Browser Source (OBS/Streamlabs)</label>
 
                     <div className="flex gap-2">
                       {/* Campo de Input (Somente Leitura) */}
@@ -364,7 +367,7 @@ const GoalComponent: React.FC = () => {
                           type="text"
                           value={ApiConfig.getBaseFrontendURL() + "/streamer/dashboard/goal/to-show?streamerId=" + streamerData.id}
                           readOnly
-                          className="w-full px-4 py-3 pr-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-sm text-gray-900 dark:text-white truncate focus:outline-none"
+                          className="w-full px-4 py-3 pr-4 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-white truncate focus:outline-none"
                         />
                       </div>
 
@@ -381,7 +384,7 @@ const GoalComponent: React.FC = () => {
 
                       {/* Botão 2: COPIAR */}
                       <button
-                        className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl transition duration-150"
+                        className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl transition duration-150"
                         onClick={handleCopyURL}
                         title="Copiar URL"
                       >
@@ -402,10 +405,10 @@ const GoalComponent: React.FC = () => {
                   </div>
                 </>
               ) : (
-                <div className="text-center p-6 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                  <Goal size={48} className="mx-auto text-gray-400 mb-2" />
-                  <p className="text-gray-700 dark:text-gray-300 font-semibold">Nenhuma meta criada ainda.</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Use o painel ao lado para criar sua primeira meta.</p>
+                <div className="text-center p-6 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+                  <Goal size={48} className="mx-auto text-zinc-400 mb-2" />
+                  <p className="text-zinc-700 dark:text-zinc-300 font-semibold">Nenhuma meta criada ainda.</p>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">Use o painel ao lado para criar sua primeira meta.</p>
                 </div>
               )}
             </div>
@@ -413,12 +416,12 @@ const GoalComponent: React.FC = () => {
             {/* Card: Confirmação de Exclusão (Modal/Alerta) */}
             {showDeleteConfirm && (
               <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 w-full max-w-sm">
-                  <p className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tem certeza que deseja deletar?</p>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6">Esta ação é irreversível.</p>
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl p-6 w-full max-w-sm">
+                  <p className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Tem certeza que deseja deletar?</p>
+                  <p className="text-zinc-600 dark:text-zinc-400 mb-6">Esta ação é irreversível.</p>
                   <div className="flex justify-end gap-3">
                     <button
-                      className="px-4 py-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                      className="px-4 py-2 text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
                       onClick={cancelDelete}
                     >
                       Não
@@ -435,45 +438,45 @@ const GoalComponent: React.FC = () => {
             )}
 
             {/* Card: Especificações no OBS */}
-            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 md:p-8">
-              <div className="flex items-center gap-3 border-b pb-4 mb-6 border-gray-100 dark:border-gray-700">
+            <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-6 md:p-8">
+              <div className="flex items-center gap-3 border-b pb-4 mb-6 border-zinc-100 dark:border-zinc-800">
                 <View size={24} className="text-blue-500" />
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
                   Especificações de Fonte no OBS/Streamlabs
                 </h2>
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-gray-600 dark:text-gray-400">
+                <table className="w-full text-left text-zinc-600 dark:text-zinc-400">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-800 dark:text-gray-300">
+                    <tr className="border-b border-zinc-200 dark:border-zinc-700 text-sm font-semibold text-zinc-800 dark:text-zinc-300">
                       <th className="py-2 pr-4">Propriedade</th>
                       <th className="py-2">Valor Recomendado</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
-                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">Width</td>
+                    <tr className="border-b border-zinc-100 dark:border-zinc-700/50">
+                      <td className="py-2.5 font-medium text-zinc-900 dark:text-white">Width</td>
                       <td className="py-2.5 font-mono text-sm">520px</td>
                     </tr>
-                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
-                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">Height</td>
+                    <tr className="border-b border-zinc-100 dark:border-zinc-700/50">
+                      <td className="py-2.5 font-medium text-zinc-900 dark:text-white">Height</td>
                       <td className="py-2.5 font-mono text-sm">60px</td>
                     </tr>
-                    <tr className="border-b border-gray-100 dark:border-gray-700/50">
-                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">FPS</td>
+                    <tr className="border-b border-zinc-100 dark:border-zinc-700/50">
+                      <td className="py-2.5 font-medium text-zinc-900 dark:text-white">FPS</td>
                       <td className="py-2.5 font-mono text-sm">30</td>
                     </tr>
                     <tr>
-                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">CSS Personalizado</td>
+                      <td className="py-2.5 font-medium text-zinc-900 dark:text-white">CSS Personalizado</td>
                       <td className="py-2.5">Fundo transparente</td>
                     </tr>
                     <tr>
-                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">Shutdown source when not visible</td>
+                      <td className="py-2.5 font-medium text-zinc-900 dark:text-white">Shutdown source when not visible</td>
                       <td className="py-2.5 text-red-500 font-semibold">Desmarcado (❎)</td>
                     </tr>
                     <tr>
-                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">Refresh browser when scene becomes active</td>
+                      <td className="py-2.5 font-medium text-zinc-900 dark:text-white">Refresh browser when scene becomes active</td>
                       <td className="py-2.5 text-red-500 font-semibold">Desmarcado (❎)</td>
                     </tr>
                   </tbody>
@@ -487,8 +490,8 @@ const GoalComponent: React.FC = () => {
         {/* Mensagem de Alerta (Global) */}
         {alertMessage && (
           <div className={`fixed bottom-4 right-4 p-4 rounded-xl shadow-2xl transition-opacity duration-300 z-50 ${alertMessage.includes("sucesso")
-              ? 'bg-green-500 text-white'
-              : 'bg-red-500 text-white'
+            ? 'bg-green-500 text-white'
+            : 'bg-red-500 text-white'
             }`}>
             <p className="flex items-center gap-2 text-sm font-semibold">
               {alertMessage.includes("sucesso") ? <Save size={16} /> : <AlertCircle size={16} />}

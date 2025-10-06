@@ -21,7 +21,7 @@ const StreamerQrPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [qrCodeTheme, setQrCodeTheme] = useState<QrCodeTheme | null>(null);
-    
+
     const messages = [
         "🚀 Envie sua mensagem!",
         "📱 Aponte o celular para o qr-code!",
@@ -31,8 +31,8 @@ const StreamerQrPage: React.FC = () => {
 
     const isDarkTheme = qrCodeTheme?.qr_code_is_dark_theme ?? false;
     const fgColor = isDarkTheme ? "#FFFFFFFF" : "#21272BFF";
-    const finalLogo = isDarkTheme ? logoDark : logo; 
-    
+    const finalLogo = isDarkTheme ? logoDark : logo;
+
     // ------------------- Lógica de Fetch -------------------
 
     useEffect(() => {
@@ -93,59 +93,69 @@ const StreamerQrPage: React.FC = () => {
             </div>
         );
     }
-    
+
     // ------------------- Classes Dinâmicas Tailwind -------------------
 
     // O container principal é a "moldura" compacta.
     const containerClasses = isDarkTheme
-        ? "bg-gray-800/90 text-white shadow-2xl shadow-gray-900/70 border-gray-700"
-        : "bg-white/90 text-gray-800 shadow-xl shadow-gray-300/60 border-gray-300";
+        ? "bg-zinc-800/90 text-white shadow-2xl shadow-zinc-900/70 border-zinc-700"
+        : "bg-white/90 text-zinc-800 shadow-xl shadow-zinc-300/60 border-zinc-300";
 
-    const messageColor = isDarkTheme ? "text-white" : "text-gray-900";
+    const messageColor = isDarkTheme ? "text-white" : "text-zinc-900";
 
     // Fundo do QR Code (deve ser o oposto do fgColor para contraste)
-    const qrCodeBgClasses = isDarkTheme 
-        ? "bg-gray-800 shadow-inner shadow-gray-700/50" 
-        : "bg-white shadow-inner shadow-gray-300/50";
+    const qrCodeBgClasses = isDarkTheme
+        ? "bg-zinc-800 shadow-inner shadow-zinc-700/50"
+        : "bg-white shadow-inner shadow-zinc-300/50";
 
     // Tamanho reduzido para compactação
-    const qrCodeSize = 200; 
+    const qrCodeSize = 200;
 
     return (
         // Container Fullscreen (Simula um overlay de streaming)
+        // Mantemos o w-screen h-screen para simular o ambiente OBS/Streamlabs
         <div className="flex items-center justify-center w-screen h-screen">
-            
+
             {/* Cartão Centralizado Compacto */}
-            <div 
-                // Padding reduzido para p-3. O maxWidth é removido para que o tamanho seja ditado pelo QR Code.
+            <div
+                // Usamos classes de fundo e borda transparentes/sutis com Zinc.
+                // O fundo claro (white) usará uma opacidade baixa. O escuro (zinc-900) também.
                 className={`flex flex-col items-center p-3 rounded-xl backdrop-blur-sm transition-all duration-500 w-auto border border-opacity-30 
+                    ${qrCodeTheme?.qr_code_is_dark_theme  // Solução!
+                        ? 'bg-zinc-950/20 border-zinc-800/50'
+                        : 'bg-white/20 border-zinc-300/50'
+                    }
                             ${containerClasses}`}
             >
-                
+
                 {/* Mensagem Motivacional (Agora como um rótulo compacto acima) */}
                 {qrCodeTheme?.add_messages_bellow && (
                     <div className="mb-2 w-full">
-                         <p 
-                            key={currentMessage} 
+                        <p
+                            key={currentMessage}
                             // Adicionamos um fundo sutil à mensagem para legibilidade
                             className={`px-3 py-1 text-sm font-semibold text-center rounded-lg 
-                                       ${isDarkTheme ? 'bg-black/50' : 'bg-white/70'} 
-                                       ${messageColor} animate-fade-in-out`}
+                                            // Fundo da mensagem: Preto semi-transparente no tema escuro, Branco semi-transparente no claro.
+                                            ${isDarkTheme
+                                    ? 'bg-black/50 text-white shadow-lg'
+                                    : 'bg-white/80 text-zinc-900 shadow-md'} 
+                                            ${messageColor} animate-fade-in-out`}
                         >
                             {messages[currentMessage]}
                         </p>
                     </div>
                 )}
-                
+
                 {/* Container do QR Code */}
-                {/* Removemos o padding interno excessivo, a div do QR code agora é o centro do design. */}
-                <div className={`relative rounded-md ${qrCodeBgClasses}`}> 
+                {/* O fundo do QR Code deve ser mantido em alto contraste (branco/preto) ou transparente, mas o 'qrCodeBgClasses' pode ser refatorado se houver estilos. 
+                   Assumindo que `qrCodeBgClasses` contém estilos como `shadow-xl`. */}
+                <div className={`relative rounded-md ${qrCodeBgClasses}`}>
                     <QRCode
                         value={streamerData.qr_code_url}
                         size={qrCodeSize} // Tamanho fixo e menor
                         bgColor="transparent"
                         fgColor={fgColor}
-                        qrStyle="squares" 
+                        qrStyle="squares"
                         eyeRadius={5}
                         logoImage={finalLogo}
                         logoWidth={40} // Logo reduzido
@@ -153,7 +163,7 @@ const StreamerQrPage: React.FC = () => {
                         logoOpacity={1}
                         removeQrCodeBehindLogo={true}
                         logoPadding={3}
-                        logoPaddingStyle="circle" 
+                        logoPaddingStyle="circle"
                     />
                 </div>
             </div>

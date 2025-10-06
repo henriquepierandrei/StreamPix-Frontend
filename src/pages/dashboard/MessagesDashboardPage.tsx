@@ -166,19 +166,19 @@ function MessagesPage() {
 
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 lg:pl-64">
+        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 lg:pl-64">
             <NavBarDashboard activeItem={active} onSelect={setActive} />
-
+    
             <main className="p-4 sm:p-6 lg:p-8">
                 {/* Header */}
                 <div className="mb-8">
                     <div className="flex items-center gap-3 mb-2">
                         <Link2 size={32} className="text-blue-500" />
-                        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">
+                        <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-white">
                             Configurações de Mensagens
                         </h1>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-zinc-600 dark:text-zinc-400">
                         Gerencie as configurações de exibição das mensagens de doação em sua live.
                     </p>
                 </div>
@@ -188,28 +188,28 @@ function MessagesPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     
                     {/* COLUNA 1: URL e Configurações */}
-                    <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 md:p-8 h-fit space-y-8">
+                    <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-6 md:p-8 h-fit space-y-8">
                         
                         {/* URL do Browser Source */}
                         <div>
-                            <div className="flex items-center gap-3 border-b pb-4 mb-6 border-gray-100 dark:border-gray-700">
+                            <div className="flex items-center gap-3 border-b pb-4 mb-6 border-zinc-100 dark:border-zinc-800">
                                 <Link2 size={24} className="text-blue-500" />
-                                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                                <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
                                     URL de Exibição das Mensagens
                                 </h2>
                             </div>
-
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Adicione esta URL como "Browser Source" no OBS/Streamlabs</label>
+    
+                            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Adicione esta URL como "Browser Source" no OBS/Streamlabs</label>
                             <div className="flex gap-2">
                                 <div className="relative flex-grow">
                                     <input
                                         type="text"
                                         value={messagesUrl}
                                         readOnly
-                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-sm text-gray-900 dark:text-white truncate focus:outline-none"
+                                        className="w-full px-4 py-3 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-white truncate focus:outline-none"
                                     />
                                 </div>
-
+    
                                 {/* Botão 1: VISUALIZAR (Olho) */}
                                 <a 
                                     href={messagesUrl}
@@ -220,10 +220,10 @@ function MessagesPage() {
                                 >
                                     <View size={20} />
                                 </a>
-
+    
                                 {/* Botão 2: COPIAR */}
                                 <button 
-                                    className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl transition duration-150"
+                                    className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl transition duration-150"
                                     onClick={handleCopyURL}
                                     title="Copiar URL"
                                     // Desabilita se estiver no estado inicial de carregamento
@@ -238,34 +238,34 @@ function MessagesPage() {
                                 </span>
                             )}
                         </div>
-
+    
                         {/* Opções de Configuração */}
                         <div>
-                            <div className="flex items-center gap-3 border-b pb-4 mb-6 border-gray-100 dark:border-gray-700">
+                            <div className="flex items-center gap-3 border-b pb-4 mb-6 border-zinc-100 dark:border-zinc-800">
                                 <Save size={24} className="text-blue-500" />
-                                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                                <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
                                     Opções de Aparência
                                 </h2>
                             </div>
-
+    
                             <div className="space-y-4">
                                 {/* Checkbox: Tema Escuro */}
-                                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600">
-                                    <label htmlFor="darkTheme" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
-                                        Tema Escuro para as Mensagens
+                                <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700">
+                                    <label htmlFor="darkTheme" className="text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
+                                        **Tema Escuro** para as Mensagens
                                     </label>
                                     <input
                                         id="darkTheme"
                                         type="checkbox"
                                         checked={streamerData.donate_is_dark_theme}
                                         onChange={(e) => updateField('donate_is_dark_theme', e.target.checked)}
-                                        className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:checked:bg-blue-600"
+                                        className="h-5 w-5 text-blue-600 border-zinc-300 rounded focus:ring-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:checked:bg-blue-600"
                                     />
                                 </div>
-
+    
                                 {/* Checkbox: Adicionar Mensagens Abaixo */}
-                                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600">
-                                    <label htmlFor="addMessagesBellow" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700">
+                                    <label htmlFor="addMessagesBellow" className="text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
                                         Exibir mensagens de doação **abaixo** de mensagens anteriores
                                     </label>
                                     <input
@@ -273,7 +273,7 @@ function MessagesPage() {
                                         type="checkbox"
                                         checked={streamerData.add_messages_bellow}
                                         onChange={(e) => updateField('add_messages_bellow', e.target.checked)}
-                                        className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:checked:bg-blue-600"
+                                        className="h-5 w-5 text-blue-600 border-zinc-300 rounded focus:ring-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:checked:bg-blue-600"
                                     />
                                 </div>
                             </div>
@@ -284,59 +284,58 @@ function MessagesPage() {
                             <button
                                 className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:scale-[1.01] disabled:transform-none"
                                 onClick={handleSave}
-                                // Corrigido para desabilitar apenas com isSaving (se a lógica de isLoading na renderização já o fizer)
                                 disabled={isSaving || isLoading} 
                             >
                                 {isSaving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
                                 {isSaving ? "Salvando..." : "Salvar Configurações"}
                             </button>
                         </div>
-
+    
                     </div>
                     
                     {/* --- */}
-
+    
                     {/* COLUNA 2: Especificações OBS */}
                     <div>
-                        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 md:p-8">
-                            <div className="flex items-center gap-3 border-b pb-4 mb-6 border-gray-100 dark:border-gray-700">
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-6 md:p-8">
+                            <div className="flex items-center gap-3 border-b pb-4 mb-6 border-zinc-100 dark:border-zinc-800">
                                 <View size={24} className="text-blue-500" />
-                                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                                <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
                                     Especificações de Fonte no OBS/Streamlabs
                                 </h2>
                             </div>
                             
                             <div className="overflow-x-auto">
-                                <table className="w-full text-left text-gray-600 dark:text-gray-400">
+                                <table className="w-full text-left text-zinc-600 dark:text-zinc-400">
                                     <thead>
-                                        <tr className="border-b border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-800 dark:text-gray-300">
+                                        <tr className="border-b border-zinc-200 dark:border-zinc-700 text-sm font-semibold text-zinc-800 dark:text-zinc-300">
                                             <th className="py-2 pr-4">Propriedade</th>
                                             <th className="py-2">Valor Recomendado</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr className="border-b border-gray-100 dark:border-gray-700/50">
-                                            <td className="py-2.5 font-medium text-gray-900 dark:text-white">Width</td>
+                                        <tr className="border-b border-zinc-100 dark:border-zinc-700/50">
+                                            <td className="py-2.5 font-medium text-zinc-900 dark:text-white">Width</td>
                                             <td className="py-2.5 font-mono text-sm">580px</td>
                                         </tr>
-                                        <tr className="border-b border-gray-100 dark:border-gray-700/50">
-                                            <td className="py-2.5 font-medium text-gray-900 dark:text-white">Height</td>
+                                        <tr className="border-b border-zinc-100 dark:border-zinc-700/50">
+                                            <td className="py-2.5 font-medium text-zinc-900 dark:text-white">Height</td>
                                             <td className="py-2.5 font-mono text-sm">150px</td>
                                         </tr>
-                                        <tr className="border-b border-gray-100 dark:border-gray-700/50">
-                                            <td className="py-2.5 font-medium text-gray-900 dark:text-white">FPS</td>
+                                        <tr className="border-b border-zinc-100 dark:border-zinc-700/50">
+                                            <td className="py-2.5 font-medium text-zinc-900 dark:text-white">FPS</td>
                                             <td className="py-2.5 font-mono text-sm">60</td>
                                         </tr>
-                                        <tr className="border-b border-gray-100 dark:border-gray-700/50">
-                                            <td className="py-2.5 font-medium text-gray-900 dark:text-white">CSS Personalizado</td>
+                                        <tr className="border-b border-zinc-100 dark:border-zinc-700/50">
+                                            <td className="py-2.5 font-medium text-zinc-900 dark:text-white">CSS Personalizado</td>
                                             <td className="py-2.5">Fundo transparente</td>
                                         </tr>
                                         <tr>
-                                            <td className="py-2.5 font-medium text-gray-900 dark:text-white">Shutdown source when not visible</td>
+                                            <td className="py-2.5 font-medium text-zinc-900 dark:text-white">Shutdown source when not visible</td>
                                             <td className="py-2.5 text-red-500 font-semibold">Desmarcado (❎)</td>
                                         </tr>
                                         <tr>
-                                            <td className="py-2.5 font-medium text-gray-900 dark:text-white">Refresh browser when scene becomes active</td>
+                                            <td className="py-2.5 font-medium text-zinc-900 dark:text-white">Refresh browser when scene becomes active</td>
                                             <td className="py-2.5 text-red-500 font-semibold">Desmarcado (❎)</td>
                                         </tr>
                                     </tbody>
@@ -344,11 +343,11 @@ function MessagesPage() {
                             </div>
                         </div>
                     </div>
-
+    
                 </div>
-
+    
                 {/* --- */}
-
+    
                 {/* Mensagem de Alerta (Global) */}
                 {alertMessage && (
                     <div className={`fixed bottom-4 right-4 p-4 rounded-xl shadow-2xl transition-opacity duration-300 z-50 ${
