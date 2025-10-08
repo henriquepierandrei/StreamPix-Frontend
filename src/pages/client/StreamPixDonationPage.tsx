@@ -195,7 +195,7 @@ const StreamPixDonation: React.FC = () => {
 
             {/* Alert de Erro (Fixo no topo) */}
             {error && (
-                <div className="fixed top-0 left-0 right-0 z-50 p-4">
+                <div className="fixed top-0 left-0 right-0 z-[999999999999] p-4 w-5">
                     <Alert error={error} />
                 </div>
             )}
