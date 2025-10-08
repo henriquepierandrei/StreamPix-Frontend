@@ -39,9 +39,8 @@ const Alert: React.FC<AlertProps> = ({ error, duration = 5, onClose }) => {
             className={`
                 relative w-full p-4 rounded-xl shadow-2xl transition-all duration-300 transform 
                 flex items-start justify-between gap-4 overflow-hidden
-                ${baseClasses}
+                ${baseClasses} bg-white dark:bg-zinc-900 border border-red-600 dark:border-red-700
             `}
-            // Adiciona a animação de entrada
             style={{ animation: 'fadeIn 0.3s ease-out' }}
         >
             <style>
@@ -62,7 +61,7 @@ const Alert: React.FC<AlertProps> = ({ error, duration = 5, onClose }) => {
 
             <div className="flex items-center gap-3">
                 <XCircle size={24} className="flex-shrink-0 text-red-600 dark:text-red-400" />
-                <p className="text-sm font-medium leading-relaxed">
+                <p className="text-sm font-medium leading-relaxed text-gray-900 dark:text-zinc-100">
                     {error.message}
                 </p>
             </div>
@@ -78,7 +77,6 @@ const Alert: React.FC<AlertProps> = ({ error, duration = 5, onClose }) => {
                 <X size={16} />
             </button>
 
-
             {/* Barra de Progresso (Feedback Visual do Timer) */}
             <div className="absolute bottom-0 left-0 h-1 w-full">
                 <div
@@ -88,6 +86,7 @@ const Alert: React.FC<AlertProps> = ({ error, duration = 5, onClose }) => {
             </div>
         </div>
     );
+
 };
 
 export default Alert;

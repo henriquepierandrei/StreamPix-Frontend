@@ -60,7 +60,7 @@ function NavbarHome() {
 
             <div className="hidden lg:flex items-center gap-1">
               {/* Links de navegação */}
-              {["Contato", "Linkedin"].map((item) => (
+              {["StreamPix", "Monetização", "Benefícios", "FAQ"].map((item) => (
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
@@ -110,7 +110,7 @@ function NavbarHome() {
           <div className="fixed top-16 right-4 w-72 bg-white dark:bg-zinc-950 rounded-2xl shadow-2xl border border-zinc-200 dark:border-zinc-800 z-40 lg:hidden overflow-hidden">
             <div className="p-4 space-y-1">
               {/* Links do menu móvel */}
-              {["Contato", "Linkedin"].map((item) => (
+              {["StreamPix", "Monetização", "Benefícios", "FAQ"].map((item) => (
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}

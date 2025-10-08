@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ArrowLeft, UserX, XIcon } from 'lucide-react';
-import logo from "../../assets/logo.png";
-import logoDark from '../../assets/logo-dark.png';
+import logo from '../../assets/logo.png';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createDonationRequest, sendDonation, getStreamerData } from '../../api/DonationRequest';
 import Loading from '../../components/Loading';
@@ -25,18 +24,6 @@ interface DonationResponse {
 
 type PaymentStatus = 'pending' | 'success' | 'failed' | 'notfound' | 'error';
 
-// A função formatAmount é mantida como um recurso defensivo geral, mas não é usada no fetch do minAmount,
-// pois a API já o retorna como '0,01'.
-// Se precisar usá-la em outro lugar, ela deve ser ajustada para primeiro trocar vírgula por ponto.
-// Exemplo de ajuste: const num = Number(value.toString().replace(',', '.'));
-const formatAmount = (value: number | string, fallback: string = "10,00"): string => {
-    // Para funcionar defensivamente com entrada de string/number
-    const valueString = value ? value.toString().replace(',', '.') : '0';
-    const num = parseFloat(valueString);
-    if (isNaN(num)) return fallback;
-    return num.toFixed(2).replace('.', ',');
-}
-
 
 const StreamPixDonation: React.FC = () => {
     const navigate = useNavigate();
@@ -51,14 +38,10 @@ const StreamPixDonation: React.FC = () => {
     const [voiceSettings, setVoiceSettings] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<any>(false);
-
     // minAmount armazena o valor MÍNIMO como STRING formatada ("10,00" ou "0,01")
     const [minAmount, setMinAmount] = useState<string>("10,00");
     const [maxNameLength, setMaxNameLength] = useState(20);
     const [maxMessageLength, setMaxMessageLength] = useState(162);
-
-    const isDark = localStorage.getItem("theme") === "dark";
-    const currentLogo = isDark ? logoDark : logo;
 
     const quickAmounts = useMemo(() => [5, 10, 25, 50, 100], []);
 
@@ -145,23 +128,23 @@ const StreamPixDonation: React.FC = () => {
     // ------------------- Renderização de Status de Erro -------------------
 
     const ErrorScreen = ({ status, title, description, icon: Icon }: { status: PaymentStatus, title: string, description: string, icon: React.FC<any> }) => (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 transition-colors duration-300">
             <div className="absolute top-8 left-8">
                 <button
-                    className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+                    className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors duration-200"
                     onClick={() => window.history.back()}
                 >
                     <ArrowLeft size={24} />
                 </button>
             </div>
-            <img src={currentLogo} alt="Logo" className="absolute top-8 w-10 h-10" style={{ left: '50%', transform: 'translateX(-50%)' }} />
+            <img src={logo} alt="Logo" className="absolute top-8 w-10 h-10" style={{ left: '50%', transform: 'translateX(-50%)' }} />
 
-            <div className="bg-white dark:bg-gray-800 p-10 rounded-2xl shadow-2xl text-center w-full max-w-sm transition-transform duration-300 transform scale-100 hover:scale-105">
+            <div className="bg-white dark:bg-zinc-800 p-10 rounded-2xl shadow-2xl text-center w-full max-w-sm transition-transform duration-300 transform scale-100 hover:scale-105">
                 <div className={`w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-6 shadow-lg ${status === 'notfound' ? 'bg-indigo-500' : 'bg-red-500'}`}>
                     <Icon size={32} color="white" strokeWidth={2} />
                 </div>
-                <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-3">{title}</h2>
-                <p className="text-gray-600 dark:text-gray-400">{description}</p>
+                <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-white mb-3">{title}</h2>
+                <p className="text-zinc-600 dark:text-zinc-400">{description}</p>
             </div>
         </div>
     );
@@ -193,11 +176,20 @@ const StreamPixDonation: React.FC = () => {
     // ------------------- Renderização Principal do Formulário -------------------
 
     return (
-        // Container: Fundo dinâmico e centralização
-        <div className='min-h-screen flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-300'>
+        // Container: Fundo dinâmico (sem min-h-screen para não forçar altura total)
+        <div className="flex flex-col items-center p-8 bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-zinc-950 dark:to-zinc-900 relative min-h-screen overflow-hidden transition-colors duration-300">
+
+            {/* Shapes animados */}
+            {/* Shapes animados aprimorados */}
+            <div className="absolute top-[-15%] left-[-10%] w-72 h-72 bg-indigo-700 opacity-20 rounded-[50%] animate-spin-slow"></div>
+            <div className="absolute top-[10%] right-[-15%] w-96 h-96 bg-pink-700 opacity-15 rounded-[45%_35%_60%_50%] animate-spin-reverse"></div>
+            <div className="absolute bottom-[-20%] left-[5%] w-80 h-80 bg-purple-800 opacity-12 rounded-[50%_60%_40%_55%] animate-bounce-slow"></div>
+            <div className="absolute bottom-[0%] right-[10%] w-52 h-52 bg-indigo-600 opacity-18 rounded-[30%_70%_35%_65%] animate-pulse-slow"></div>
+            <div className="absolute top-[30%] left-[20%] w-36 h-36 bg-pink-600 opacity-10 rounded-[40%_60%_50%_50%] animate-spin-slow"></div>
+
 
             {/* Botão de Tema no canto */}
-            <div className="absolute top-4 right-4 z-10">
+            <div className="absolute top-4 right-4 z-[9999999999]">
                 <ThemeButton />
             </div>
 
@@ -209,19 +201,23 @@ const StreamPixDonation: React.FC = () => {
             )}
 
             {/* Card Principal do Formulário */}
-            <div className="w-full max-w-lg mx-auto bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+            <div className="w-full max-w-lg mx-auto bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl shadow-2xl border border-zinc-100 dark:border-zinc-800 transition-colors duration-300 z-[999999]">
 
                 {/* Header do Card */}
-                <div className='flex items-center gap-4 mb-8 border-b pb-4 border-gray-100 dark:border-gray-700'>
-                    <img src={currentLogo} alt="Logo" className="w-10 h-10 p-2 rounded-lg bg-indigo-600 shadow-lg" />
-                    <h1 className='text-2xl font-extrabold text-gray-900 dark:text-white'>
-                        Doar para <span className='text-indigo-600'>{streamerName}</span>
+                <div className='flex items-center gap-4 mb-8 border-b pb-4 border-zinc-100 dark:border-zinc-800'>
+                    <img src={logo} alt="Logo" className="w-10 h-10 p-2 rounded-lg bg-indigo-600 shadow-lg" />
+                    <h1 className='text-2xl font-extrabold text-zinc-900 dark:text-white'>
+                        Doar para{' '}
+                        <span className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent'>
+                            {streamerName}
+                        </span>
                     </h1>
                 </div>
 
+
                 {/* Seção de Nome */}
                 <div className="mb-4">
-                    <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label htmlFor="username" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
                         Seu nome de usuário
                     </label>
                     <input
@@ -231,16 +227,16 @@ const StreamPixDonation: React.FC = () => {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         maxLength={maxNameLength}
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white transition-shadow duration-300 shadow-sm"
+                        className="w-full p-3 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-shadow duration-300 shadow-sm"
                     />
-                    <p className="text-xs text-right text-gray-400 dark:text-gray-500 mt-1">
+                    <p className="text-xs text-right text-zinc-400 dark:text-zinc-500 mt-1">
                         Máx. {maxNameLength} caracteres
                     </p>
                 </div>
 
                 {/* Seção de Valores Rápidos */}
                 <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
                         Valores Rápidos:
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -251,7 +247,7 @@ const StreamPixDonation: React.FC = () => {
                                 onClick={() => handleQuickAmount(value)}
                                 className={`px-4 py-2 text-sm font-semibold rounded-full transition-all duration-200 shadow-md ${selectedQuickAmount === value
                                     ? 'bg-indigo-600 text-white shadow-indigo-500/50 scale-105'
-                                    : 'bg-gray-200 text-gray-700 hover:bg-indigo-100 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-indigo-700 dark:hover:text-white'
+                                    : 'bg-zinc-200 text-zinc-700 hover:bg-indigo-100 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-indigo-700 dark:hover:text-white'
                                     }`}
                             >
                                 R$ {value}
@@ -262,7 +258,7 @@ const StreamPixDonation: React.FC = () => {
 
                 {/* Seção de Mensagem */}
                 <div className="mb-6">
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label htmlFor="message" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
                         Mensagem de Apoio (Opcional)
                     </label>
                     <div className="relative">
@@ -273,15 +269,15 @@ const StreamPixDonation: React.FC = () => {
                             onChange={(e) => setMessage(e.target.value)}
                             maxLength={maxMessageLength}
                             rows={4}
-                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white transition-shadow duration-300 shadow-sm resize-none"
+                            className="w-full p-3 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white transition-shadow duration-300 shadow-sm resize-none"
                         />
-                        <div className="absolute bottom-2 right-3 text-xs text-gray-400 dark:text-gray-500">
+                        <div className="absolute bottom-2 right-3 text-xs text-zinc-400 dark:text-zinc-500">
                             {message.length}/{maxMessageLength}
                         </div>
                     </div>
                 </div>
 
-                {/* Componente de Áudio (Assumindo que ele tem suas próprias classes Tailwind) */}
+                {/* Componente de Áudio */}
                 <div className="mb-6">
                     <AudioComponent
                         onVoiceChange={(voiceId, settings) => {
@@ -293,15 +289,13 @@ const StreamPixDonation: React.FC = () => {
 
                 {/* Seção de Valor da Doação */}
                 <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
                         Valor da Doação
                     </label>
-                    {/* CORREÇÃO: Removido 'gap-2' para unir os campos */}
                     <div className="flex">
                         <select
                             value={currency}
-                            // Alterado: Removido rounded-l-lg e adicionado rounded-l-xl (melhor estética) e sem border-r
-                            className="p-3 border border-gray-300 dark:border-gray-600 rounded-l-xl bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold transition-colors duration-300 border-r-0 focus:outline-none"
+                            className="p-3 border border-zinc-300 dark:border-zinc-700 rounded-l-xl bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 font-semibold transition-colors duration-300 border-r-0 focus:outline-none"
                             disabled
                         >
                             <option value="BRL">BRL</option>
@@ -311,30 +305,25 @@ const StreamPixDonation: React.FC = () => {
                             placeholder="0.00"
                             value={amount}
                             onChange={(e) => {
-                                // Garantir que a alteração do valor não resulte em um valor negativo no estado
                                 const value = e.target.value;
                                 if (parseFloat(value) >= 0 || value === '') {
                                     setAmount(value);
-                                    setSelectedQuickAmount(null); // Desseleciona valor rápido
+                                    setSelectedQuickAmount(null);
                                 }
                             }}
-                            // Adicionado: min="0" para validação nativa do navegador
                             min="0"
                             step={0.01}
                             className="
-        flex-grow p-3 border border-gray-300 dark:border-gray-600 rounded-r-xl 
-        focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 dark:bg-gray-700 
-        text-gray-900 dark:text-white transition-shadow duration-300 shadow-sm z-10 min-w-0
-        
-        // Classes Tailwind para remover as setas nativas (scroll)
-        [appearance:textfield] 
-        [&::-webkit-inner-spin-button]:m-0 
-        [&::-webkit-outer-spin-button]:m-0
-    "
+                flex-grow p-3 border border-zinc-300 dark:border-zinc-700 rounded-r-xl 
+                focus:ring-indigo-500 focus:border-indigo-500 bg-zinc-50 dark:bg-zinc-800 
+                text-zinc-900 dark:text-white transition-shadow duration-300 shadow-sm z-10 min-w-0
+                [appearance:textfield] 
+                [&::-webkit-inner-spin-button]:m-0 
+                [&::-webkit-outer-spin-button]:m-0
+            "
                         />
                     </div>
-                    {/* Exibe o valor mínimo como string formatada */}
-                    <p className='text-sm text-gray-500 dark:text-gray-400 mt-1'>
+                    <p className='text-sm text-zinc-500 dark:text-zinc-500 mt-1'>
                         Valor mínimo: R$ {minAmount}
                     </p>
                 </div>
@@ -356,8 +345,8 @@ const StreamPixDonation: React.FC = () => {
 
             {/* Footer com Branding */}
             <div className="mt-8 text-center">
-                <div className="flex items-center justify-center gap-2 text-gray-500 dark:text-gray-400">
-                    <img src={currentLogo} alt="Logo" className="w-6 h-6 p-1 rounded-full bg-gray-300 dark:bg-gray-700" />
+                <div className="flex items-center justify-center gap-2 text-zinc-500 dark:text-zinc-500">
+                    <img src={logo} alt="Logo" className="w-6 h-6 p-1 rounded-full bg-zinc-300 dark:bg-zinc-800" />
                     <span className='text-sm font-semibold'>
                         <span className='text-indigo-600 font-extrabold'>StreamPix</span> - Doações Simplificadas
                     </span>
@@ -365,6 +354,7 @@ const StreamPixDonation: React.FC = () => {
             </div>
         </div>
     );
+
 };
 
 export default StreamPixDonation;

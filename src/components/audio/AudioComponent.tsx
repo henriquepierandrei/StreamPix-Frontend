@@ -197,34 +197,33 @@ function VoiceSelector({ onVoiceSelect, isOpen = false, onClose }: VoiceSelector
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
       <CustomStyles />
       {/* Modal Container */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col transform transition-all p-6 sm:p-8">
+      <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col transform transition-all p-6 sm:p-8">
 
         {/* Header */}
-        <div className="flex justify-between items-center mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Seletor de Voz IA</h2>
+        <div className="flex justify-between items-center mb-6 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-zinc-100">Seletor de Voz IA</h2>
           <button
             onClick={onClose}
-            className="p-1 rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors w-8 h-8 flex items-center justify-center"
+            className="p-1 rounded-full text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors w-8 h-8 flex items-center justify-center"
             aria-label="Fechar"
           >
             <X size={16} />
           </button>
-
         </div>
 
         <div className="overflow-y-auto pr-2 -mr-2"> {/* Content Scroll Area */}
 
           {/* Seletor de gênero */}
-          <div className="flex space-x-3 mb-6 p-1 bg-gray-100 dark:bg-gray-700 rounded-xl">
+          <div className="flex space-x-3 mb-6 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl">
             <button
-              className={`flex-1 flex items-center justify-center py-2 px-4 text-sm font-semibold rounded-lg transition-colors duration-200 ${currentGender === 'female' ? 'bg-purple-600 text-white shadow-md' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+              className={`flex-1 flex items-center justify-center py-2 px-4 text-sm font-semibold rounded-lg transition-colors duration-200 ${currentGender === 'female' ? 'bg-purple-600 text-white shadow-md' : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700'}`}
               onClick={() => setCurrentGender('female')}
             >
               <Venus size={16} className="mr-2" />
               Femininas
             </button>
             <button
-              className={`flex-1 flex items-center justify-center py-2 px-4 text-sm font-semibold rounded-lg transition-colors duration-200 ${currentGender === 'male' ? 'bg-purple-600 text-white shadow-md' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+              className={`flex-1 flex items-center justify-center py-2 px-4 text-sm font-semibold rounded-lg transition-colors duration-200 ${currentGender === 'male' ? 'bg-purple-600 text-white shadow-md' : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700'}`}
               onClick={() => setCurrentGender('male')}
             >
               <Mars size={16} className="mr-2" />
@@ -233,7 +232,7 @@ function VoiceSelector({ onVoiceSelect, isOpen = false, onClose }: VoiceSelector
           </div>
 
           {/* Texto informativo */}
-          <p className="mb-4 text-gray-600 dark:text-gray-400">Escolha uma voz para ler sua mensagem (clique para selecionar/ouvir):</p>
+          <p className="mb-4 text-zinc-600 dark:text-zinc-400">Escolha uma voz para ler sua mensagem (clique para selecionar/ouvir):</p>
 
           {/* Grid de vozes */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -242,19 +241,18 @@ function VoiceSelector({ onVoiceSelect, isOpen = false, onClose }: VoiceSelector
                 key={voice.id}
                 className={`relative flex flex-col items-center p-3 border-2 rounded-xl cursor-pointer transition-all duration-200 ${selectedVoice === voice.id
                   ? 'border-purple-600 bg-purple-50 dark:bg-purple-900/50 shadow-lg scale-[1.02]'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-purple-400 hover:shadow-md'
+                  : 'border-zinc-200 dark:border-zinc-700 hover:border-purple-400 hover:shadow-md'
                   }`}
                 onClick={() => setSelectedVoice(voice.id)}
               >
-                {/* Avatar/Ícone */}
                 <div className="text-purple-500 dark:text-purple-300 mb-2">
                   {voice.avatar}
                 </div>
-                <p className="text-sm font-medium text-center text-gray-800 dark:text-gray-100">{voice.name}</p>
+                <p className="text-sm font-medium text-center text-zinc-800 dark:text-zinc-100">{voice.name}</p>
 
                 {/* Botão Play/Pause Flutuante */}
                 <button
-                  className="absolute top-1 right-1 p-2 bg-white/80 dark:bg-gray-700/80 rounded-full text-purple-600 hover:scale-110 transition-transform shadow-md w-8 h-8 flex items-center justify-center"
+                  className="absolute top-1 right-1 p-2 bg-white/80 dark:bg-zinc-800/80 rounded-full text-purple-600 hover:scale-110 transition-transform shadow-md w-8 h-8 flex items-center justify-center"
                   onClick={(e) => {
                     e.stopPropagation();
                     playingVoice === voice.id ? handleStopVoice(voice.id) : handlePlayVoice(voice.id);
@@ -273,16 +271,16 @@ function VoiceSelector({ onVoiceSelect, isOpen = false, onClose }: VoiceSelector
                     </svg>
                   )}
                 </button>
-
               </div>
             ))}
           </div>
 
           {/* Botão de configurações avançadas */}
           <button
-            className="flex items-center justify-center w-full py-3 mt-6 text-purple-600 dark:text-purple-400 font-semibold rounded-xl bg-purple-50 dark:bg-gray-700/50 hover:bg-purple-100 dark:hover:bg-gray-700 transition-colors shadow-sm"
+            className="flex items-center justify-center w-full py-3 mt-6 text-purple-600 dark:text-purple-400 font-semibold rounded-xl bg-purple-50 dark:bg-zinc-800/50 hover:bg-purple-100 dark:hover:bg-zinc-700 transition-colors shadow-sm"
             onClick={() => setShowSettings(!showSettings)}
           >
+            {/* Ícone */}
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="mr-2 w-5 h-5">
               <path d="M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97c0-.33-.03-.65-.07-.97l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.08-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.32-.07.64-.07.97c0 .33.03.65.07.97l-2.11 1.63c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.39 1.06.73 1.69.98l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.25 1.17-.59 1.69-.98l2.49 1c.22.08.49 0 .61-.22l2-3.46c.13-.22.07-.49-.12-.64l-2.11-1.63Z" />
             </svg>
@@ -291,11 +289,11 @@ function VoiceSelector({ onVoiceSelect, isOpen = false, onClose }: VoiceSelector
 
           {/* Painel de configurações */}
           {showSettings && (
-            <div className="space-y-6 pt-6 border-t border-gray-200 dark:border-gray-700 mt-6">
+            <div className="space-y-6 pt-6 border-t border-zinc-200 dark:border-zinc-800 mt-6">
 
               {/* Velocidade */}
               <div className="space-y-2">
-                <label className="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="flex items-center justify-between text-sm font-medium text-zinc-700 dark:text-zinc-300">
                   <span className="flex items-center"><Gauge size={16} className="mr-2 text-purple-500" /> Velocidade</span>
                   <span className="text-purple-600 font-bold">{settings.rate > 0 ? `+${settings.rate}%` : `${settings.rate}%`}</span>
                 </label>
@@ -310,9 +308,9 @@ function VoiceSelector({ onVoiceSelect, isOpen = false, onClose }: VoiceSelector
                 />
               </div>
 
-              {/* Tom */}
+              {/* Tom (Pitch) */}
               <div className="space-y-2">
-                <label className="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="flex items-center justify-between text-sm font-medium text-zinc-700 dark:text-zinc-300">
                   <span className="flex items-center"><Music size={16} className="mr-2 text-purple-500" /> Tom (Grave/Agudo)</span>
                   <span className="text-purple-600 font-bold">{settings.pitch > 0 ? `+${settings.pitch}%` : `${settings.pitch}%`}</span>
                 </label>
@@ -329,7 +327,7 @@ function VoiceSelector({ onVoiceSelect, isOpen = false, onClose }: VoiceSelector
 
               {/* Volume */}
               <div className="space-y-2">
-                <label className="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="flex items-center justify-between text-sm font-medium text-zinc-700 dark:text-zinc-300">
                   <span className="flex items-center">
                     {settings.volume < 40 ? <Volume size={16} className="mr-2 text-purple-500" /> : settings.volume < 80 ? <Volume1 size={16} className="mr-2 text-purple-500" /> : <Volume2 size={16} className="mr-2 text-purple-500" />}
                     Volume
@@ -347,10 +345,10 @@ function VoiceSelector({ onVoiceSelect, isOpen = false, onClose }: VoiceSelector
                 />
               </div>
 
-              {/* Intensidade do Estilo (Mostrado se o estilo não for 'default') */}
+              {/* Intensidade do Estilo */}
               {settings.style !== "default" && (
                 <div className="space-y-2">
-                  <label className="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="flex items-center justify-between text-sm font-medium text-zinc-700 dark:text-zinc-300">
                     <span className="flex items-center"><BicepsFlexed size={16} className="mr-2 text-purple-500" /> Intensidade do Estilo</span>
                     <span className="text-purple-600 font-bold">{settings.styleDegree === 1 ? 'Normal' : 'Forte'}</span>
                   </label>
@@ -365,12 +363,15 @@ function VoiceSelector({ onVoiceSelect, isOpen = false, onClose }: VoiceSelector
                   />
                 </div>
               )}
+
             </div>
           )}
+
+
         </div>
 
         {/* Botão Continuar */}
-        <div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="mt-8 pt-4 border-t border-zinc-200 dark:border-zinc-800">
           <button
             className="w-full py-3 font-bold text-white bg-purple-600 rounded-xl shadow-lg hover:bg-purple-700 transition-all disabled:bg-purple-400 disabled:shadow-none disabled:cursor-not-allowed"
             disabled={!selectedVoice}
@@ -382,6 +383,8 @@ function VoiceSelector({ onVoiceSelect, isOpen = false, onClose }: VoiceSelector
       </div>
     </div>
   );
+
+
 }
 
 // Componente principal AudioComponent
@@ -432,9 +435,9 @@ export default function AudioComponent({ onVoiceChange }: AudioComponentProps) {
   }
 
   return (
-    <div className="p-4 bg-white dark:bg-gray-900 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+    <div className="p-4 bg-white dark:bg-zinc-900 rounded-xl shadow-md border border-zinc-200 dark:border-zinc-800">
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Voz gerada por IA:
         </label>
 
@@ -443,8 +446,8 @@ export default function AudioComponent({ onVoiceChange }: AudioComponentProps) {
           type="button"
           onClick={() => setIsVoiceSelectorOpen(true)}
           className={`w-full flex items-center justify-center py-2.5 px-4 font-semibold rounded-lg transition-colors border-2 ${selectedVoiceId
-            ? 'bg-purple-50 text-purple-700 border-purple-300 hover:bg-purple-100 dark:bg-gray-700 dark:text-purple-400 dark:border-purple-600'
-            : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600'
+            ? 'bg-purple-50 text-purple-700 border-purple-300 hover:bg-purple-100 dark:bg-zinc-800 dark:text-purple-400 dark:border-purple-600'
+            : 'bg-zinc-100 text-zinc-700 border-zinc-300 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700'
             }`}
         >
           <Mic size={18} className="mr-2" />
@@ -453,18 +456,18 @@ export default function AudioComponent({ onVoiceChange }: AudioComponentProps) {
 
         {/* Preview das configurações */}
         {selectedVoiceId && (
-          <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 p-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+          <div className="mt-2 text-xs text-zinc-500 dark:text-zinc-400 p-2 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
             <p className="flex justify-between">
               <span>Velocidade: </span>
-              <span className="font-semibold text-gray-700 dark:text-gray-200">{voiceSettings.rate > 0 ? `+${voiceSettings.rate}%` : `${voiceSettings.rate}%`}</span>
+              <span className="font-semibold text-zinc-700 dark:text-zinc-100">{voiceSettings.rate > 0 ? `+${voiceSettings.rate}%` : `${voiceSettings.rate}%`}</span>
             </p>
             <p className="flex justify-between">
               <span>Volume: </span>
-              <span className="font-semibold text-gray-700 dark:text-gray-200">{voiceSettings.volume}%</span>
+              <span className="font-semibold text-zinc-700 dark:text-zinc-100">{voiceSettings.volume}%</span>
             </p>
             <p className="flex justify-between">
               <span>Estilo: </span>
-              <span className="font-semibold text-gray-700 dark:text-gray-200">{formatStyle(voiceSettings.style)}</span>
+              <span className="font-semibold text-zinc-700 dark:text-zinc-100">{formatStyle(voiceSettings.style)}</span>
             </p>
           </div>
         )}
@@ -477,4 +480,6 @@ export default function AudioComponent({ onVoiceChange }: AudioComponentProps) {
       />
     </div>
   );
+
+
 }

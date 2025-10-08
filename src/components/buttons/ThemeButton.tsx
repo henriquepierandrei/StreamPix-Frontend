@@ -30,6 +30,7 @@ function ThemeButton() {
       onClick={toggleTheme}
       // Classes Tailwind para um visual moderno:
       className="
+        
         flex items-center space-x-2 
         p-2 pr-3 rounded-full 
         text-sm font-medium 
