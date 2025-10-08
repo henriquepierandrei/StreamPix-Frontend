@@ -125,7 +125,10 @@ function HomePage() {
           <div className="text-center mb-12 md:mb-20">
             {/* Texto que muda de cor de dark para white */}
             <h2 className="text-4xl sm:text-6xl font-extrabold text-zinc-900 dark:text-white mb-4 tracking-tight">
-              Busca de <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-700">Criadores</span>
+              Busca de{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-pink-500 to-purple-700">
+                Criadores
+              </span>
             </h2>
             {/* Subtítulo que muda de cor de gray para zinc-400 */}
             <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto">
